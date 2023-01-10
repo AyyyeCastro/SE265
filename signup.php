@@ -1,13 +1,10 @@
 <?php
-    // VER 3.4 FINAL
    session_start();
    include_once __DIR__ . '/include/functions.php';
    include_once __DIR__ . '/model/userController.php';
 
-   // login as false
    $_SESSION['isLoggedIn'] = false;
 
-   /*******************************/
 
    $message = "";
    if (isPostRequest()) 
@@ -27,11 +24,9 @@
     
 
       if($userDatabase->userSignup($userName, $PW) ){
-      // Success message
-      echo "Success! You can now log in with your new username and password.";} 
+      echo "Signed up! You can now login.";} 
       
       else{
-      // Error message
       echo "Error:";}
    }
     

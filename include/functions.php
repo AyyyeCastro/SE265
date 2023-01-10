@@ -14,10 +14,10 @@ function isGetRequest()
 # False activity -> start it. True -> started logged In session.
 function isUserLoggedIn()
 {
-    // Check session staus and start session if not running
+    # Check session staus and start session if not running
     if (session_status() !== PHP_SESSION_ACTIVE) {session_start();}
 
-    // Check if isLoggedIn is set, then check its status
+    # Check if isLoggedIn is set, then check its status
     return (array_key_exists('isLoggedIn', $_SESSION) && ($_SESSION['isLoggedIn']));
 }
 

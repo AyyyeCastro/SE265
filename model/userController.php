@@ -4,16 +4,13 @@ class Users
 {
     private $userData;
 
-    // Used to salt user password
     const saltPW = "saltedPW";
 
 
     public function __construct($configFile) 
     {
-        // Parse config file, throw exception if it fails
         if ($ini = parse_ini_file($configFile))
         {
-            // Create PHP Database Object
             $userDB = new PDO( "mysql:host=" . $ini['servername'] . 
                                 ";port=" . $ini['port'] . 
                                 ";dbname=" . $ini['dbname'], 
@@ -32,22 +29,18 @@ class Users
         }
     } 
 
-    // Pull ALL user data.
     public function getUsers() 
     {
         $userTable = $this->userData;
-        $results = [];                  // Array to hold results
+        $results = [];                 
        return ($results);
     }
     
-    // SIGN UP the user, and insert info into DB with hashed Password.
     public function userSignup($userName, $PW) 
     {
-        // user not yet added, so is false. 
-        $isUserAdded = false;    
-        // set variable userDB to for the DB PDO.      
+        $isUserAdded = false;        
         $userTable = $this->userData; 
-        //set the amnt of salt 
+
         $salt = random_bytes(32); 
 
         $stmt = $userTable->prepare("INSERT INTO se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt");
