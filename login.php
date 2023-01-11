@@ -24,16 +24,18 @@
         if ($userDatabase->isUserTrue($userName, $PW)) 
         {
             $_SESSION['isLoggedIn'] = true;
+            $_SESSION['userID'] = $userDatabase->getUserId($userName);
             header ('Location: backend/youLoggedIn.php');
         } 
         else 
         {
-           $message = "Incorrect login credentials. Please try again. Hint: Quack quack";
+           $message = "Incorrect login credentials. Please try again";
         }
     }
     
 ?>
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
    <title>User Login</title>
@@ -47,6 +49,7 @@
       <div class="container">
          <div id="mainDiv">
 
+         <h1>User Login</h1>
          <form action="login.php" method="POST">
             <div class="form-group">
                <label for="username">Username</label>
@@ -58,16 +61,18 @@
             </div>
             <button type="submit" class="btn btn-primary">Log In</button>
          </form>
+         
+         <br>
          <a href="signup.php"><button type="submit" class="btn btn-primary">sign up</button></a>
 
-            
          <?php 
             if ($message)
             {   ?>
-            <div class="custom-text" style="padding: 15px; margin-top: 15px; max-width: 50vw; background-color: red; border: dotted 4px darkred; font-family: 'Roboto Mono', monospace;"> 
+            <div class="custom-text" style=" color: blue; padding: 15px; margin-top: 15px; max-width: 50vw; background-color: #FAF9F6; border: dotted 4px blue;"> 
             <?php echo $message; ?>
             </div>
-            <?php } ?>
+            <?php } 
+         ?>
       </div>
    </div>
 </body>

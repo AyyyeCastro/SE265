@@ -36,28 +36,54 @@ class Users
        return ($results);
     }
     
-    public function userSignup($userName, $PW) 
+    public function userSignup($userName, $PW, $userInnie, $userBio)
     {
         $isUserAdded = false;        
         $userTable = $this->userData; 
 
         $salt = random_bytes(32); 
 
-        $stmt = $userTable->prepare("INSERT INTO se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt");
+        $stmt = $userTable->prepare("INSERT INTO se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio");
 
         $bindParameters = array(
             ":uName" => $userName,
             ":uPW" => sha1($salt . $PW),
-            ":uSalt" => $salt 
-            # I found that w/o doing bin2hex, the signup will throw an error. 
-            # (Inserting a binary string into a MySQL Column that doesnt support it). 
-            # Because of this bin2hex, the below function, isUserTrue ,will now need to unconvert this b4 processing. 
+            ":uSalt" => $salt,
+            ":uInnie" => $userInnie,
+            ":uBio" => $userBio  
+            
+            #---- Important to notes ----#
+                # userBio will not be filled by the user during this sign up. It will be a hidden form in signUp.php with a default value of "Say something about your self".
+                # This is just to have the MySQL column (userBio) injected upon signup, and automatically relate the bio with the userID upon signing up. 
+                # This will allow for an easy update script in a future function.
         );       
         
         $isUserAdded = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
 
         return ($isUserAdded);
     }
+
+
+    // ------ This may have been one way to insert a userBio. But, instead I went with the method in the userSignup function. ------- ///
+    // public function userBioInsert($userBio, $userInnie)
+    // {
+    //     $isBioAdded = false;        
+    //     $userTable = $this->userData; 
+
+
+    //     $stmt = $userTable->prepare("INSERT INTO se265users SET userBio = :uBio WHERE userInnie =:uInnie");
+    //     # it's important to note that userInnie's will HAVE to be a unique, one user handle. If two user's share the same innie, then the program will update BOTH user's bios. 
+    //     # This requirement of unique handles is handled in ...  NEEDS TO BE DONE
+
+    //     $bindParameters = array(
+    //         ":uBio" => $userBio,
+    //         ":uInnie" => $userInnie 
+    //     );       
+        
+    //     $isBioAdded = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+
+    //     return ($isBioAdded);
+    // }
    
 
     // DELETE user record.
@@ -102,6 +128,57 @@ class Users
             $isUserTrue = ($hashPW == $results['userPW']);
         }
         return $isUserTrue;
+    }
+    
+    public function getUserDetails($userID) 
+    {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM se265users WHERE userID = :userID");
+        $bindParameters = array(":userID" => $userID);
+        
+        if($stmt->execute($bindParameters) && $stmt->rowCount() > 0){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+
+    public function getUserId($username)
+    {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT userID FROM se265users WHERE userName = :username");
+        $bindParameters = array(":username" => $username);
+        $stmt->execute($bindParameters);
+        $user = $stmt->fetch();
+        return $user['userID'];
+    }
+
+    public function updateProfile($userName, $PW, $userInnie, $userBio, $userID)
+    {
+        $userTable = $this->userData; 
+        
+        if($PW)
+        {
+            $salt = random_bytes(32);
+            $hashedPW = sha1($salt . $PW);
+            $stmt = $userTable->prepare("UPDATE se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio WHERE userID = :userID ");
+            $bindParameters = array(
+                ":uName" => $userName,
+                ":uPW" => $hashedPW,
+                ":uSalt" => $salt,
+                ":uInnie" => $userInnie,
+                ":uBio" => $userBio ,
+                ":userID" => $userID
+            );
+        }else{
+            $stmt = $userTable->prepare("UPDATE se265users SET userName = :uName, userInnie = :uInnie, userBio = :uBio WHERE userID = :userID");
+            $bindParameters = array(
+                ":uName" => $userName,
+                ":uInnie" => $userInnie,
+                ":uBio" => $userBio ,
+                ":userID" => $userID
+            );
+        }    
+        return $stmt->execute($bindParameters);
     }
 
 }
