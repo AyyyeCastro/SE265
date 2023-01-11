@@ -36,27 +36,28 @@ class Users
        return ($results);
     }
     
-    public function userSignup($userName, $PW, $userInnie, $userBio)
+    public function userSignup($userName, $PW, $userInnie, $userBio, $fileDestination)
     {
         $isUserAdded = false;        
         $userTable = $this->userData; 
 
         $salt = random_bytes(32); 
 
-        $stmt = $userTable->prepare("INSERT INTO se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio");
+        $stmt = $userTable->prepare("INSERT INTO se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination");
 
         $bindParameters = array(
             ":uName" => $userName,
             ":uPW" => sha1($salt . $PW),
             ":uSalt" => $salt,
             ":uInnie" => $userInnie,
-            ":uBio" => $userBio  
-            
-            #---- Important to notes ----#
-                # userBio will not be filled by the user during this sign up. It will be a hidden form in signUp.php with a default value of "Say something about your self".
-                # This is just to have the MySQL column (userBio) injected upon signup, and automatically relate the bio with the userID upon signing up. 
-                # This will allow for an easy update script in a future function.
+            ":uBio" => $userBio,
+            ":fileDestination" => $fileDestination
         );       
+
+        #---- Important to notes ----#
+            # userBio will not be filled by the user during this sign up. It will be a hidden form in signUp.php with a default value of "Say something about your self".
+            # This is just to have the MySQL column (userBio) injected upon signup, and automatically relate the bio with the userID upon signing up. 
+            # This will allow for an easy update script in a future function.
         
         $isUserAdded = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
 
@@ -84,9 +85,7 @@ class Users
 
     //     return ($isBioAdded);
     // }
-   
 
-    // DELETE user record.
     public function userDelete ($id) 
     {
         $isUserDeleted = false;     
@@ -99,7 +98,6 @@ class Users
         return $this->userData;
     }
  
-   // pull ONE user record.
     public function getUserRecord($id) 
     {
         $results = [];                  
@@ -108,8 +106,6 @@ class Users
         return ($results);
     }
 
-
-    // Ensure user entered correct login details.
     public function isUserTrue($userName, $PW)
     {
         $isUserTrue = false;

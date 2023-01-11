@@ -14,10 +14,6 @@
    <div style="padding: 15px;">
       <br>
       <p>Congrats, you signed in correctly<p> 
-      <br><br> 
-      <a href="editProfile.php">Edit Account</a>
-      <br><br> 
-      <a href="viewProfile.php">View profile</a>     
    </div>
 
 </body>

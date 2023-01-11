@@ -38,6 +38,7 @@
          $message = "Error in updating profile, please try again.";
       }
    }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,33 +54,34 @@
         <div id="mainDiv">
             <h1>Account Information</h1>
             <form action="editProfile.php" method="POST">
-                <div>
+               <div>
                     <label for="username">Username</label>
                     <input type="text" id="userName" name="userName" class="form-control" value="<?php echo $userInfo['userName'];?>" required>
                     <small id="userHelp" class="form-text text-muted">Remember, this is your login username. Keep this private.</small>
-                </div>
-                <br>
-                <div>
-                    <label for="userPW">Password</label>
-                    <input type="password" id="userPW" name="userPW" class="form-control">
-                    <small id="innieHelp" class="form-text text-muted">Do not enter anything, if you want to keep the same Password.</small>
-                </div>
-                <br>
-                <div>
-                    <label for="userInnie">Your Innie Handle (@)</label>
-                    <input type="text" id="userInnie" name="userInnie" class="form-control" value="<?php echo $userInfo['userInnie'];?>" required>
-                    <small id="innieHelp" class="form-text text-muted">Your public handle, and what people will see you as.</small>
-                </div>
-                <br>
-                <div>
-                    <label for="userBio">Bio</label>
-                    <textarea id="userBio" name="userBio" class="form-control" required><?php echo $userInfo['userBio'];?></textarea>
-                </div>
-                <br>
-                <div>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <a href="youLoggedIn.php" style="padding: 15px;">Cancel</a>
-                </div>
+               </div>
+               <br>
+               <div>
+                  <label for="userPW">Password</label>
+                  <input type="password" id="userPW" name="userPW" class="form-control">
+                  <small id="innieHelp" class="form-text text-muted">Do not enter anything, if you want to keep the same Password.</small>
+               </div>
+               <br>
+               <div>
+                  <label for="userInnie">Your Innie Handle (@)</label>
+                  <input type="text" id="userInnie" name="userInnie" class="form-control" value="<?php echo $userInfo['userInnie'];?>" required>
+                  <small id="innieHelp" class="form-text text-muted">Your public handle, and what people will see you as.</small>
+               </div>
+               <br>
+               <div>
+                  <label for="userBio">Bio</label>
+                  <textarea id="userBio" name="userBio" class="form-control" required><?php echo $userInfo['userBio'];?></textarea>
+               </div>
+
+               <br>
+               <div>
+                  <button type="submit" class="btn btn-primary">Update</button>
+                  <a href="youLoggedIn.php" style="padding: 15px;">Cancel</a>
+               </div>
             </form>
             <br>
             <?php echo $message ?>
