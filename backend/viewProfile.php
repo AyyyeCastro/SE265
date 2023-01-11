@@ -1,13 +1,14 @@
 <?php
-   session_start();
    include_once '../include/functions.php';
    include_once '../include/header.php';
    include_once '../model/userController.php';
 
-   if (!isUserLoggedIn())
+   if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn'])
    {
       header("location: ../login.php"); 
+      exit;
    }
+   
 
    $message = "";
    $configFile = '../model/dbconfig.ini';
@@ -26,31 +27,76 @@
    $userInfo = $userDatabase->getUserDetails($userID);
    # ----------------#
 ?>
-    <div class="container">
-        <div id="mainDiv">
-            <div id ="profileHeader">
-               <br>
-               <div class="container-fluid bg-light">
-                  <div class="container">
-                     <div class="row" style="padding: 10px;">
 
-                        <div class="col-md-4"> 
-                           <img src="<?php echo '../'. $userInfo['userPic']; ?>" class="img-fluid rounded-circle" alt="profile picture" style="height: 175px; width: 175px; border: solid 2px blue;"">
-                        </div>
+<style>
+   .img-container{
+      position: relative;
+   }
+   
+   .img-overlay{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+   }
+   
+   .img-overlay img {
+      position: absolute;
+      top: 90%;
+      left: 60%;
+      transform: translate(-320%, -40%);
+   }
+</style>
 
-                        <div class="col-md-8" style="padding: 10px;">
-                           <h1><?php echo $userInfo['userInnie']; ?></h1>
-                           <p><?php echo $userInfo['userBio']; ?></p>
-                        </div>
+<div class="container">
+    <div id="mainDiv">
+        <div id ="profileHeader">
+           <br>
+           <div class="container-fluid bg-light">
+              <div class="container">
+                 <div class="row" style="padding: 10px;">
+                    <div class="col-md-4">
+                       <div class="img-container">
+                          <?php 
+                             $defaultAvie = "../include/default-avie/default-avie.jpg";
+                             if (is_null($userInfo['userPic']) || empty($userInfo['userPic'])) { 
+                                echo "<img src= '$defaultAvie' class='img-fluid rounded-circle' alt='profile picture' style='height: 175px; width: 175px; border: solid 2px blue;'>";
+                             }
+                              else{
+                                echo "<img src='" . $userInfo['userPic'] . "' class='img-fluid rounded-circle' alt='profile picture' style='height: 175px; width: 175px; border: solid 2px blue;'>";
+                             }
+                             ?>
 
-                     </div> <!-- Row -->
-                  </div> <!-- container -->
-               </div> <!-- container bg -->
-            </div> <!-- div profileHeader -->
-            <br>
-            <a href="youLoggedIn.php">Back Home</a>    
-        </div> <!-- main div -->
-    </div>
+                           <div class="changePicIcon">
+                              <a href="../backend/editUserPic.php" class="img-overlay">
+                              <img src="../include/icons/change-avie.png" class="img-fluid" style="height: 40px; width: 40px;">
+                              </a>
+                           </div>
+                           
+                       </div>
+                    </div>
+
+                    <div class="col-md-7" style="padding: 10px;">
+                       <h1><?php echo $userInfo['userInnie']; ?></h1> 
+                       <small id="bioTitle" class="form-text text-muted">Biography</small>
+                       <p><?php echo $userInfo['userBio']; ?></p>
+                    </div>
+
+                    <div class="col-md-1" style="padding: 10px;">
+                       <p style="text-align: right;"><a href="../backend/editProfile.php">Edit</a><p>
+                    </div>
+
+                 </div> <!-- Row -->
+              </div> <!-- container -->
+           </div> <!-- container bg -->
+        </div> <!-- div profileHeader -->
+        <br>
+        <a href="youLoggedIn.php">Back Home</a>   
+    </div> <!-- main div -->
+</div>
+
+
 </body>
 </html>
 

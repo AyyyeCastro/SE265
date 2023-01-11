@@ -1,5 +1,4 @@
 <?php
-    session_start();
     include_once __DIR__ . '/include/functions.php';
     include_once __DIR__ . '/model/userController.php';
 
@@ -23,9 +22,10 @@
     
         if ($userDatabase->isUserTrue($userName, $PW)) 
         {
-            $_SESSION['isLoggedIn'] = true;
-            $_SESSION['userID'] = $userDatabase->getUserId($userName);
-            header ('Location: backend/youLoggedIn.php');
+         session_start();
+         $_SESSION['isLoggedIn'] = true;
+         $_SESSION['userID'] = $userDatabase->getUserId($userName);
+         header ('Location: backend/youLoggedIn.php');
         } 
         else 
         {

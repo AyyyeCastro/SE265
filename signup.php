@@ -14,9 +14,11 @@
       $userInnie = filter_input(INPUT_POST, 'userInnie');
       $userBio = filter_input(INPUT_POST, 'userBio');
 
-      $file = $_FILES['userProfilePicture'];
-      $fileDestination = 'uploaded/' . $file['name'];
-      move_uploaded_file($file['tmp_name'], $fileDestination);
+      #--- Profile pictures -- #
+      #$file = $_FILES['userProfilePicture'];
+      #$fileDestination = 'uploaded/' . $file['name'];
+      #move_uploaded_file($file['tmp_name'], $fileDestination);
+      # ---------------------- #
 
       $configFile = __DIR__ . '/model/dbconfig.ini';
       try 
@@ -28,8 +30,9 @@
          echo "<h2>" . $error->getMessage() . "</h2>";
       }   
     
-
-      if($userDatabase->userSignup($userName, $PW, $userInnie, $userBio, $fileDestination)){
+      #if you add profile pictures back to the signup sheet -> 
+      # make sure u include $fileDestination in the userSignup parameters.
+      if($userDatabase->userSignup($userName, $PW, $userInnie, $userBio)){
            $message = "Signed up! You can now login.";
        } 
        
@@ -84,12 +87,13 @@
         </div>
 
         <br>
-
+        
+      <!--
         <div>
           <label for="userProfilePicture">Profile Picture</label>
-          <input type="file" id="userProfilePicture" name="userProfilePicture" class="form-control" accept="image/*" required>
+          <input type="hidden" id="userProfilePicture" name="userProfilePicture" class="form-control" accept="image/*" required>
         </div>
-
+       -->
 
         <div>
           <br>

@@ -29,21 +29,17 @@ class Users
         }
     } 
 
-    public function getUsers() 
-    {
-        $userTable = $this->userData;
-        $results = [];                 
-       return ($results);
-    }
-    
-    public function userSignup($userName, $PW, $userInnie, $userBio, $fileDestination)
+    #if you add profile pictures back to the signup sheet -> 
+    # make sure u include $fileDestination in the userSignup parameters.
+    # also userPic = :fileDestination in tto the stmt SQL injection code.
+    public function userSignup($userName, $PW, $userInnie, $userBio)
     {
         $isUserAdded = false;        
         $userTable = $this->userData; 
 
         $salt = random_bytes(32); 
 
-        $stmt = $userTable->prepare("INSERT INTO se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination");
+        $stmt = $userTable->prepare("INSERT INTO se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio");
 
         $bindParameters = array(
             ":uName" => $userName,
@@ -51,7 +47,7 @@ class Users
             ":uSalt" => $salt,
             ":uInnie" => $userInnie,
             ":uBio" => $userBio,
-            ":fileDestination" => $fileDestination
+            #":fileDestination" => $fileDestination
         );       
 
         #---- Important to notes ----#
@@ -63,28 +59,6 @@ class Users
 
         return ($isUserAdded);
     }
-
-
-    // ------ This may have been one way to insert a userBio. But, instead I went with the method in the userSignup function. ------- ///
-    // public function userBioInsert($userBio, $userInnie)
-    // {
-    //     $isBioAdded = false;        
-    //     $userTable = $this->userData; 
-
-
-    //     $stmt = $userTable->prepare("INSERT INTO se265users SET userBio = :uBio WHERE userInnie =:uInnie");
-    //     # it's important to note that userInnie's will HAVE to be a unique, one user handle. If two user's share the same innie, then the program will update BOTH user's bios. 
-    //     # This requirement of unique handles is handled in ...  NEEDS TO BE DONE
-
-    //     $bindParameters = array(
-    //         ":uBio" => $userBio,
-    //         ":uInnie" => $userInnie 
-    //     );       
-        
-    //     $isBioAdded = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
-
-    //     return ($isBioAdded);
-    // }
 
     public function userDelete ($id) 
     {
@@ -148,7 +122,7 @@ class Users
         return $user['userID'];
     }
 
-    public function updateProfile($userName, $PW, $userInnie, $userBio, $userID)
+    public function updateProfile($userName, $PW, $userInnie, $userBio, $userID, $fileDestination)
     {
         $userTable = $this->userData; 
         
@@ -156,26 +130,29 @@ class Users
         {
             $salt = random_bytes(32);
             $hashedPW = sha1($salt . $PW);
-            $stmt = $userTable->prepare("UPDATE se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio WHERE userID = :userID ");
+            $stmt = $userTable->prepare("UPDATE se265users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination WHERE userID = :userID ");
             $bindParameters = array(
                 ":uName" => $userName,
                 ":uPW" => $hashedPW,
                 ":uSalt" => $salt,
                 ":uInnie" => $userInnie,
                 ":uBio" => $userBio ,
-                ":userID" => $userID
+                ":userID" => $userID,
+                ":fileDestination" => $fileDestination
             );
         }else{
-            $stmt = $userTable->prepare("UPDATE se265users SET userName = :uName, userInnie = :uInnie, userBio = :uBio WHERE userID = :userID");
+            $stmt = $userTable->prepare("UPDATE se265users SET userName = :uName, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination WHERE userID = :userID");
             $bindParameters = array(
                 ":uName" => $userName,
                 ":uInnie" => $userInnie,
                 ":uBio" => $userBio ,
-                ":userID" => $userID
+                ":userID" => $userID,
+                ":fileDestination" => $fileDestination
             );
         }    
         return $stmt->execute($bindParameters);
     }
+     
 
 }
 ?>

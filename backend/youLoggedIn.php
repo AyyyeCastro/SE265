@@ -13,7 +13,7 @@
 
    <div style="padding: 15px;">
       <br>
-      <p>Congrats, you signed in correctly<p> 
+      <p>Congrats, you signed in correctly. View the nav above.<p> 
    </div>
 
 </body>

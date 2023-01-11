@@ -15,7 +15,7 @@
 
   <nav class="navbar navbar-light bg-light">
     
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" href="../backend/youLoggedIn.php">
       <img src="../include/PlugIn-Icon.png" class="img-fluid rounded-circle" width="40" height="40" class="d-inline-block align-top" alt="">
       PlugIn
     </a>
@@ -25,7 +25,7 @@
       if (isUserLoggedIn()) 
       { ?>
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="viewProfile.php">View profile</a> &nbsp&nbsp <a href="editProfile.php">Edit Account</a> &nbsp&nbsp <a href="logoff.php">Logout</a></li>
+      <li><a href="viewProfile.php">View profile</a> &nbsp&nbsp <a href="logoff.php">Logout</a></li>
       </ul>
       <?php
       }  

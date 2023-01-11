@@ -1,12 +1,14 @@
 <?php
-   session_start();
    include_once '../include/functions.php';
    include_once '../model/userController.php';
 
-   if (!isUserLoggedIn())
+   session_start();
+   if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn'])
    {
       header("location: ../login.php"); 
+      exit;
    }
+   
 
    $message = "";
    $configFile = '../model/dbconfig.ini';
@@ -25,19 +27,36 @@
    $userInfo = $userDatabase->getUserDetails($userID);
    # ----------------#
 
-   if(isPostRequest()){
 
+   if(isPostRequest()){
       $userName = filter_input(INPUT_POST, 'userName');
       $userInnie = filter_input(INPUT_POST, 'userInnie');
       $userBio = filter_input(INPUT_POST, 'userBio');
       $userPW = filter_input(INPUT_POST, 'userPW');
 
-      if($userDatabase->updateProfile($userName, $userPW, $userInnie, $userBio, $userID)){
-         $message = 'Profile Updated Successfully' . '<a href="youLoggedIn.php" style="padding: 15px;">Go Back Home</a>';
-      }else{
-         $message = "Error in updating profile, please try again.";
+      # -- Profile Pictures -- #
+      # -- IMPORTANT!!! -- #
+      $userInfo = $userDatabase->getUserDetails($userID);
+      $fileDestination = $userInfo['userPic'];
+      # First it get's the userInfo stored in the MySQL database, which I have linked to getUserDetails($userID)
+      # Then set the DEFAULT $fileDestination to always be the previously set profile picture, stored in the DB.
+      # This way if the user doesn't update their pic in the form, the previous image is still saved.
+  
+      #--- Profile Picture Traveling -- #
+      $file = $_FILES['userProfilePicture'];
+      if ($file['error'] != UPLOAD_ERR_NO_FILE) {
+          $fileDestination = '../uploaded/' . $file['name'];
+          move_uploaded_file($file['tmp_name'], $fileDestination);
       }
-   }
+      # ---------------------------------#
+  
+      if($userDatabase->updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination)){
+          header("location: ../backend/viewProfile.php"); 
+      }else{
+          $message = "Error in updating profile, please try again.";
+      }
+  }
+  
 
 ?>
 <!DOCTYPE html>
@@ -52,8 +71,8 @@
 <body>
     <div class="container">
         <div id="mainDiv">
-            <h1>Account Information</h1>
-            <form action="editProfile.php" method="POST">
+            <h1>Account Information</h1> <!-- SUPER important. enctype="multipart/form-data" in order to allow inserting profile pics -->
+            <form action="editProfile.php" method="POST" enctype="multipart/form-data">
                <div>
                     <label for="username">Username</label>
                     <input type="text" id="userName" name="userName" class="form-control" value="<?php echo $userInfo['userName'];?>" required>
@@ -76,11 +95,17 @@
                   <label for="userBio">Bio</label>
                   <textarea id="userBio" name="userBio" class="form-control" required><?php echo $userInfo['userBio'];?></textarea>
                </div>
+               <br>
+               <div>
+                  <label for="userProfilePicture">Change Profile Avie</label>
+                  <input type="file" id="userProfilePicture" name="userProfilePicture" class="form-control" accept="image/*">
+                  <small id="innieHelp" class="form-text text-muted">Don't insert a file to maintain the same avie.</small>
+               </div>
 
                <br>
                <div>
                   <button type="submit" class="btn btn-primary">Update</button>
-                  <a href="youLoggedIn.php" style="padding: 15px;">Cancel</a>
+                  <a href="viewProfile.php" style="padding: 15px;">Cancel</a>
                </div>
             </form>
             <br>
