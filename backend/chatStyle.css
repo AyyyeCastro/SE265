@@ -1,0 +1,118 @@
+/* CSS referenced from Mozzila.org's Websocket guide.
+  This whole website is NOT focused on beautifying CSS right now, so please dont worry about it being ugly */
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body{
+  height: 100%;
+  width: 100%;
+}
+
+html {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 100%;
+  background: rgb(255, 255, 255);
+}
+
+#page-wrapper {
+  width: 95vw;
+  height: 100vh;
+  background: #FFF;
+  padding: 1em;
+  margin: 1em auto;
+  border-top: 5px solid #3916c4;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+h1 {
+	margin-top: 0;
+}
+
+#status {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.open {
+  color: #3916c4;
+}
+
+.closed {
+  color: red;
+}
+
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.95rem;
+}
+
+ul li {
+  /* controls the background around the chat text areas */
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid rgb(214, 214, 214);
+}
+
+
+/* controls the sent chat text */
+ul li span {
+  display: inline-block;
+  /* Chat text will be 50 pixels from the "SENT:" header */
+  width: 120px;
+  font-weight: bold;
+  color: #3916c4;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sent {
+  background-color: #F7F7F7;
+}
+
+/* .received {} */
+
+#message-form {
+  /* how much space the textarea will drop after each sent message */
+  margin-top: 1.5rem;
+}
+
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #D9D9D9;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
+  min-height: 100px;
+  margin-bottom: 1rem;
+}
+
+button {
+  display: inline-block;
+  border-radius: 3px;
+  border: none;
+  font-size: 0.9rem;
+  padding: 0.6rem 1em;
+  color: white;
+  margin: 0 0.25rem;
+  text-align: center;
+  background: #BABABA;
+  border-bottom: 1px solid #999;
+}
+
+button[type="submit"] {
+  background: #3916c4;
+  border-bottom: 1px solid #280f8f;
+}
+
+button:hover {
+  opacity: 0.75;
+  cursor: pointer;
+}

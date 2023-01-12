@@ -45,17 +45,6 @@
         }
     }
     
-
-   //  // if they clicked the delete button, delete the record w/ delete function.
-   //  if (isPostRequest()) 
-   //  {
-   //      if (isset($_POST["delete"]))
-   //      {
-   //          $id = filter_input(INPUT_POST, 'p_id');
-   //          $deleteList = $newCollectionClass->deleteCollection($id);
-   //          header('Location: searchCollections.php');
-   //      }  
-   //  }
 ?>
 <!-- END PHP -->
 
@@ -90,7 +79,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-               <th>id (will get hidden)</th>
+               <th></th>
                 <th>User Avie</th>
                 <th>User Innie</th>
                 <th></th>
@@ -102,14 +91,12 @@
             <tr>
                 <td>
                     <form action="" method="post">
-                        <input type="text" name="p_id" value="<?= $row['userID']; ?>" />
+                        <input type="hidden" name="p_id" value="<?= $row['userID']; ?>" />
                     </form>   
                 </td>
-                <!-- Display it's value -->
-                <td><?php echo '<img src="'. $row['userPic'] . '" style="height: 220; width: 220px;">'; ?></td>
-                <td><?php echo $row['userInnie']; ?></td>
-                <td><a href='viewProfile.php?userID=<?= $row['userID']; ?>' class='btn btn-primary'>View Profile</a></td>
-
+                <!-- Display it's value, AND IMPORTANTLY set the links to lead to the user's profile according by userID -->
+                <td><a href="viewUsers.php?userID=<?= $row['userID']; ?>"><img src="<?= $row['userPic']; ?>" style="height: 175px; width: 175px;"></a></td>
+                <td><a href="viewUsers.php?userID=<?= $row['userID']; ?>"><?= $row['userInnie']; ?></a></td>
             </tr>
         <?php endforeach; ?>
         <!-- END for-loop -->

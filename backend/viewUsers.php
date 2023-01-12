@@ -21,10 +21,10 @@
       echo "<h2>" . $error->getMessage() . "</h2>";
    }   
   
-   # -- Important -- #
-   # Set the session outside of the post request, so that the forms can get pre-filled. 
-   $userID = $_SESSION['userID'];
+
+   $userID = filter_input(INPUT_GET, 'userID');
    $userInfo = $userDatabase->getUserDetails($userID);
+   
 
    # ----------------#
 ?>
@@ -53,7 +53,11 @@
 <div class="container">
     <div id="mainDiv">
         <div id ="profileHeader">
+
            <br>
+           <a href="searchUsers.php"><button class="btn btn-primary">Back</button></a>
+           <br><br>
+
            <div class="container-fluid bg-light">
               <div class="container">
                  <div class="row" style="padding: 10px;">
@@ -67,20 +71,15 @@
                               else{
                                 echo "<img src='" . $userInfo['userPic'] . "' class='img-fluid rounded-circle' alt='profile picture' style='height: 175px; width: 175px; border: solid 2px blue;'>";
                              }
-                             ?>
-
-                           <div class="changePicIcon">
-                              <a href="../backend/editUserPic.php" class="img-overlay">
-                              </a>
-                           </div>
-                           
+                             ?>   
                        </div>
                     </div>
 
                     <div class="col-md-7" style="padding: 10px;">
-                       <h1><?php echo $userInfo['userInnie']; ?></h1> 
+                    <!--  < ? = is actually a shortcut for echo as of PHP 5.4 and above! Just found out!! -->
+                       <h1><?=$userInfo['userInnie']; ?></h1> 
                        <small id="bioTitle" class="form-text text-muted">Biography</small>
-                       <p><?php echo $userInfo['userBio']; ?></p>
+                       <p><?= $userInfo['userBio']; ?></p>
                     </div>
 
                      <!-- The following code would be inside the 'profileHeader' div in your viewProfile.php file, most likely in the same area where you have the "Edit" button currently -->

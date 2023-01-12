@@ -1,5 +1,4 @@
 <?php
-  // This should already be loaded, but just in case
   include_once '../include/functions.php';
 ?>
 
@@ -25,7 +24,7 @@
       if (isUserLoggedIn()) 
       { ?>
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="viewProfile.php">View profile</a> &nbsp&nbsp <a href="searchUsers.php">Search Users</a> &nbsp&nbsp <a href="logoff.php">Logout</a></li>
+      <li><a href="chatRoom.php">Chat Room</a> &nbsp&nbsp <a href="viewProfile.php">View profile</a> &nbsp&nbsp <a href="searchUsers.php">Search Users</a> &nbsp&nbsp <a href="logoff.php">Logout</a></li>
       </ul>
       <?php
       }  

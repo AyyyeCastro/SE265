@@ -87,7 +87,7 @@
                <br>
                <div>
                   <label for="userInnie">Your Innie Handle (@)</label>
-                  <input type="text" id="userInnie" name="userInnie" class="form-control" value="<?php echo $userInfo['userInnie'];?>" required>
+                  <input type="text" id="userInnie" name="userInnie" class="form-control" value="<?php echo $userInfo['userInnie'];?>" maxlength="15" required>
                   <small id="innieHelp" class="form-text text-muted">Your public handle, and what people will see you as.</small>
                </div>
                <br>

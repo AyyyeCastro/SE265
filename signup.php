@@ -5,6 +5,7 @@
 
   $_SESSION['isLoggedIn'] = false;
 
+
   $message = "";
   if (isPostRequest()) 
   {
@@ -64,7 +65,7 @@
         <br>
         <div>
           <label for="userInnie">Your Innie Handle (@)</label>
-          <input type="text" id="userInnie" name="userInnie" class="form-control" required>
+          <input type="text" id="userInnie" name="userInnie" class="form-control" maxlength="15" required>
           <small id="innieHelp" class="form-text text-muted">This will be what people on PlugIn see you as.</small>
         </div>
 
