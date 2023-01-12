@@ -25,7 +25,7 @@
       if (isUserLoggedIn()) 
       { ?>
       <ul class="nav navbar-nav navbar-right">
-      <li><a href="viewProfile.php">View profile</a> &nbsp&nbsp <a href="logoff.php">Logout</a></li>
+      <li><a href="viewProfile.php">View profile</a> &nbsp&nbsp <a href="searchUsers.php">Search Users</a> &nbsp&nbsp <a href="logoff.php">Logout</a></li>
       </ul>
       <?php
       }  

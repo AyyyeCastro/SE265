@@ -1,49 +1,36 @@
 <?php
-   session_start();
-   include_once __DIR__ . '/include/functions.php';
-   include_once __DIR__ . '/model/userController.php';
+  session_start();
+  include_once __DIR__ . '/include/functions.php';
+  include_once __DIR__ . '/model/userController.php';
 
-   $_SESSION['isLoggedIn'] = false;
+  $_SESSION['isLoggedIn'] = false;
 
-
-   $message = "";
-   if (isPostRequest()) 
-   {
-      $userName = filter_input(INPUT_POST, 'userName');
-      $PW = filter_input(INPUT_POST, 'userPW');
-      $userInnie = filter_input(INPUT_POST, 'userInnie');
-      $userBio = filter_input(INPUT_POST, 'userBio');
-
-      #--- Profile pictures -- #
-      #$file = $_FILES['userProfilePicture'];
-      #$fileDestination = 'uploaded/' . $file['name'];
-      #move_uploaded_file($file['tmp_name'], $fileDestination);
-      # ---------------------- #
-
-      $configFile = __DIR__ . '/model/dbconfig.ini';
-      try 
-      {
-         $userDatabase = new Users($configFile);
-      } 
-      catch ( Exception $error ) 
-      {
-         echo "<h2>" . $error->getMessage() . "</h2>";
-      }   
+  $message = "";
+  if (isPostRequest()) 
+  {
+    $userName = filter_input(INPUT_POST, 'userName');
+    $PW = filter_input(INPUT_POST, 'userPW');
+    $userInnie = filter_input(INPUT_POST, 'userInnie');
+    $userBio = filter_input(INPUT_POST, 'userBio');
+  
+    $configFile = __DIR__ . '/model/dbconfig.ini';
+    try 
+    {
+        $userDatabase = new Users($configFile);
+    } 
+    catch ( Exception $error ) 
+    {
+        echo "<h2>" . $error->getMessage() . "</h2>";
+    }   
     
-      #if you add profile pictures back to the signup sheet -> 
-      # make sure u include $fileDestination in the userSignup parameters.
-      if($userDatabase->userSignup($userName, $PW, $userInnie, $userBio)){
-           $message = "Signed up! You can now login.";
-       } 
-       
-       else{
-           $message = "Error in signing up, please try again.";
-       }
+    # Check for unique user innie, username, and then allow the userSignUp function to run.
+    if (!$userDatabase->userUniqueInnie($userInnie) && !$userDatabase->userUniqueUN($userName) && $userDatabase->userSignup($userName, $PW, $userInnie, $userBio)) {
+      $message = "Signed up! You can now login.";
+    }else {
+      $message = "Sorry, your Username and/or Innie handle must be unique. Try again!";
     }
- 
-
-    
- 
+     
+  }
 ?>
 
 <!DOCTYPE html>

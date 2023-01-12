@@ -25,6 +25,12 @@
    # Set the session outside of the post request, so that the forms can get pre-filled. 
    $userID = $_SESSION['userID'];
    $userInfo = $userDatabase->getUserDetails($userID);
+
+
+
+
+
+   
    # ----------------#
 ?>
 
@@ -83,20 +89,22 @@
                        <p><?php echo $userInfo['userBio']; ?></p>
                     </div>
 
-                    <div class="col-md-1" style="padding: 10px;">
-                       <p style="text-align: right;"><a href="../backend/editProfile.php">Edit</a><p>
-                    </div>
+                     <!-- The following code would be inside the 'profileHeader' div in your viewProfile.php file, most likely in the same area where you have the "Edit" button currently -->
+
+                     <div class="col-md-1" style="padding: 10px;">
+                        <!-- Check if the currently logged in user's ID matches the ID of the profile being viewed -->
+                        <?php if ($_SESSION['userID'] === $userInfo['userID']) { ?>
+                           <p style="text-align: right;"><a href="../backend/editProfile.php">Edit</a><p>
+                        <?php } ?>
+                     </div>
 
                  </div> <!-- Row -->
               </div> <!-- container -->
            </div> <!-- container bg -->
         </div> <!-- div profileHeader -->
-        <br>
-        <a href="youLoggedIn.php">Back Home</a>   
+        <br>  
     </div> <!-- main div -->
 </div>
-
-
 </body>
 </html>
 

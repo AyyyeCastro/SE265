@@ -60,6 +60,45 @@ class Users
         return ($isUserAdded);
     }
 
+
+    function userUniqueInnie($userInnie){
+        $userTable = $this->userData; 
+        $stmt = $userTable->prepare("SELECT count(*) FROM se265users WHERE userInnie=:userInnie");
+
+
+        $stmt->bindParam(
+            ':userInnie', $userInnie
+        );
+
+        $stmt->execute();
+        $number_of_rows = $stmt->fetchColumn(); 
+        if($number_of_rows > 0){
+            return true;}
+        else
+        {
+            return false;
+        }
+    }
+
+    function userUniqueUN($userName){
+        $userTable = $this->userData; 
+        $stmt = $userTable->prepare("SELECT count(*) FROM se265users WHERE userName=:userName");
+
+
+        $stmt->bindParam(
+            ':userName', $userName
+        );
+
+        $stmt->execute();
+        $number_of_rows = $stmt->fetchColumn(); 
+        if($number_of_rows > 0){
+            return true;}
+        else
+        {
+            return false;
+        }
+    }
+
     public function userDelete ($id) 
     {
         $isUserDeleted = false;     
@@ -152,6 +191,45 @@ class Users
         }    
         return $stmt->execute($bindParameters);
     }
+
+
+    public function findUserByInnie($userInnie) 
+    {
+        $results = array();                  
+        $binds = array();                    
+        $isFirstClause = true;              
+        $userTable = $this->userData;
+ 
+ 
+        $sql = "SELECT userID, userName, userInnie, userBio, userPic FROM se265users";
+ 
+         if (isset($userInnie)) 
+         {
+             if ($isFirstClause)
+             {
+                 $sql .= " WHERE ";
+                 $isFirstClause = false;
+             }
+             else
+             {
+                 $sql .= " AND ";
+             }
+             $sql .= " userInnie LIKE :userInnie";
+             $binds['userInnie'] = '%'.$userInnie.'%';
+         }
+       
+ 
+         $sql .= " ORDER BY userInnie";
+        
+         $stmt = $this->userData->prepare($sql);
+       
+         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
+             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+         }
+ 
+ 
+        return $results;
+    }   
      
 
 }
