@@ -99,25 +99,12 @@ class Users
         }
     }
 
-    public function userDelete ($id) 
-    {
-        $isUserDeleted = false;     
-        $userTable = $this->userData; 
 
-        return ($isUserDeleted);
-    }
     public function getDatabaseRef()
     {
         return $this->userData;
     }
  
-    public function getUserRecord($id) 
-    {
-        $results = [];                  
-        $userTable = $this->userData;
-    
-        return ($results);
-    }
 
     public function isUserTrue($userName, $PW)
     {
@@ -231,6 +218,49 @@ class Users
         return $results;
     }   
      
+
+    #######################################################################################
+    #######################################################################################
+    ################# -- BEGINNING OF USER LISTING CONTROLLER -- ##########################
+    #######################################################################################
+    #######################################################################################
+
+    public function postUserListing($userID, $listProdCat, $listProdPrice, $listProdTitle, 
+    $listDesc, $listCond, $fileDestination)
+    {
+        $isListPosted = false;        
+        $userTable = $this->userData; 
+
+        $stmt = $userTable->prepare("INSERT INTO se265userlistings SET userID = :userID, listProdCat = :listProdCat, 
+        listProdPrice = :listProdPrice,listProdTitle = :listProdTitle, listDesc = :listDesc,
+         listCond = :listCond, listProdPic = :fileDestination");
+
+        $bindParameters = array(
+            ":userID" => $userID,
+            ":listProdCat" => $listProdCat,
+            ":listProdPrice" => $listProdPrice,
+            ":listProdTitle" => $listProdTitle,
+            ":listDesc" => $listDesc,
+            ":listCond" => $listCond,
+            ":fileDestination" => $fileDestination,
+        );       
+
+        $isListPosted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isListPosted);
+    }
+
+    public function getUserListing($userID){
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM se265userlistings WHERE userID = :userID ORDER BY listProdPrice DESC");
+        $bindParameters = array(
+            ":userID" => $userID
+        );
+        $stmt->execute($bindParameters);
+        return $stmt->fetchAll();
+    }
+
+
+
 
 }
 ?>

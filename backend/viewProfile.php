@@ -25,6 +25,7 @@
    # Set the session outside of the post request, so that the forms can get pre-filled. 
    $userID = $_SESSION['userID'];
    $userInfo = $userDatabase->getUserDetails($userID);
+   $userListLog = $userDatabase->getUserListing($userID);
 
    # ----------------#
 ?>
@@ -96,7 +97,44 @@
               </div> <!-- container -->
            </div> <!-- container bg -->
         </div> <!-- div profileHeader -->
-        <br>  
+        <br>  <br>  
+
+         <!-- BEGIN TABLE -->
+         <table class="table table-hover" id="userListLog">
+            <thead>
+                  <tr>
+                     <th></th> <!-- listID -->
+                     <th>Price</th>
+                     <th></th> <!-- image -->
+                     <th>Desc</th>
+                     <th>Title</th>
+                     <th>Condition</th>
+                     <th>Category</th>
+                  </tr>
+            </thead>
+            <tbody>
+                  <!-- For every value stored in the array we declared in the PHP section -->
+                  <?php
+                     foreach ($userListLog as $row): ?>
+                  <tr>
+                     <td>
+                        <form action="" method="post">
+                              <input type="hidden" name="p_id" value="<?= $row['listID']; ?>" />
+                        </form>   
+                     </td>
+                     <td><?= $row['listProdPrice']; ?></td>
+                     <!-- Display it's value, AND IMPORTANTLY set the links to lead to the user's profile according by userID -->
+                     <td><img src="<?= $row['listProdPic']; ?>" style="height: 200px; width: 200px;"></td>
+                     <td><?= $row['listProdTitle']; ?></td>
+                     <td><?= $row['listDesc']; ?></td>
+                     <td><?= $row['listCond']; ?></td>
+                     <td><?= $row['listProdCat']; ?></td>
+                  </tr>
+            <?php endforeach;?>
+            <!-- END for-loop -->
+            </tbody>
+         </table>
+         <!-- END TABLE -->
     </div> <!-- main div -->
 </div>
 </body>
