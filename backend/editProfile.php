@@ -29,31 +29,37 @@
 
 
    if(isPostRequest()){
-      $userName = filter_input(INPUT_POST, 'userName');
-      $userInnie = filter_input(INPUT_POST, 'userInnie');
-      $userBio = filter_input(INPUT_POST, 'userBio');
-      $userPW = filter_input(INPUT_POST, 'userPW');
+      if (isset($_POST['updateBtn'])) 
+      {
+         $userName = filter_input(INPUT_POST, 'userName');
+         $userInnie = filter_input(INPUT_POST, 'userInnie');
+         $userBio = filter_input(INPUT_POST, 'userBio');
+         $userPW = filter_input(INPUT_POST, 'userPW');
 
-      # -- Profile Pictures -- #
-      # -- IMPORTANT!!! -- #
-      $userInfo = $userDatabase->getUserDetails($userID);
-      $fileDestination = $userInfo['userPic'];
-      # First it get's the userInfo stored in the MySQL database, which I have linked to getUserDetails($userID)
-      # Then set the DEFAULT $fileDestination to always be the previously set profile picture, stored in the DB.
-      # This way if the user doesn't update their pic in the form, the previous image is still saved.
-  
-      #--- Profile Picture Traveling -- #
-      $file = $_FILES['userProfilePicture'];
-      if ($file['error'] != UPLOAD_ERR_NO_FILE) {
-          $fileDestination = '../uploaded/' . $file['name'];
-          move_uploaded_file($file['tmp_name'], $fileDestination);
+         # -- Profile Pictures -- #
+         # -- IMPORTANT!!! -- #
+         $userInfo = $userDatabase->getUserDetails($userID);
+         $fileDestination = $userInfo['userPic'];
+         # First it get's the userInfo stored in the MySQL database, which I have linked to getUserDetails($userID)
+         # Then set the DEFAULT $fileDestination to always be the previously set profile picture, stored in the DB.
+         # This way if the user doesn't update their pic in the form, the previous image is still saved.
+   
+         #--- Profile Picture Traveling -- #
+         $file = $_FILES['userProfilePicture'];
+         if ($file['error'] != UPLOAD_ERR_NO_FILE) {
+            $fileDestination = '../uploaded/' . $file['name'];
+            move_uploaded_file($file['tmp_name'], $fileDestination);
+         }
+         # ---------------------------------#
+   
+         if($userDatabase->updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination)){
+            header("location: ../backend/viewProfile.php"); 
+         }else{
+            $message = "Error in updating profile, please try again.";
+         }
       }
-      # ---------------------------------#
-  
-      if($userDatabase->updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination)){
-          header("location: ../backend/viewProfile.php"); 
-      }else{
-          $message = "Error in updating profile, please try again.";
+      if (isset($_POST['cancelBtn'])){
+         header('Location: viewProfile.php');
       }
   }
   
@@ -102,10 +108,20 @@
                   <small id="innieHelp" class="form-text text-muted">Don't insert a file to maintain the same avie.</small>
                </div>
 
+               <!-- Work in progress... Ensure this boolean can only be viewed by ADMIN and/or MODS -->
+               <br>
+               <div class="form-check">
+               <input class="form-check-input" type="checkbox" value="" id="isModerator">
+               <label class="form-check-label" for="isModerator">
+                  Make Moderator
+               </label>
+               </div>
+               <!------------>
+
                <br>
                <div>
-                  <button type="submit" class="btn btn-primary">Update</button>
-                  <a href="viewProfile.php" style="padding: 15px;">Cancel</a>
+                  <input type="submit" class="btn btn-primary" name="updateBtn" value="update" />
+                  <input type="submit" class="btn btn-secondary" name="cancelBtn" value="cancel" onclick="return confirm('This will remove all progress. Leave page?')">
                </div>
             </form>
             <br>

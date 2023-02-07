@@ -25,7 +25,7 @@
          session_start();
          $_SESSION['isLoggedIn'] = true;
          $_SESSION['userID'] = $userDatabase->getUserId($userName);
-         header ('Location: backend/youLoggedIn.php');
+         header ('Location: backend/plugInHome.php');
         } 
         else 
         {

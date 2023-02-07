@@ -25,15 +25,21 @@
    # Set the session outside of the post request, so that the forms can get pre-filled. 
    $userID = $_SESSION['userID'];
    $userInfo = $userDatabase->getUserDetails($userID);
+   $catList = $userDatabase->getAllCategories();
+   $condList = $userDatabase->getAllConditions();
+
    # ----------------#
 
 
    if(isPostRequest()){
       $listProdCat = filter_input(INPUT_POST, 'inputProdCat');
+      $catList = $userDatabase->getAllCategories();
       $listProdPrice = filter_input(INPUT_POST, 'inputProdPrice');
       $listProdTitle = filter_input(INPUT_POST, 'inputProdTitle');
       $listDesc = filter_input(INPUT_POST, 'inputProdDesc');
       $listCond = filter_input(INPUT_POST, 'inputProdCond');
+      $condList = $userDatabase->getAllConditions();
+      
 
       # -- Profile Pictures -- #
       # -- IMPORTANT!!! -- #
@@ -55,7 +61,7 @@
       $listCond, $fileDestination)){
           header("location: ../backend/viewProfile.php"); 
       }else{
-          $message = "Error in updating profile, please try again.";
+          $message = "Error posting new listing, please try again.";
       }
   }
 ?>
@@ -63,14 +69,22 @@
    <div class="container">
       <div id="mainDiv">
          <form action="postListing.php" method="post" enctype="multipart/form-data">
-            <div>
-               <label for="inputProdCat">Product Category:</label>
-               <input type="text" class="form-control" id="inputProdCat" name="inputProdCat" required>
-            </div>
+         <select class="form-control" id="inputProdCat" name="inputProdCat" required>
+         <option value="" disabled selected>Choose category</option>
+         <?php
+            foreach ($catList as $category) {
+               $selected = ($category['catGenre'] == $listDetails['listProdCat']) ? 'selected' : '';
+               echo '<option value="' . $category['catGenre'] . '" ' . $selected . '>' . $category['catGenre'] . '</option>';
+            }
+         ?>
+         </select>
+
+
+
 
             <div>
                <label for="inputProdPrice">Product price:</label>
-               <input type="number" class="form-control" id="inputProdPrice" name="inputProdPrice" required>
+               <input type="text" class="form-control" id="inputProdPrice" name="inputProdPrice" required>
             </div>
 
             <div>
@@ -86,16 +100,27 @@
             
             <div>
                <label for="inputProdCond">Product Condition:</label> <!-- listCondition in the db -->
-               <textarea class="form-control" id="inputProdCond" name="inputProdCond" rows="5" required></textarea>
+               <select class="form-control" id="inputProdCond" name="inputProdCond" required>
+               <option value="" disabled selected>Choose category</option>
+               <?php
+                  foreach ($condList as $condition) {
+                     $selected = ($condition['condType'] == $listDetails['listProdCat']) ? 'selected' : '';
+                     echo '<option value="' . $condition['condType'] . '" ' . $condition . '>' . $condition['condType'] . '</option>';
+                  }
+               ?>
+               </select>
             </div>
 
             <div>
-               <label for="inputProdPic">Upload Product Picture</label>
-               <input type="file" id="inputProdPic" name="inputProdPic" class="form-control" accept="image/*">
+               <label for="inputProdPic">Select Pictures</label>
+               <input type="file" id="inputProdPic" name="inputProdPic" class="form-control" accept="image/*" multiple>
             </div>
 
             <br>
-            <input type="submit" class="btn btn-primary" value="Post Listing">
+            <div>
+               <input type="submit" class="btn btn-primary" value="Post Listing">
+               <a href="viewProfile.php" style="padding: 15px;">Cancel</a>
+            </div>
          </form>
       </div> <!-- main div -->
    </div>

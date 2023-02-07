@@ -5,7 +5,9 @@
 
    if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn'])
    {
-      header("location: ../login.php"); 
+      // work in progress... If not logged in when viewing prorfiles 
+      // -> redirect to login w/ a prompt on why they should be logged in..
+      echo "Please login before viewing profiles..";
       exit;
    }
    
@@ -49,6 +51,19 @@
       left: 60%;
       transform: translate(-320%, -40%);
    }
+
+   .ProfilePics {
+      object-fit: cover;/* Do not scale the image */
+      object-position: center; /* Center the image within the element */
+      width: 200px;
+      height: 200px;
+      margin-bottom: 1rem;
+   }
+
+   .profDetails
+   {
+      word-spacing: 7px;
+   }
 </style>
 
 <div class="container">
@@ -67,20 +82,24 @@
                           <?php 
                              $defaultAvie = "../include/default-avie/default-avie.jpg";
                              if (is_null($userInfo['userPic']) || empty($userInfo['userPic'])) { 
-                                echo "<img src= '$defaultAvie' class='img-fluid rounded-circle' alt='profile picture' style='height: 175px; width: 175px; border: solid 2px blue;'>";
+                                echo "<img src= '$defaultAvie' class='ProfilePics rounded-circle' alt='profile picture' style='border: solid 2px blue;'>";
                              }
                               else{
-                                echo "<img src='" . $userInfo['userPic'] . "' class='img-fluid rounded-circle' alt='profile picture' style='height: 175px; width: 175px; border: solid 2px blue;'>";
+                                echo "<img src='" . $userInfo['userPic'] . "' class='ProfilePics rounded-circle' alt='profile picture' style='border: solid 2px blue;'>";
                              }
                              ?>   
                        </div>
                     </div>
 
                     <div class="col-md-7" style="padding: 10px;">
-                    <!--  < ? = is actually a shortcut for echo as of PHP 5.4 and above! Just found out!! -->
-                       <h1><?=$userInfo['userInnie']; ?></h1> 
+                       <h1><?php echo $userInfo['userInnie']; ?></h1> 
+                       <small id="joinDate" class="form-text text-muted profDetails"> 
+                           Joined: <b><?php echo date("Y-m-d", strtotime($userInfo['userJoined'])); ?></b> 
+                           State: <b><?php echo $userInfo['userState']; ?> </b>
+                        </small>
+                       <br>
                        <small id="bioTitle" class="form-text text-muted">Biography</small>
-                       <p><?= $userInfo['userBio']; ?></p>
+                       <p><?php echo $userInfo['userBio']; ?></p>
                     </div>
 
                      <!-- The following code would be inside the 'profileHeader' div in your viewProfile.php file, most likely in the same area where you have the "Edit" button currently -->
@@ -104,9 +123,9 @@
                   <tr>
                      <th></th> <!-- listID -->
                      <th></th> <!-- image -->
-                     <th>Desc</th>
-                     <th>Price</th>
                      <th>Title</th>
+                     <th>Price</th>
+                     <th>Desc</th>
                      <th>Condition</th>
                      <th>Category</th>
                   </tr>
@@ -118,7 +137,7 @@
                   <tr>
                      <td>
                         <form action="" method="post">
-                              <input type="hidden" name="p_id" value="<?= $row['listID']; ?>" />
+                           <input type="hidden" name="p_id" value="<?= $row['listID']; ?>" />
                         </form>   
                      </td>
                      <!-- Display it's value, AND IMPORTANTLY set the links to lead to the user's profile according by userID -->

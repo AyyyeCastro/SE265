@@ -4,16 +4,22 @@
   include_once "../include/functions.php";
   include_once "../include/header.php";
 
-   //if not logged in, kick them
-   if (!isUserLoggedIn())
+   // //if not logged in, kick them
+   // if (!isUserLoggedIn())
+   // {
+   //    header("location: ../login.php"); 
+   // }
+
+   if (isUserLoggedIn())
    {
-      header("location: ../login.php"); 
+      $message = "You are currently signed into your account..";
+      echo $message;
    }
 ?>
 
    <div style="padding: 15px;">
       <br>
-      <p>Congrats, you signed in correctly. View the nav above.<p> 
+      <p>This home page does not require signing in.<p> 
    </div>
 
 </body>

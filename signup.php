@@ -7,25 +7,29 @@
 
 
   $message = "";
+  $configFile = 'model/dbconfig.ini';
+  try 
+  {
+     $userDatabase = new Users($configFile);
+  } 
+  catch ( Exception $error ) 
+  {
+     echo "<h2>" . $error->getMessage() . "</h2>";
+  }   
+ 
+  $stateList = $userDatabase->getAllStates();
+
   if (isPostRequest()) 
   {
     $userName = filter_input(INPUT_POST, 'userName');
     $PW = filter_input(INPUT_POST, 'userPW');
     $userInnie = filter_input(INPUT_POST, 'userInnie');
     $userBio = filter_input(INPUT_POST, 'userBio');
-  
-    $configFile = __DIR__ . '/model/dbconfig.ini';
-    try 
-    {
-        $userDatabase = new Users($configFile);
-    } 
-    catch ( Exception $error ) 
-    {
-        echo "<h2>" . $error->getMessage() . "</h2>";
-    }   
+    $userState = filter_input(INPUT_POST, 'userState');
+
     
     # Check for unique user innie, username, and then allow the userSignUp function to run.
-    if (!$userDatabase->userUniqueInnie($userInnie) && !$userDatabase->userUniqueUN($userName) && $userDatabase->userSignup($userName, $PW, $userInnie, $userBio)) {
+    if (!$userDatabase->userUniqueInnie($userInnie) && !$userDatabase->userUniqueUN($userName) && $userDatabase->userSignup($userName, $PW, $userInnie, $userBio, $userState)) {
       $message = "Signed up! You can now login.";
     }else {
       $message = "Sorry, your Username and/or Innie handle must be unique. Try again!";
@@ -74,15 +78,20 @@
           <input type="hidden" id="userBio" name="userBio" class="form-control" value="Say something about yourself..." required>
         </div>
 
+        <div>
+          <label for="userState">State:</label>
+          <select class="form-control" id="userState" name="userState" required>
+            <option value="" disabled selected>Choose your state</option>
+            <?php
+              foreach ($stateList as $states) {
+                echo '<option value="' . $states['stateName'] . '">' . $states['stateName'] . '</option>';
+              }
+            ?>
+          </select>
+        </div>
+
         <br>
         
-      <!--
-        <div>
-          <label for="userProfilePicture">Profile Picture</label>
-          <input type="hidden" id="userProfilePicture" name="userProfilePicture" class="form-control" accept="image/*" required>
-        </div>
-       -->
-
         <div>
           <br>
           <button type="submit" class="btn btn-primary">Sign Up</button>

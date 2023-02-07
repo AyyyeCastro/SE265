@@ -29,3 +29,33 @@ function isUserLoggedIn()
 }
 
 ?>
+
+<!-- Jabascript functions -->
+<script>
+    // work in progress.
+
+    // Confirm a deletion click.
+    function confirmDelete() {
+        const message = confirm("Do you want to permanently delete this?");
+        if(message){
+            alert("Your selection has been permanently deleted.");
+        }
+        else{
+            alert("Nothing has been deleted.");
+            e.preventDefault();
+        }
+    }
+
+    // Confirm a Cancel click.
+    function confirmCancel() {
+        const message = confirm("Are you sure you want to cancel your work?");
+        if(message){
+            alert("Redirecting You Back...");
+        }
+        else{
+            alert("Nothing has been canceled.");
+        }
+    }    
+
+
+</script>
