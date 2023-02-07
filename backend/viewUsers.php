@@ -71,7 +71,7 @@
         <div id ="profileHeader">
 
            <br>
-           <a href="searchUsers.php"><button class="btn btn-primary">Back</button></a>
+           <a href="displayResults.php"><button class="btn btn-primary">Back</button></a>
            <br><br>
 
            <div class="container-fluid bg-light">
@@ -103,13 +103,6 @@
                     </div>
 
                      <!-- The following code would be inside the 'profileHeader' div in your viewProfile.php file, most likely in the same area where you have the "Edit" button currently -->
-
-                     <div class="col-md-1" style="padding: 10px;">
-                        <!-- Check if the currently logged in user's ID matches the ID of the profile being viewed -->
-                        <?php if ($_SESSION['userID'] === $userInfo['userID']) { ?>
-                           <p style="text-align: right;"><a href="../backend/editProfile.php">Edit</a><p>
-                        <?php } ?>
-                     </div>
 
                  </div> <!-- Row -->
               </div> <!-- container -->

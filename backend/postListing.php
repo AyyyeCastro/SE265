@@ -119,7 +119,7 @@
             <br>
             <div>
                <input type="submit" class="btn btn-primary" value="Post Listing">
-               <a href="viewProfile.php" style="padding: 15px;">Cancel</a>
+               <a href="plugInHome.php" style="padding: 15px;">Cancel</a>
             </div>
          </form>
       </div> <!-- main div -->

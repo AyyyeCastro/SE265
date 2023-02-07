@@ -55,7 +55,7 @@
         } ?>
       </ul>
 
-      <form class="form-inline my-2 my-lg-0" method="post" action="displayResults.php">
+      <form class="form-inline my-2 my-lg-0" method="get" action="displayResults.php">
   <select class="form-control mr-sm-2" name="search_option">
     <option value="Products">Products</option>
     <option value="Sellers">Sellers</option>

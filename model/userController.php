@@ -386,6 +386,45 @@ class Users
         return $results;
     }  
 
+    public function findListByCat($listProdCat) 
+    {
+        $results = array();                  
+        $binds = array();                    
+        $isFirstClause = true;              
+        $userTable = $this->userData;
+ 
+ 
+        $sql = "SELECT listID, listProdCat, listProdPrice, listProdTitle, listDesc, listCond, listProdPic FROM plugin_listings";
+ 
+        # Note: Change listDesc to listProdDesc when u get a chance.. 
+         if (isset($listProdTitle)) 
+         {
+             if ($isFirstClause)
+             {
+                 $sql .= " WHERE ";
+                 $isFirstClause = false;
+             }
+             else
+             {
+                 $sql .= " AND ";
+             }
+             $sql .= " listProdCat LIKE :listProdCat";
+             $binds['listProdCat'] = '%'.$listProdCat.'%';
+         }
+       
+ 
+         $sql .= " ORDER BY listProdCat";
+        
+         $stmt = $this->userData->prepare($sql);
+       
+         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
+             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+         }
+ 
+ 
+        return $results;
+    }  
+
 
 
 }

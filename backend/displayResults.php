@@ -20,6 +20,7 @@
       echo "<h2>" . $error->getMessage() . "</h2>";
    }   
 
+   $search_option="";
    $defaultAvie = "../include/default-avie/default-avie.jpg";
    $listCollection =[];
    $listProdTitle="";
@@ -29,19 +30,23 @@
    // Fill the listings before criteria
    $userListLog = $userDatabase->findListBySearch($listProdTitle);
    $deleteList=[];
-   if (isPostRequest()) 
+
+   // IMPORTANT
+   // Why Get request? 
+   // It stores the results of the user's search into the URL. 
+   // This allows the user to copy the URL, and share it to other sources, with the same results showing.
    {
         // if they clicked the search button ->
-        if (isset($_POST["search"]))
+        if (isset($_GET["search"]))
         {
-            $search_option = $_POST['search_option'];
+            $search_option = $_GET['search_option'];
             // if the user selected to search for sellers
             if ($search_option == 'Products') 
             {
                // declare the variables to nothing first...
                $listProdTitle ="";
                //... have the user's input (from form below) allign with the declared variables. 
-               $listProdTitle  = $_POST['inputName'];
+               $listProdTitle  = $_GET['inputName'];
                // have the array (declared above) store the info, and send it to the findOneCollection function.
                $userListLog = $userDatabase->findListBySearch($listProdTitle);
             }
@@ -49,7 +54,7 @@
             // declare the variables to nothing first...
             $userInnie="";
             //... have the user's input (from form below) allign with the declared variables. 
-            $userInnie = $_POST['inputName'];
+            $userInnie = $_GET['inputName'];
             // have the array (declared above) store the info, and send it to the findOneCollection function.
             $listCollection = $userDatabase->findUserByInnie($userInnie);
            }
