@@ -23,6 +23,8 @@
    ## IMPORTANT -- A DELETE BUTTON WILL BE NEEDED. 
    ## NOT IMPLEMENTED YET.
    $deleteList =[];
+   $userID = $_SESSION['userID'];
+   $userInfo = $userDatabase->getUserDetails($userID);
 
    if(isGetRequest()){
       # -- Important -- #
@@ -54,6 +56,7 @@
          $listProdTitle = filter_input(INPUT_POST, 'inputProdTitle');
          $listDesc = filter_input(INPUT_POST, 'inputProdDesc');
          $listCond = filter_input(INPUT_POST, 'inputProdCond');
+         $listState = filter_input(INPUT_POST, 'inputProdState');
 
 
          # -- IMPORTANT!!! -- #
@@ -76,7 +79,7 @@
          # ---------------------------------#
    
          if($userDatabase->updateUserListing($listID, $listProdCat, $listProdPrice, $listProdTitle, 
-         $listDesc, $listCond, $fileDestination)){
+         $listDesc, $listCond, $fileDestination, $listState)){
             header("location: ../backend/viewProfile.php"); 
          }else{
             $message = "Error posting new listing, please try again.";
@@ -99,6 +102,13 @@
             <div>
                <input type="hidden" id="listID" name="listID" value="<?= $listDetails['listID']; ?>" />
             </div>
+
+            <div>
+               <!-- product state. This is a hidden field. Value gathered automatically from user's profile state -->
+               <input type="disabled" class="form-control" id="inputProdState" name="inputProdState" value="<?php echo $userInfo['userState']; ?>" readonly>
+            </div>
+            <br>
+
             <div>
                <label for="inputProdCat">Product Category:</label>
                <select class="form-control" id="inputProdCat" name="inputProdCat" required>

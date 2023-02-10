@@ -132,11 +132,34 @@ class Users
         return $isUserTrue;
     }
     
+    public function getProfileByName($profileName) 
+    {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_users WHERE userInnie = :profileName");
+        $bindParameters = array(":profileName" => $profileName);
+        
+        if($stmt->execute($bindParameters) && $stmt->rowCount() > 0){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+
     public function getUserDetails($userID) 
     {
         $userTable = $this->userData;
         $stmt = $userTable->prepare("SELECT * FROM plugin_users WHERE userID = :userID");
         $bindParameters = array(":userID" => $userID);
+        
+        if($stmt->execute($bindParameters) && $stmt->rowCount() > 0){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+    public function getCustomerDetails($customerID) 
+    {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_users WHERE userID = :customerID");
+        $bindParameters = array(":customerID" => $customerID);
         
         if($stmt->execute($bindParameters) && $stmt->rowCount() > 0){
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -154,7 +177,18 @@ class Users
         return $user['userID'];
     }
 
-    public function updateProfile($userName, $PW, $userInnie, $userBio, $userID, $fileDestination)
+    public function getUserIdByInnie($userInnie)
+    {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT userID FROM plugin_users WHERE userInnie = :userInnie");
+        $bindParameters = array(":userInnie" => $userInnie);
+        
+        
+        $stmt->execute($bindParameters);
+        return $stmt->fetch();
+    }
+
+    public function updateProfile($userName, $PW, $userInnie, $userBio, $userID, $fileDestination, $userState)
     {
         $userTable = $this->userData; 
         
@@ -162,7 +196,7 @@ class Users
         {
             $salt = random_bytes(32);
             $hashedPW = sha1($salt . $PW);
-            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination WHERE userID = :userID");
+            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination, userState=:userState WHERE userID = :userID");
             $bindParameters = array(
                 ":uName" => $userName,
                 ":uPW" => $hashedPW,
@@ -170,16 +204,18 @@ class Users
                 ":uInnie" => $userInnie,
                 ":uBio" => $userBio ,
                 ":userID" => $userID,
-                ":fileDestination" => $fileDestination
+                ":fileDestination" => $fileDestination,
+                ":userState"=>$userState
             );
         }else{
-            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination WHERE userID = :userID");
+            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination, userState=:userState WHERE userID = :userID");
             $bindParameters = array(
                 ":uName" => $userName,
                 ":uInnie" => $userInnie,
                 ":uBio" => $userBio ,
                 ":userID" => $userID,
-                ":fileDestination" => $fileDestination
+                ":fileDestination" => $fileDestination,
+                ":userState"=>$userState
             );
         }    
         return $stmt->execute($bindParameters);
@@ -257,14 +293,16 @@ class Users
 
     
     public function postUserListing($userID, $listProdCat, $listProdPrice, $listProdTitle, 
-    $listDesc, $listCond, $fileDestination)
+    $listDesc, $listCond, $fileDestination, $listState, 
+    $listPostedOn,$fileDestination2, $fileDestination3, $fileDestination4)
     {
         $isListPosted = false;        
         $userTable = $this->userData; 
 
         $stmt = $userTable->prepare("INSERT INTO plugin_listings SET userID = :userID, listProdCat = :listProdCat, 
         listProdPrice = :listProdPrice,listProdTitle = :listProdTitle, listDesc = :listDesc,
-         listCond = :listCond, listProdPic = :fileDestination");
+         listCond = :listCond, listProdPic = :fileDestination, listState=:listState, listPostedOn = NOW(), 
+         listProdPic2 = :fileDestination2,listProdPic3 = :fileDestination3,listProdPic4 = :fileDestination4");
 
         $bindParameters = array(
             ":userID" => $userID,
@@ -274,6 +312,10 @@ class Users
             ":listDesc" => $listDesc,
             ":listCond" => $listCond,
             ":fileDestination" => $fileDestination,
+            ":listState" => $listState,
+            ":fileDestination2" => $fileDestination2,
+            ":fileDestination3" => $fileDestination3,
+            ":fileDestination4" => $fileDestination4,
         );       
 
         $isListPosted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
@@ -291,14 +333,14 @@ class Users
     }
 
     public function updateUserListing($listID, $listProdCat, $listProdPrice, $listProdTitle, 
-    $listDesc, $listCond, $fileDestination)
+    $listDesc, $listCond, $fileDestination, $listState)
     {
         $isListPosted = false;        
         $userTable = $this->userData; 
 
         $stmt = $userTable->prepare("UPDATE plugin_listings SET listProdCat = :listProdCat, 
         listProdPrice = :listProdPrice, listProdTitle = :listProdTitle, listDesc = :listDesc,
-        listCond = :listCond, listProdPic = :fileDestination WHERE listID = :listID");
+        listCond = :listCond, listProdPic = :fileDestination, listState =:listState, listUpdatedOn=NOW() WHERE listID = :listID");
 
         $bindParameters = array(
             ":listID" => $listID,
@@ -309,11 +351,11 @@ class Users
             ":listCond" => $listCond,
             # listProdPic = the :fileDestination -> which equals the $fileDestination. 
             ":fileDestination" => $fileDestination,
+            ":listState"=> $listState,
         );       
 
         $isListPosted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isListPosted);
-        var_dump($isListPosted);
     }
 
 
@@ -342,12 +384,123 @@ class Users
         return false;
     }
 
+    #############################################################
+    #############################################################
+    ### MESSAGE MANAGEMENT ###
 
+    public function sendMessage($parentID,$customerID, $sellerID, $listID, 
+    $messageTitle, $messageDesc, $fileDestination, $customerInnie, 
+    $sellerInnie, $fileDestination2, $fileDestination3, $fileDestination4)
+    {
+        $isMsgSent = false;        
+        $userTable = $this->userData; 
+
+        $salt = random_bytes(32); 
+
+        $stmt = $userTable->prepare("INSERT INTO plugin_messages SET parentID=:parentID, customerID = :customerID, sellerID = :sellerID, 
+        listID = :listID, messageTitle = :messageTitle, messageDesc = :messageDesc, messagePics =:fileDestination, 
+        messageSentOn = NOW(), customerInnie=:customerInnie, sellerInnie=:sellerInnie, 
+        messagePic2=:fileDestination2,messagePic3=:fileDestination3, messagePic4=:fileDestination4");
+
+        $bindParameters = array(
+            ":parentID"=>$parentID,
+            ":customerID" => $customerID,
+            ":sellerID" => $sellerID,
+            ":listID" => $listID,
+            ":messageTitle" => $messageTitle,
+            ":messageDesc" => $messageDesc,
+            ":fileDestination" => $fileDestination,
+            ":customerInnie"=> $customerInnie,
+            ":sellerInnie"=>$sellerInnie,
+            ":fileDestination2" => $fileDestination2,
+            ":fileDestination3" => $fileDestination3,
+            ":fileDestination4" => $fileDestination4,
+            
+        );       
+
+        $isMsgSent = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isMsgSent);
+    }
+
+    public function replyMessage($parentID,$receiverID,$senderID, $listID, 
+    $messageTitle, $messageDesc, $fileDestination, $receiverInnie, 
+    $senderInnie, $fileDestination2, $fileDestination3, $fileDestination4)
+    {
+        $isMsgSent = false;        
+        $userTable = $this->userData; 
+
+        $salt = random_bytes(32); 
+
+        $stmt = $userTable->prepare("INSERT INTO plugin_messages SET parentID=:parentID, senderID = :senderID, receiverID = :receiverID, 
+        listID = :listID, messageTitle = :messageTitle, messageDesc = :messageDesc, messagePics =:fileDestination, 
+        messageSentOn = NOW(), receiverInnie=:receiverInnie, senderInnie=:senderInnie, 
+        messagePic2=:fileDestination2,messagePic3=:fileDestination3, messagePic4=:fileDestination4");
+
+        $bindParameters = array(
+            ":parentID"=>$parentID,
+            ":receiverID" => $receiverID,
+            ":senderID" => $senderID,
+            ":listID" => $listID,
+            ":messageTitle" => $messageTitle,
+            ":messageDesc" => $messageDesc,
+            ":fileDestination" => $fileDestination,
+            ":receiverInnie"=> $receiverInnie,
+            ":senderInnie"=>$senderInnie,
+            ":fileDestination2" => $fileDestination2,
+            ":fileDestination3" => $fileDestination3,
+            ":fileDestination4" => $fileDestination4,
+            
+        );       
+
+        $isMsgSent = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isMsgSent);
+    }
+
+    public function getAllMessages($userID){
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_messages WHERE (sellerID = :userID) ORDER BY messageSentOn DESC");
+        $bindParameters = array(
+            ":userID" => $userID,
+        );
+        $stmt->execute($bindParameters);
+        return $stmt->fetchAll();
+    }
+
+    public function getMessageCrumbs($listID, $parentID, $messageSentOn){
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_messages WHERE (listID=:listID AND parentID = :parentID AND messageSentOn < :messageSentOn) ORDER BY messageSentOn DESC");
+        $bindParameters = array(
+            ":listID" => $listID,
+            ":parentID" => $parentID,
+            ":messageSentOn" => $messageSentOn
+        );
+    
+        $stmt->execute($bindParameters);
+        return $stmt->fetchAll();
+    }
+    
+
+    
+
+    public function getMessageDetails($messageID){
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_messages WHERE messageID = :messageID");
+        $bindParameters = array(
+            ":messageID" => $messageID
+        );
+        $stmt->execute($bindParameters);
+        /* learn from mistake:
+        use fetch() here, not fetchall();
+        */
+        return $stmt->fetch();
+    }
+
+    
     #############################################################
     #############################################################
     ### NAME SEARCHING ###
 
-    public function findListBySearch($listProdTitle) 
+    public function findListAdvanced($listProdTitle, $listDesc, $listProdCat, $listCond, $listState) 
     {
         $results = array();                  
         $binds = array();                    
@@ -355,9 +508,8 @@ class Users
         $userTable = $this->userData;
  
  
-        $sql = "SELECT listID, listProdCat, listProdPrice, listProdTitle, listDesc, listCond, listProdPic FROM plugin_listings";
+        $sql = "SELECT * FROM plugin_listings";
  
-        # Note: Change listDesc to listProdDesc when u get a chance.. 
          if (isset($listProdTitle)) 
          {
              if ($isFirstClause)
@@ -372,32 +524,8 @@ class Users
              $sql .= " listProdTitle LIKE :listProdTitle";
              $binds['listProdTitle'] = '%'.$listProdTitle.'%';
          }
-       
- 
-         $sql .= " ORDER BY listProdTitle";
-        
-         $stmt = $this->userData->prepare($sql);
-       
-         if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
-             $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-         }
- 
- 
-        return $results;
-    }  
 
-    public function findListByCat($listProdCat) 
-    {
-        $results = array();                  
-        $binds = array();                    
-        $isFirstClause = true;              
-        $userTable = $this->userData;
- 
- 
-        $sql = "SELECT listID, listProdCat, listProdPrice, listProdTitle, listDesc, listCond, listProdPic FROM plugin_listings";
- 
-        # Note: Change listDesc to listProdDesc when u get a chance.. 
-         if (isset($listProdTitle)) 
+         if (isset($listDesc)) 
          {
              if ($isFirstClause)
              {
@@ -408,12 +536,57 @@ class Users
              {
                  $sql .= " AND ";
              }
-             $sql .= " listProdCat LIKE :listProdCat";
-             $binds['listProdCat'] = '%'.$listProdCat.'%';
+             $sql .= " listDesc LIKE :listDesc";
+             $binds['listDesc'] = '%'.$listDesc.'%';
          }
        
+         if (isset($listProdCat)) 
+         {
+             if ($isFirstClause)
+             {
+                 $sql .= " WHERE ";
+                 $isFirstClause = false;
+             }
+             else
+             {
+                 $sql .= " AND ";
+             }
+             $sql .= "  listProdCat LIKE :listProdCat";
+            $binds['listProdCat'] = $listProdCat;
+        }
  
-         $sql .= " ORDER BY listProdCat";
+         if (isset($listCond)) 
+         {
+             if ($isFirstClause)
+             {
+                 $sql .= " WHERE ";
+                 $isFirstClause = false;
+             }
+             else
+             {
+                 $sql .= " AND ";
+             }
+            $sql .= "  listCond LIKE :listCond";
+            $binds['listCond'] = $listCond;
+        }
+
+        if (isset($listState)) 
+        {
+            if ($isFirstClause)
+            {
+                $sql .= " WHERE ";
+                $isFirstClause = false;
+            }
+            else
+            {
+                $sql .= " AND ";
+            }
+            $sql .= " listState LIKE :listState";
+            $binds['listState'] = '%'.$listState.'%';
+        }
+ 
+ 
+         $sql .= " ORDER BY listProdTitle";
         
          $stmt = $this->userData->prepare($sql);
        
@@ -422,10 +595,8 @@ class Users
          }
  
  
-        return $results;
-    }  
-
-
-
+         return $results;
+    }   
 }
+
 ?>

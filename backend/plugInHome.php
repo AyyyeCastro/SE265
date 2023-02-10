@@ -1,45 +1,50 @@
-<?php 
-  //call other files
-  include_once "../model/userController.php";
-  include_once "../include/functions.php";
-  include_once "../include/header.php";
+<?php
+//call other files
+include_once "../model/userController.php";
+include_once "../include/functions.php";
+include_once "../include/header.php";
 
-   // //if not logged in, kick them
-   // if (!isUserLoggedIn())
-   // {
-   //    header("location: ../login.php"); 
-   // }
+// //if not logged in, kick them
+// if (!isUserLoggedIn())
+// {
+//    header("location: ../login.php"); 
+// }
 
 ?>
 <style>
-   .bg1{
+   .bg1 {
       background-color: white;
       height: 50vh;
       padding: 10px;
    }
-   .bg2{
+
+   .bg2 {
       background-color: gray;
       height: 25vh;
    }
-   .bg3{
+
+   .bg3 {
       background-color: white;
       height: 25vh;
    }
+
    .carousel-item img {
-   height: 100%;
-   width: 100%;
-   object-fit: contain;/* Do not scale the image */
-   object-position: center; /* Center the image within the element */
-   background-color: #ededed;
-   padding: 15px;
+      height: 100%;
+      width: 100%;
+      object-fit: contain;
+      /* Do not scale the image */
+      object-position: center;
+      /* Center the image within the element */
+      background-color: #ededed;
+      padding: 15px;
    }
 
-   .prev, .next{
+   .prev,
+   .next {
       background-color: #ededed;
       opacity: 15%;
    }
-}
-
+   }
 </style>
 
 <div class="container-fluid bg1">
@@ -52,17 +57,19 @@
       <div class="carousel-inner">
          <div class="carousel-item active">
             <a href="#">
-               <img  src="../include/slideshow/shopAcc.png" alt="First slide">
+               <img src="../include/slideshow/shopAcc.png" alt="First slide">
             </a>
          </div>
          <div class="carousel-item">
-            <a href="http://localhost/SE266/REPO-Folder/SE265/backend/displayResults.php?search_option=Products&inputName=JUJU&search=Search">
+            <a
+               href="http://localhost/SE266/REPO-Folder/SE265/backend/displayResults.php?search_option=Products&inputName=JUJU&search=Search">
                <img src="../include/slideshow/shopManga.png" alt="Second slide">
             </a>
          </div>
          <div class="carousel-item">
-            <a href="http://localhost/SE266/REPO-Folder/SE265/backend/displayResults.php?search_option=Products&inputName=MoodSwings+In+To+Order&search=Search">
-               <img  src="../include/slideshow/shopMusic.png" alt="Third slide">
+            <a
+               href="http://localhost/SE266/REPO-Folder/SE265/backend/displayResults.php?search_option=Products&inputName=Moodswings+In+to+Order&search=Search">
+               <img src="../include/slideshow/shopMusic.png" alt="Third slide">
             </a>
          </div>
       </div>
@@ -84,14 +91,18 @@
 
 
 </body>
+
 </html>
 
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+   integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+   integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+   integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 
- 
+
 
 <!-- Why does this .php page have closing tags for body and html? 
 This is because the metadata and starting divs were created in header.php ("include" folder), and referenced with PHP above. -->
