@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
    include_once '../include/functions.php';
    include_once '../model/userController.php';

@@ -1,6 +1,7 @@
+<!DOCTYPE html>
 <?php
-include_once '../include/functions.php';
 include_once '../include/header.php';
+include_once '../include/functions.php';
 include_once '../model/userController.php';
 
 if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
@@ -54,7 +55,7 @@ if (isPostRequest()) {
       move_uploaded_file($file2['tmp_name'], $fileDestination2);
    }
    $file3 = $_FILES['inputProdPic3'];
-   if ($file2['error'] != UPLOAD_ERR_NO_FILE) {
+   if ($file3['error'] != UPLOAD_ERR_NO_FILE) {
       $fileDestination3 = '../backend/listingUpload/' . $file3['name'];
       move_uploaded_file($file3['tmp_name'], $fileDestination3);
    }
@@ -87,6 +88,7 @@ if (isPostRequest()) {
    }
 }
 ?>
+
 <style>
    input[type="file"] {
       width: 82px;
@@ -106,35 +108,18 @@ if (isPostRequest()) {
                value="<?php echo $userInfo['userState']; ?>" readonly>
          </div>
          <br>
-
-         <select class="form-control" id="inputProdCat" name="inputProdCat" required>
-            <option value="" disabled selected>Choose category</option>
-            <?php
-            foreach ($catList as $category) {
-               $selected = ($category['catGenre'] == $listDetails['listProdCat']) ? 'selected' : '';
-               echo '<option value="' . $category['catGenre'] . '" ' . $selected . '>' . $category['catGenre'] . '</option>';
-            }
-            ?>
-         </select>
-
          <div>
-            <label for="inputProdPrice">Product price:</label>
-            <input type="text" class="form-control" id="inputProdPrice" name="inputProdPrice" placeholder="$9.99"
-               pattern="^\d*(\.\d{0,2})?$" title="Numbers only. Up to two decimal places." required>
+            <select class="form-control" id="inputProdCat" name="inputProdCat" required>
+               <option value="" disabled selected>Choose category</option>
+               <?php
+               foreach ($catList as $category) {
+                  $selected = ($category['catGenre'] == $listDetails['listProdCat']) ? 'selected' : '';
+                  echo '<option value="' . $category['catGenre'] . '" ' . $selected . '>' . $category['catGenre'] . '</option>';
+               }
+               ?>
+            </select>
          </div>
-
-         <div>
-            <label for="inputProdTitle">Product Name/Title:</label>
-            <input type="text" class="form-control" id="inputProdTitle" name="inputProdTitle" maxlength="55" required>
-         </div>
-
-         <div>
-            <label for="inputProdDesc">Product Description:</label> <!-- listSummary in the db -->
-            <textarea class="form-control" id="inputProdDesc" name="inputProdDesc" rows="5" maxlength="275"
-               required></textarea>
-         </div>
-
-
+         <br>
          <div>
             <label for="inputProdCond">Product Condition:</label> <!-- listCondition in the db -->
             <select class="form-control" id="inputProdCond" name="inputProdCond" required>
@@ -147,27 +132,50 @@ if (isPostRequest()) {
                ?>
             </select>
          </div>
+         <br>
+         <div>
+            <label for="inputProdPrice">Product price:</label>
+            <input type="text" class="form-control" id="inputProdPrice" name="inputProdPrice" placeholder="9.99"
+               pattern="^\d*(\.\d{0,2})?$" title="Numbers only. Up to two decimal places. No commas." required>
+         </div>
+         <br>
+         <div>
+            <label for="inputProdTitle">Product Name/Title:</label>
+            <input type="text" class="form-control" id="inputProdTitle" name="inputProdTitle" maxlength="55" required>
+         </div>
+         <br>
+         <div>
+            <label for="inputProdDesc">Product Description:</label> <!-- listSummary in the db -->
+            <textarea id="inputProdDesc" class="form-control" name="inputProdDesc" rows="5"></textarea>
+            <script>
+               tinymce.init({
+                  selector: '#inputProdDesc',
+                  height: 200,
+                  menubar: false,
+                  plugins: [
+                     'advlist autolink lists link image charmap print preview anchor',
+                     'searchreplace visualblocks code fullscreen',
+                     'insertdatetime media table paste code help wordcount'
+                  ],
+                  toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                  content_css: '//www.tiny.cloud/css/codepen.min.css'
+               });
+            </script>
+         </div>
 
          <br>
          <div>
             <label for="inputProdPic">First Picture (REQUIRED)</label>
-            <button class="btn"><input type="file" id="inputProdPic" name="inputProdPic" class="form-control"
-                  accept="image/*" required></button>
+            <input type="file" id="inputProdPic" name="inputProdPic" class="form-control" accept="image/*" required>
          </div>
          <div>
-            <label for="inputProdPic2">Second Picture (optional)</label>
-            <button class="btn"><input type="file" id="inputProdPic2" name="inputProdPic2" class="form-control"
-                  accept="image/*"></button>
+            <input type="file" id="inputProdPic2" name="inputProdPic2" class="form-control" accept="image/*">
          </div>
          <div>
-            <label for="inputProdPic3">Third picture (optional)</label>
-            <button class="btn"><input type="file" id="inputProdPic3" name="inputProdPic3" class="form-control"
-                  accept="image/*"></button>
+            <input type="file" id="inputProdPic3" name="inputProdPic3" class="form-control" accept="image/*">
          </div>
          <div>
-            <label for="inputProdPic4">Fourth picture (optional)</label>
-            <button class="btn"><input type="file" id="inputProdPic4" name="inputProdPic4" class="form-control"
-                  accept="image/*"></button>
+            <input type="file" id="inputProdPic4" name="inputProdPic4" class="form-control" accept="image/*">
          </div>
 
          <br>

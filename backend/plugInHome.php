@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 //call other files
 include_once "../model/userController.php";

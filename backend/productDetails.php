@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 //call other files
 include_once "../model/userController.php";
@@ -30,9 +31,8 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
    }
 
    .listProdTitle {
-      font-weight: bold;
       font-size: 25px;
-      max-width: 250px;
+      max-width: 100%;
       /* limit title width to the same width of the of the image */
    }
 
@@ -42,9 +42,9 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
    }
 
    .listProdPrice {
-      padding-top: 3px;
       font-size: 18px;
       max-width: 250px;
+      font-weight: bold;
    }
 
    .listCond {
@@ -53,14 +53,10 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
       max-width: 250px;
    }
 
-   .listState {
-      font-size: 13px;
-      max-width: 250px;
-   }
 
-   .listSeller {
+   .underBtnText{
+      margin-top: 10px;
       font-size: 13px;
-      color: #506d90;
    }
 
    .listImgBox {}
@@ -68,11 +64,16 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
    .listInfoBox {}
 
    .listBuyBox {
-      border: 5px solid #F1F1F1;
+      border: 4px solid #F8F8F8;
+      border-radius: 25px;
+      padding: 15px;
+      margin-top: 15px;
    }
 
    .btnBuyNow {
       margin-top: 15px;
+      width: 100%;
+      background-color: #4D27B9;
    }
 
    .listImgBox {
@@ -97,12 +98,18 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
    .thumb-imgs img {
       cursor: pointer;
    }
+   .listDescBox{
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      border-radius: 25px;
+   }
 </style>
 
 
 <div class="container">
    <div class="row">
-      <div class="col-sm listImgBox">
+      <div class="col-sm-7 listImgBox">
          <input type="hidden" name="userID" value="<?= $sellerInfo['userID']; ?>" />
          <input type="hidden" name="p_id" value="<?= $listDetails['listID']; ?>" />
          <div class="main-img">
@@ -111,38 +118,40 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
          </div>
       </div>
 
-      <div class="col-sm listInfoBox">
+      <div class="col-sm-5 listInfoBox">
          <div class="listProdTitle">
             <?= $listDetails['listProdTitle']; ?>
-         </div>
-         <div class="listSeller">Seller:
-            <?= $sellerInfo['userInnie']; ?>
          </div>
          <div class="listPostedOn">Posted on:
             <?php echo date("Y-m-d", strtotime($listDetails['listPostedOn'])); ?>
          </div>
-         <div class="listState">State:
-            <?= $listDetails['listState']; ?>
-         </div>
          <div class="listProdCat"> Listed in:
             <?= $listDetails['listProdCat']; ?>
          </div>
-      </div>
-
-      <div class="col-sm listBuyBox">
-         <div class="listProdPrice">$
-            <?= $listDetails['listProdPrice']; ?>
+         <div class="col-sm-12 listBuyBox">
+            <div class="listProdPrice">$
+               <?= $listDetails['listProdPrice']; ?>
+            </div>
+            <div class="listCond">
+               <?= $listDetails['listCond']; ?>
+            </div>
+            <div class="btnRequest">
+               <a href="requestProduct.php?listID=<?= $listDetails['listID']; ?>""><button class=" btn btn-md
+                  btn-primary btnBuyNow">Request</button></a>
+            </div>
+            <div class="underBtnText">
+               <div class="listSeller">Seller:
+                  <?= $sellerInfo['userInnie']; ?>
+               </div>
+               <div class="listState">State:
+                  <?= $listDetails['listState']; ?>
+               </div>
+            </div>
          </div>
-         <div class="listCond">
-            <?= $listDetails['listCond']; ?>
-         </div>
-         <a href="requestProduct.php?listID=<?= $listDetails['listID']; ?>""><button class=" btn btn-md btn-primary
-            btnBuyNow">Request</button></a>
+
       </div>
-
-
       <div class="col-sm-12">
-         <div class="col-sm-4 thumb-imgs">
+         <div class="col-sm-6 thumb-imgs">
             <img src="<?= $listDetails['listProdPic']; ?>"
                style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
             <?php if (!empty($listDetails['listProdPic2']) || !empty($listDetails['listProdPic3']) || !empty($listDetails['listProdPic4'])): ?>
@@ -156,9 +165,8 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
          </div>
       </div>
 
-      <div class="col-sm-12">
-         <hr>
-         <b>Description</b>
+      <div class="col-sm-12 listDescBox">
+         <p class="listDescHeader">Description</p>
          <div class="listDesc">
             <?= $listDetails['listDesc']; ?>
          </div>

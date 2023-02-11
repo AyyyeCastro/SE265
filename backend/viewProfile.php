@@ -108,6 +108,8 @@ if (isPostRequest()) {
    }
 </style>
 
+
+
 <div class="container">
    <div id="mainDiv">
       <div id="profileHeader">

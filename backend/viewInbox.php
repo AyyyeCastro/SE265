@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 include_once '../include/functions.php';
 include_once '../include/header.php';
@@ -28,6 +29,10 @@ $deleteMessage = [];
 ?>
 
 <style>
+   .container {
+      padding: 10px;
+   }
+
    .profileObject {
       border-bottom: 1px solid rgba(186, 186, 186, .4);
       /* first 3 are the color, last is the opacity */
@@ -39,28 +44,41 @@ $deleteMessage = [];
    table {
       width: 50%;
       border-collapse: collapse;
+      
    }
+   table a{
+      color: black;
+   }
+
 
    td:after {
       content: '';
       display: block;
-      margin-top: 20%;
+      margin-top: 15%;
    }
 
    td .content-img {}
 
-   table a:link {
+   .unReplied {
       font-weight: bold;
-      color: #6A99CD;
+      background-color: #F0F0FA;
    }
 
-   table a:visited {
+   .replied {
       font-weight: normal;
+      color: black;
+      background-color: #F8F9FA;
+   }
+
+   .subText {
+      color: #506d90;
+      font-size: 12px;
+      margin-top: 2px;
    }
 </style>
 
 <div class="container">
-   <div id="mainDiv">
+   <div class="row">
       <!-- BEGIN TABLE -->
       <table class="table table-hover" id="userListLog">
          <thead>
@@ -75,48 +93,85 @@ $deleteMessage = [];
          </thead>
          <tbody>
             <!-- For every value stored in the array we decl2ared in the PHP section -->
-            <?php foreach ($messageLog as $row): ?>
+            <?php foreach ($messageLog as $row):?>
+               <?php if ($row['isMessageReplied'] == 'No'): ?>
+                  <tr class="unreplied">
+                     <td>
+                        <!-- form to manage post requests -->
+                        <form action="" method="post">
+                           <!-- hidden listID field. -->
+                           <input type="hidden" name="customerID" value="<?= $row['customerID']; ?>" />
+                           <input type="hidden" name="messageID" value="<?= $row['messageID']; ?>" />
+                        </form>
+                     </td>
+                     <div class="container">
+                        <div class="row">
+                           <div class="col-sm">
 
-               <tr>
-                  <td>
-                     <!-- form to manage post requests -->
-                     <form action="" method="post">
-                        <!-- hidden listID field. -->
-                        <input type="hidden" name="customerID" value="<?= $row['customerID']; ?>" />
-                        <input type="hidden" name="messageID" value="<?= $row['messageID']; ?>" />
-                     </form>
-                  </td>
-                  <div class="container">
-                     <div class="row">
-                        <div class="col-sm">
-
-                           <td>
-                              <div class="sentFrom">
-                                 <?php echo $row['customerInnie']; ?>
-                              </div>
-                           </td>
-                           <td>
-                              <div class="listID">
-                                 <?php echo $row['listID']; ?>
-                              </div>
-                           </td>
-                           <td>
-                              <a
-                                 href="viewMessage.php?messageID=<?php echo $row['messageID']; ?>&parentID=<?php echo $row['parentID'];?>&receiverID=<?= $row['customerID']; ?>&receiverInnie=<?= $row['customerInnie']; ?>">
-                                 <div class="messageTitle">
-                                    <?php echo $row['messageTitle']; ?>
+                              <td>
+                                 <div class="sentFrom">
+                                    <?php echo $row['customerInnie']; ?>
                                  </div>
-                              </a>
-                           </td>
-                           <td>
-                              <div class="messageSentOn">
-                                 <?php echo date("Y-m-d h-i A", strtotime($row['messageSentOn'])); ?>
-                              </div>
-                           </td>
+                              </td>
+                              <td>
+                                 <div class="listID">
+                                    <?php echo $row['listID']; ?>
+                                 </div>
+                              </td>
+                              <td>
+                                 <a
+                                    href="viewMessage.php?messageID=<?php echo $row['messageID']; ?>&parentID=<?php echo $row['parentID']; ?>&receiverID=<?= $row['customerID']; ?>&receiverInnie=<?= $row['customerInnie']; ?>">
+                                    <?php echo $row['messageTitle']; ?>
+                                 </a>
+                                 <p class="subText">Unreplied</p>
+                              </td>
+                              <td>
+                                 <div class="messageSentOn">
+                                    <?php echo date("Y-m-d h-i A", strtotime($row['messageSentOn'])); ?>
+                                 </div>
+                              </td>
+                           </div>
                         </div>
-                     </div>
+                  </tr>
+               <?php else: ?>
+                  <tr class="replied">
+                     <td>
+                        <!-- form to manage post requests -->
+                        <form action="" method="post">
+                           <!-- hidden listID field. -->
+                           <input type="hidden" name="customerID" value="<?= $row['customerID']; ?>" />
+                           <input type="hidden" name="messageID" value="<?= $row['messageID']; ?>" />
+                        </form>
+                     </td>
+                     <div class="container">
+                        <div class="row">
+                           <div class="col-sm">
 
-               </tr>
+                              <td>
+                                 <div class="sentFrom">
+                                    <?php echo $row['customerInnie']; ?>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="listID">
+                                    <?php echo $row['listID']; ?>
+                                 </div>
+                              </td>
+                              <td class="">
+                                 <a
+                                    href="viewMessage.php?messageID=<?php echo $row['messageID']; ?>&parentID=<?php echo $row['parentID']; ?>&receiverID=<?= $row['customerID']; ?>&receiverInnie=<?= $row['customerInnie']; ?>">
+                                    <?php echo $row['messageTitle']; ?>
+                                 </a>
+                              </td>
+                              <td>
+                                 <div class="messageSentOn">
+                                    <?php echo date("Y-m-d h-i A", strtotime($row['messageSentOn'])); ?>
+                                 </div>
+                              </td>
+                           </div>
+                        </div>
+                  </tr>
+               <?php endif ?>
             <?php endforeach; ?>
             <!-- END for-loop -->
          </tbody>

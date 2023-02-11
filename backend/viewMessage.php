@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 include_once '../include/functions.php';
 include_once '../include/header.php';
@@ -69,6 +70,12 @@ if (isPostRequest()) {
    $fileDestination2 = filter_input(INPUT_POST, 'fileDestination2');
    $fileDestination3 = filter_input(INPUT_POST, 'fileDestination3');
    $fileDestination4 = filter_input(INPUT_POST, 'fileDestination4');
+   $isMessageReplied = filter_input(INPUT_POST, 'isMessageReplied');
+
+
+   /* for updateIsRepliedMessage function */
+   $priorMessageID = filter_input(INPUT_POST, 'priorMessageID');
+   $updateStatus = filter_input(INPUT_POST, 'updateStatus');
 
 
    #--- Profile Picture Traveling -- #
@@ -93,22 +100,11 @@ if (isPostRequest()) {
       move_uploaded_file($file4['tmp_name'], $fileDestination4);
    }
 
-   if (
-      $userDatabase->sendMessage(
-         $parentID,
-         $customerID,
-         $sellerID,
-         $listID,
-         $messageTitle,
-         $messageDesc,
-         $fileDestination,
-         $customerInnie,
-         $sellerInnie,
-         $fileDestination2,
-         $fileDestination3,
-         $fileDestination4
-      )
-   ) {
+   if ($userDatabase->sendMessage($parentID,$customerID,$sellerID,$listID,
+         $messageTitle,$messageDesc,$fileDestination,$customerInnie,
+         $sellerInnie, $fileDestination2,$fileDestination3,$fileDestination4, $isMessageReplied) 
+         && $userDatabase->updateIsMessageReplied($priorMessageID, $updateStatus)) 
+   {
       header('Location: viewInbox.php');
       $message = "Your message Was Sent!";
 
@@ -177,7 +173,7 @@ if (isPostRequest()) {
    .profileObject {
       border-radius: 25px solid #F1F1F1;
       padding: 20px;
-      background-color: #F1F1F1;
+      background-color: #F8F9FA;
       /* first 3 are the color, last is the opacity */
    }
 
@@ -233,10 +229,10 @@ if (isPostRequest()) {
 
    .msgHistory {
       height: 350px;
-      background-color: #F8F9FA;
+      background-color: #F1F1F1;
       border-top-left-radius: 25px;
       border-top-right-radius: 25px;
-      padding: 20px;
+      padding: 35px;
       overflow: auto;
       display: flex;
       flex-direction: column-reverse;
@@ -259,7 +255,7 @@ if (isPostRequest()) {
    .selfMsg,
    .selfBG {
       color: white;
-      margin-left: 60%;
+      margin-left: 70%;
       background-color: #4D27B9;
       border-radius: 25px;
       padding: 20px;
@@ -268,7 +264,7 @@ if (isPostRequest()) {
 
    .otherMsg,
    .otherBG {
-      margin-top: 20px;
+      margin-right: 20%;
       color: white;
       background-color: #899aab;
       border-radius: 25px;
@@ -333,164 +329,173 @@ if (isPostRequest()) {
                      <span class="selfMsg selfBG">
                         <p class="messageDesc">
                            <?php echo $row['messageDesc']; ?>
-                        </p>
+                        <p>
                         </p class="messageSentOn">sent:
                         <?php echo date("h-i A", strtotime($row['messageSentOn'])); ?>
                         On
                         <?php echo date("Y-m-d", strtotime($row['messageSentOn'])); ?>
                         </p>
-                        <p class="messagePics thumb-imgs-history" onclick="TestsFunction_history()">
-                        <?php if (!empty($row['messagePics'])): ?>
-                           <img src="<?= $row['messagePics']; ?>"
-                              style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
-                        <?php endif ?>
-
-                        <?php if (!empty($row['messagePic2'])): ?>
-                           <img src="<?= $row['messagePic2']; ?>"
-                              style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
-                        <?php endif ?>
-
-                        <?php if (!empty($row['messagePic3'])): ?>
-                           <img src="<?= $row['messagePic3']; ?>"
-                              style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
-                        <?php endif ?>
-                        <?php if (!empty($row['messagePic4'])): ?>
-                           <img src="<?= $row['messagePic4']; ?>"
-                              style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
-                        <?php endif ?>
                         </p>
-                        <?php if (!empty($row['messagePics']) || !empty($row['messagePic2']) || !empty($row['messagePic3']) || !empty($row['messagePic4'])): ?>
-                           <p class="main-img" id="TestsDiv-history" style="display:none"">
-                                    <img src=""style=" object-fit: contain; object-position: center; background-color: #F6F6F6;
-                              height: 450px; width: 450px;">
+                           <?php if (!empty($row['messagePics'])): ?>
+                              <img src="<?= $row['messagePics']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
+                           <?php endif ?>
+
+                           <?php if (!empty($row['messagePic2'])): ?>
+                              <img src="<?= $row['messagePic2']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
+                           <?php endif ?>
+
+                           <?php if (!empty($row['messagePic3'])): ?>
+                              <img src="<?= $row['messagePic3']; ?>"
+                                 style="object-fit: contain; object-position:c enter; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
+                           <?php endif ?>
+                           <?php if (!empty($row['messagePic4'])): ?>
+                              <img src="<?= $row['messagePic4']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
+                           <?php endif ?>
                            </p>
-                        <?php endif ?>
                      </span>
-                  <?php else: ?>
-                     <span class="otherMsg otherBG">
-                        <p class="messageDesc">
-                           <?php echo $row['messageDesc']; ?>
-                        </p>
-                        </p class="messageSentOn">
-                        sent:
-                        <?php echo date("h-i A", strtotime($row['messageSentOn'])); ?>
-                        On
-                        <?php echo date("Y-m-d", strtotime($row['messageSentOn'])); ?>
-                        </p>
-                     </span>
-                  <?php endif ?>
-               </div>
-            <?php endforeach; ?>
+               <?php else: ?>
+                  <span class="otherMsg otherBG">
+                     <p class="messageDesc">
+                        <?php echo $row['messageDesc']; ?>
+                     </p>
+                     </p class="messageSentOn">
+                     sent:
+                     <?php echo date("h-i A", strtotime($row['messageSentOn'])); ?>
+                     On
+                     <?php echo date("Y-m-d", strtotime($row['messageSentOn'])); ?>
+                     </p>
+                  </span>
+               <?php endif ?>
+            </div>
+         <?php endforeach; ?>
+      </div>
+
+      <div class="container newestMessageBox">
+         <div class="row-sm-12 newestMessage">
+            <p>
+               <?php echo $messageDetails['messageDesc']; ?>
+            </p>
+            <p class="messageSentOn">sent:
+               <?php echo date("h-i A", strtotime($messageDetails['messageSentOn'])); ?>
+               On
+               <?php echo date("Y-m-d", strtotime($messageDetails['messageSentOn'])); ?>
+            </p>
          </div>
+         <!-- display sent messages. Only show these divs if messages are sent, otherwise.. why? -->
+         <div class="col-sm-12 thumb-imgs" onclick="TestsFunction()">
+            <?php if (!empty($messageDetails['messagePics'])): ?>
+               <img src="<?= $messageDetails['messagePics']; ?>"
+                  style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
+            <?php endif ?>
 
-         <div class="container newestMessageBox">
-            <div class="row-sm-12 newestMessage">
-               <p>
-                  <?php echo $messageDetails['messageDesc']; ?>
-               </p>
-               <p class="messageSentOn">sent:
-                  <?php echo date("h-i A", strtotime($messageDetails['messageSentOn'])); ?>
-                  On
-                  <?php echo date("Y-m-d", strtotime($messageDetails['messageSentOn'])); ?>
-               </p>
-            </div>
-            <!-- display sent messages. Only show these divs if messages are sent, otherwise.. why? -->
-            <div class="col-sm-12 thumb-imgs" onclick="TestsFunction()">
-               <?php if (!empty($messageDetails['messagePics'])): ?>
-                  <img src="<?= $messageDetails['messagePics']; ?>"
-                     style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
-               <?php endif ?>
+            <?php if (!empty($messageDetails['messagePic2'])): ?>
+               <img src="<?= $messageDetails['messagePic2']; ?>"
+                  style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
+            <?php endif ?>
 
-               <?php if (!empty($messageDetails['messagePic2'])): ?>
-                  <img src="<?= $messageDetails['messagePic2']; ?>"
-                     style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
-               <?php endif ?>
-
-               <?php if (!empty($messageDetails['messagePic3'])): ?>
-                  <img src="<?= $messageDetails['messagePic3']; ?>"
-                     style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
-               <?php endif ?>
-               <?php if (!empty($messageDetails['messagePic4'])): ?>
-                  <img src="<?= $messageDetails['messagePic4']; ?>"
-                     style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
-               <?php endif ?>
-            </div>
-            <?php if (!empty($messageDetails['messagePics']) || !empty($messageDetails['messagePic2']) || !empty($messageDetails['messagePic3']) || !empty($messageDetails['messagePic4'])): ?>
-               <div class="main-img-history" id="TestsDiv" style="display:none"">
-                        <img src=""style=" object-fit: contain; object-position: center; background-color: #F6F6F6;
-                  height: 450px; width: 450px;">
-               </div>
+            <?php if (!empty($messageDetails['messagePic3'])): ?>
+               <img src="<?= $messageDetails['messagePic3']; ?>"
+                  style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
+            <?php endif ?>
+            <?php if (!empty($messageDetails['messagePic4'])): ?>
+               <img src="<?= $messageDetails['messagePic4']; ?>"
+                  style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
             <?php endif ?>
          </div>
-      </div> <!-- end history and newest message -->
+         <?php if (!empty($messageDetails['messagePics']) || !empty($messageDetails['messagePic2']) || !empty($messageDetails['messagePic3']) || !empty($messageDetails['messagePic4'])): ?>
+            <div class="main-img" id="TestsDiv" style="display:none"">
+                     <img src=""style=" object-fit: contain; object-position: center; background-color: #F6F6F6; height:
+               450px; width: 450px;">
+            </div>
+         <?php endif ?>
+      </div>
+   </div> <!-- end history and newest message -->
 
-      <div class="col-lg-12 msgReply">
-         <!-- reply -->
-         <form action="viewMessage.php" method="post" enctype="multipart/form-data">
-            <br>
-            <div>
-               <input type="hidden" class="form-control" id="parentID" name="parentID"
-                  value="<?= $messageDetails['parentID']; ?>" readonly>
-            </div>
-            <!-- hidden listID -->
-            <div>
-               <input type="hidden" class="form-control" id="listID" name="listID"
-                  value="<?= $listDetails['listID']; ?>">
-            </div>
-            <!-- customer's id (who sent you the message) -->
-            <div>
-               <input type="hidden" class="form-control" id="sellerID" name="sellerID"
-                  value="<?php echo $receiverID ?>">
-            </div>
-            <div>
-               <input type="hidden" class="form-control" id="sellerInnie" name="sellerInnie"
-                  value="<?php echo $sellerInnie ?>">
-            </div>
-            <div>
-               <input type="hidden" class="form-control" id="customerID" name="customerID"
-                  value="<?php echo $senderInfo['userID'] ?>">
-            </div>
-            <div>
-               <input type="hidden" class="form-control" id="customerInnie" name="customerInnie"
-                  value="<?php echo $senderInfo['userInnie'] ?>">
-            </div>
+   <div class="col-lg-12 msgReply">
+      <!-- reply -->
+      <form action="viewMessage.php" method="post" enctype="multipart/form-data">
+         <br>
 
-            <!-- hidden title, autogenerate RE | to mark as a reply.-->
-            <div>
-               <input type="hidden" class="form-control" id="messageTitle" name="messageTitle"
-                  value="RE | Requested: <?= $listDetails['listProdTitle']; ?>">
-            </div>
-            <!-- User enter message -->
-            <div>
-               <textarea class="form-control" id="messageDesc" name="messageDesc" rows="2" maxlength="275"
-                  required></textarea>
-            </div>
-            <!-- User Send Pics -->
-            <br>
+         <!-- FOR UPDATING OLD MESSAGE CONDITION -->
+         <div>
+            <input type="hidden" class="form-control" id="priorMessageID" name="priorMessageID"
+               value="<?= $messageDetails['messageID']; ?>" readonly>
+         </div>
+         <!-- hidden condition: UPDATE Prior message-->
+         <div>
+            <input type="hidden" class="form-control" id="updateStatus" name="updateStatus" value="Yes">
+         </div>
+         <!-- END -->
 
-            <div class="container insertPics">
-               <div class="row">
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic" name="sendPic" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic2" name="sendPic2" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic3" name="sendPic3" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic4" name="sendPic4" class="form-control" accept="image/*">
-                  </div>
+
+         <div>
+            <input type="hidden" class="form-control" id="parentID" name="parentID"
+               value="<?= $messageDetails['parentID']; ?>" readonly>
+         </div>
+         <!-- hidden listID -->
+         <div>
+            <input type="hidden" class="form-control" id="listID" name="listID" value="<?= $listDetails['listID']; ?>">
+         </div>
+         <!-- customer's id (who sent you the message) -->
+         <div>
+            <input type="hidden" class="form-control" id="sellerID" name="sellerID" value="<?php echo $receiverID ?>">
+         </div>
+         <div>
+            <input type="hidden" class="form-control" id="sellerInnie" name="sellerInnie"
+               value="<?php echo $sellerInnie ?>">
+         </div>
+         <div>
+            <input type="hidden" class="form-control" id="customerID" name="customerID"
+               value="<?php echo $senderInfo['userID'] ?>">
+         </div>
+         <!-- hidden condition: INSERT FOR THIS MESSAGE -->
+         <div>
+            <input type="hidden" class="form-control" id="isMessageReplied" name="isMessageReplied" value="No">
+         </div>
+         <div>
+            <input type="hidden" class="form-control" id="customerInnie" name="customerInnie"
+               value="<?php echo $senderInfo['userInnie'] ?>">
+         </div>
+
+         <!-- hidden title, autogenerate RE | to mark as a reply.-->
+         <div>
+            <input type="hidden" class="form-control" id="messageTitle" name="messageTitle"
+               value="RE | Requested: <?= $listDetails['listProdTitle']; ?>">
+         </div>
+         <!-- User enter message -->
+         <div>
+            <textarea class="form-control" id="messageDesc" name="messageDesc" rows="2" maxlength="275"
+               required></textarea>
+         </div>
+         <!-- User Send Pics -->
+         <br>
+
+         <div class="container insertPics">
+            <div class="row">
+               <div class="col-xs-1">
+                  <input type="file" id="sendPic" name="sendPic" class="form-control" accept="image/*">
+               </div>
+               <div class="col-xs-1">
+                  <input type="file" id="sendPic2" name="sendPic2" class="form-control" accept="image/*">
+               </div>
+               <div class="col-xs-1">
+                  <input type="file" id="sendPic3" name="sendPic3" class="form-control" accept="image/*">
+               </div>
+               <div class="col-xs-1">
+                  <input type="file" id="sendPic4" name="sendPic4" class="form-control" accept="image/*">
                </div>
             </div>
-            <!-- send -->
-            <div class="btnSend">
-               <button class="btn btn-outline-primary">Reply Back</button>
-            </div>
-         </form>
-      </div>
+         </div>
+         <!-- send -->
+         <div class="btnSend">
+            <button class="btn btn-outline-primary">Reply Back</button>
+         </div>
+      </form>
    </div>
+</div>
 </div>
 
 
@@ -560,12 +565,6 @@ if (isPostRequest()) {
    $(document).ready(function () {
       $('.thumb-imgs img').click(function () {
          $('.main-img img').attr('src', $(this).attr('src'));
-      });
-   });
-
-   $(document).ready(function () {
-      $('.thumb-imgs-history img').click(function () {
-         $('.main-img-history img').attr('src', $(this).attr('src'));
       });
    });
 

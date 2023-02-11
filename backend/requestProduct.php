@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <?php
 //call other files
 include_once "../model/userController.php";
@@ -50,6 +51,8 @@ if (isPostRequest()) {
    $fileDestination2 = filter_input(INPUT_POST, 'fileDestination2');
    $fileDestination3 = filter_input(INPUT_POST, 'fileDestination3');
    $fileDestination4 = filter_input(INPUT_POST, 'fileDestination4');
+   $isMessageReplied = filter_input(INPUT_POST, 'isMessageReplied');
+   echo $isMessageReplied;
 
 
    #--- Profile Picture Traveling -- #
@@ -64,7 +67,7 @@ if (isPostRequest()) {
       move_uploaded_file($file2['tmp_name'], $fileDestination2);
    }
    $file3 = $_FILES['sendPic3'];
-   if ($file2['error'] != UPLOAD_ERR_NO_FILE) {
+   if ($file3['error'] != UPLOAD_ERR_NO_FILE) {
       $fileDestination3 = '../backend/messageUpload/' . $file3['name'];
       move_uploaded_file($file3['tmp_name'], $fileDestination3);
    }
@@ -74,15 +77,9 @@ if (isPostRequest()) {
       move_uploaded_file($file4['tmp_name'], $fileDestination4);
    }
 
-   $file = $_FILES['messagePics'];
-   if ($file['error'] != UPLOAD_ERR_NO_FILE) {
-      $fileDestination = '../messageUpload/' . $file['name'];
-      move_uploaded_file($file['tmp_name'], $fileDestination);
-   }
-
    if ($userDatabase->sendMessage($parentID,$customerID, $sellerID, $listID, 
    $messageTitle, $messageDesc, $fileDestination, $customerInnie, 
-   $sellerInnie, $fileDestination2, $fileDestination3, $fileDestination4)) {
+   $sellerInnie, $fileDestination2, $fileDestination3, $fileDestination4,$isMessageReplied)) {
       header("location: displayResults.php");
       $message = "Your Request Was Sent!";
 
@@ -204,6 +201,7 @@ if (isPostRequest()) {
 
    </div> <!-- close requestInfo row-->
 
+   <!-- message info -->
    <form action="requestProduct.php" method="post" enctype="multipart/form-data">
       <br>
       <!-- hidden listID -->
@@ -220,6 +218,10 @@ if (isPostRequest()) {
       </div>
       <div>
          <input type="hidden" class="form-control" id="sellerID" name="sellerID" value="<?= $listDetails['userID']; ?>">
+      </div>
+      <!-- hidden condition -->
+      <div>
+         <input type="text" class="form-control" id="isMessageReplied" name="isMessageReplied" value="No">
       </div>
       <div>
          <label for="sellerInnie">To:</label>

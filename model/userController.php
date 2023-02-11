@@ -390,7 +390,8 @@ class Users
 
     public function sendMessage($parentID,$customerID, $sellerID, $listID, 
     $messageTitle, $messageDesc, $fileDestination, $customerInnie, 
-    $sellerInnie, $fileDestination2, $fileDestination3, $fileDestination4)
+    $sellerInnie, $fileDestination2, $fileDestination3, $fileDestination4,
+    $isMessageReplied)
     {
         $isMsgSent = false;        
         $userTable = $this->userData; 
@@ -400,7 +401,7 @@ class Users
         $stmt = $userTable->prepare("INSERT INTO plugin_messages SET parentID=:parentID, customerID = :customerID, sellerID = :sellerID, 
         listID = :listID, messageTitle = :messageTitle, messageDesc = :messageDesc, messagePics =:fileDestination, 
         messageSentOn = NOW(), customerInnie=:customerInnie, sellerInnie=:sellerInnie, 
-        messagePic2=:fileDestination2,messagePic3=:fileDestination3, messagePic4=:fileDestination4");
+        messagePic2=:fileDestination2,messagePic3=:fileDestination3, messagePic4=:fileDestination4, isMessageReplied=:isMessageReplied");
 
         $bindParameters = array(
             ":parentID"=>$parentID,
@@ -415,6 +416,7 @@ class Users
             ":fileDestination2" => $fileDestination2,
             ":fileDestination3" => $fileDestination3,
             ":fileDestination4" => $fileDestination4,
+            ":isMessageReplied"=>$isMessageReplied,
             
         );       
 
@@ -422,39 +424,24 @@ class Users
         return ($isMsgSent);
     }
 
-    public function replyMessage($parentID,$receiverID,$senderID, $listID, 
-    $messageTitle, $messageDesc, $fileDestination, $receiverInnie, 
-    $senderInnie, $fileDestination2, $fileDestination3, $fileDestination4)
-    {
+    public function updateIsMessageReplied($priorMessageID, $updateStatus){
+
         $isMsgSent = false;        
         $userTable = $this->userData; 
 
-        $salt = random_bytes(32); 
-
-        $stmt = $userTable->prepare("INSERT INTO plugin_messages SET parentID=:parentID, senderID = :senderID, receiverID = :receiverID, 
-        listID = :listID, messageTitle = :messageTitle, messageDesc = :messageDesc, messagePics =:fileDestination, 
-        messageSentOn = NOW(), receiverInnie=:receiverInnie, senderInnie=:senderInnie, 
-        messagePic2=:fileDestination2,messagePic3=:fileDestination3, messagePic4=:fileDestination4");
+        $stmt = $userTable->prepare("UPDATE plugin_messages SET isMessageReplied = :updateStatus 
+        WHERE messageID = :priorMessageID");
 
         $bindParameters = array(
-            ":parentID"=>$parentID,
-            ":receiverID" => $receiverID,
-            ":senderID" => $senderID,
-            ":listID" => $listID,
-            ":messageTitle" => $messageTitle,
-            ":messageDesc" => $messageDesc,
-            ":fileDestination" => $fileDestination,
-            ":receiverInnie"=> $receiverInnie,
-            ":senderInnie"=>$senderInnie,
-            ":fileDestination2" => $fileDestination2,
-            ":fileDestination3" => $fileDestination3,
-            ":fileDestination4" => $fileDestination4,
-            
-        );       
+            ":updateStatus"=>$updateStatus,
+            ":priorMessageID"=>$priorMessageID
+        );
 
         $isMsgSent = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isMsgSent);
     }
+        
+
 
     public function getAllMessages($userID){
         $userTable = $this->userData;
@@ -593,7 +580,6 @@ class Users
          if ($stmt->execute($binds) && $stmt->rowCount() > 0) {
              $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
          }
- 
  
          return $results;
     }   
