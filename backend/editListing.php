@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <?php
+   ob_start();
    include_once '../include/functions.php';
    include_once '../include/header.php';
    include_once '../model/userController.php';
+   
 
-   if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn'])
-   {
-      header("location: ../login.php"); 
-      exit;
-   }
+
    
    $message = "";
    $configFile = '../model/dbconfig.ini';
@@ -90,9 +88,9 @@
          header('Location: viewProfile.php');
       }
       if (isset($_POST['deleteBtn'])){
+         header('Location: viewProfile.php');
          $listID = filter_input(INPUT_POST, 'listID');
          $deleteList = $userDatabase->deleteUserLising($listID);
-         header('Location: viewProfile.php');
       }
   }
 ?>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+ob_start();
 //call other files
 include_once "../model/userController.php";
 include_once "../include/functions.php";
@@ -89,8 +90,8 @@ if (isPostRequest()) {
 }
 ?>
 <style>
-   .container-fluid {
-      padding: 35px;
+   .container {
+      padding: 15px;
    }
 
    .listProdTitle {
@@ -132,8 +133,9 @@ if (isPostRequest()) {
    .listInfoBox {}
 
    .requestInfo {
-      border: 5px solid #E5E5E5;
+      border: 3px solid #E5E5E5;
       padding: 15px;
+      border-radius: 15px;
    }
 
    .btnSend {
@@ -153,7 +155,7 @@ if (isPostRequest()) {
 </style>
 
 
-<div class="container-fluid">
+<div class="container">
    <div class="col-sm-12 pageTitle">
       <h2> Requesting... </h2>
    </div>
@@ -221,7 +223,7 @@ if (isPostRequest()) {
       </div>
       <!-- hidden condition -->
       <div>
-         <input type="text" class="form-control" id="isMessageReplied" name="isMessageReplied" value="No">
+         <input type="hidden" class="form-control" id="isMessageReplied" name="isMessageReplied" value="No">
       </div>
       <div>
          <label for="sellerInnie">To:</label>
@@ -261,3 +263,7 @@ if (isPostRequest()) {
       </div>
    </form>
 </div> <!-- close container -->
+
+</body>
+</html>
+<?php include_once '../include/footer.php'; ?>

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+ob_start();
 include_once '../include/functions.php';
 include_once '../include/header.php';
 include_once '../model/userController.php';
@@ -558,6 +559,7 @@ if (isPostRequest()) {
 </body>
 
 </html>
+<?php include_once '../include/footer.php'; ?>
 
 
 <script>

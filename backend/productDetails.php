@@ -27,7 +27,7 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
 ?>
 <style>
    .container {
-      padding: 25px;
+      padding: 15px;
    }
 
    .listProdTitle {
@@ -54,7 +54,7 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
    }
 
 
-   .underBtnText{
+   .underBtnText {
       margin-top: 10px;
       font-size: 13px;
    }
@@ -98,7 +98,8 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
    .thumb-imgs img {
       cursor: pointer;
    }
-   .listDescBox{
+
+   .listDescBox {
       margin-top: 10px;
       padding: 10px;
       background-color: #f8f8f8;
@@ -173,6 +174,11 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
       </div>
    </div>
 </div>
+
+</body>
+
+</html>
+<?php include_once '../include/footer.php'; ?>
 
 
 <script>

@@ -221,6 +221,23 @@ class Users
         return $stmt->execute($bindParameters);
     }
 
+    public function updatePP($fileDestination,$userID)
+    {
+        $isUpdated = false;        
+        $userTable = $this->userData; 
+
+        $stmt = $userTable->prepare("UPDATE plugin_users SET userPic = :fileDestination WHERE userID = :userID");
+
+        $bindParameters = array(
+
+            ":fileDestination" => $fileDestination,
+            ":userID"=>$userID
+        );       
+
+        $isUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isUpdated);
+    }
+
 
     public function findUserByInnie($userInnie) 
     {
