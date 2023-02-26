@@ -103,7 +103,7 @@ $stateList = $userDatabase->getAllStates();
 
    div .content {
       max-width: 250px;
-      height: 400px;
+      min-height: 400px;
       border: 1px #F5F5F5 solid;
       margin: 5px;
    }
@@ -215,8 +215,10 @@ $stateList = $userDatabase->getAllStates();
             </p>
          </div>
 
+         
          <div class="row">
             <?php foreach ($listArray as $row): ?>
+               <?php if ($row['isListSold'] !='YES'): ?>
                <div class="col-sm content">
                   <input type="hidden" name="p_id" value="<?= $row['listID']; ?>" />
                   <div class="listState">
@@ -240,6 +242,7 @@ $stateList = $userDatabase->getAllStates();
                      <?= $row['listCond']; ?>
                   </div>
                </div>
+               <?php endif ?>
             <?php endforeach; ?>
          </div>
       <?php endif; ?>

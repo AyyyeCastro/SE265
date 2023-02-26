@@ -94,9 +94,23 @@
       }
   }
 ?>
+<style>
+   .container-fluid{
+      height: 100vh;
+   }
+   .editListingContainer{
+      max-width: 75%;
+      margin-top: 15px;
+      border-radius: 15px;
+      border: 1px solid #E5E5E5;
+      box-shadow: 5px 10px 10px #E5E5E5;
+      padding: 15px;
+   }
 
-   <div class="container">
-      <div id="mainDiv">
+</style>
+
+   <div class="container-fluid">
+      <div class="container editListingContainer">
          <form action="editListing.php" method="post" enctype="multipart/form-data">
             <div>
                <input type="hidden" id="listID" name="listID" value="<?= $listDetails['listID']; ?>" />
@@ -133,7 +147,21 @@
 
             <div>
                <label for="inputProdDesc">Product Description:</label> 
-               <textarea class="form-control" id="inputProdDesc" name="inputProdDesc" rows="5" required><?php echo $listDetails['listDesc']; ?></textarea>
+               <textarea id="inputProdDesc" class="form-control" name="inputProdDesc" rows="5" required><?php echo $listDetails['listDesc']; ?></textarea>
+               <script>
+                  tinymce.init({
+                     selector: '#inputProdDesc',
+                     height: 200,
+                     menubar: false,
+                     plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                     ],
+                     toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                     content_css: '//www.tiny.cloud/css/codepen.min.css'
+                  });
+               </script>
             </div>
 
             
@@ -172,6 +200,7 @@
    </div>
 </body>
 </html>
+<?php    include_once '../include/footer.php'; ?>
 
 
 

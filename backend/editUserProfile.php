@@ -21,15 +21,19 @@ try {
 
 # -- Important -- #
 # Set the session outside of the post request, so that the forms can get pre-filled. 
-$userID = $_SESSION['userID'];
+$userID = $_GET['userID'];
+echo $userID;
 $userInfo = $userDatabase->getUserDetails($userID);
 // Get all of the States from the database. Fills dropdown list.
 $stateList = $userDatabase->getAllStates();
 # ----------------#
+$sessionID = $_SESSION['userID'];
+$modCheck = $userDatabase->isUserMod($sessionID);
 
 
 if (isPostRequest()) {
    if (isset($_POST['updateBtn'])) {
+      $userID = filter_input(INPUT_POST, 'userID');
       $userName = filter_input(INPUT_POST, 'userName');
       $userInnie = filter_input(INPUT_POST, 'userInnie');
       $userBio = filter_input(INPUT_POST, 'userBio');
@@ -54,13 +58,13 @@ if (isPostRequest()) {
       # ---------------------------------#
 
       if ($userDatabase->updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination, $userState, $isModerator)) {
-         header("location: ../backend/viewProfile.php");
+         header('Location: viewUsers.php?userID='. $userInfo['userID']);
       } else {
          $message = "Error in updating profile, please try again.";
       }
    }
    if (isset($_POST['cancelBtn'])) {
-      header('Location: viewProfile.php');
+      header('Location: viewUsers.php?userID='. $userInfo['userID']);
    }
 }
 
@@ -148,7 +152,7 @@ if (isPostRequest()) {
    <div class="container editProfContainer">
       <h1>Account Information</h1>
       <!-- SUPER important. enctype="multipart/form-data" in order to allow inserting profile pics -->
-      <form action="editProfile.php" method="POST" enctype="multipart/form-data">
+      <form action="editUserProfile.php" method="POST" enctype="multipart/form-data">
 
          <div class="row">
             <div class="col-md-12">
@@ -177,6 +181,8 @@ if (isPostRequest()) {
             </div>
          </div>
 
+         <input type="hidden" id="userID" name="userID" class="form-control"
+                  value="<?php echo $userInfo['userID']; ?>" required>
 
          <div class="row">
             <div class="col-md-12">
@@ -197,6 +203,7 @@ if (isPostRequest()) {
                   Password.</small>
             </div>
          </div>
+         
 
          <div class="row">
             <div class="col-md-12">
@@ -235,7 +242,7 @@ if (isPostRequest()) {
 
 
          <!--  Ensure this can only be viewed by ADMIN and/or MODS -->
-         <?php if ($userInfo['isModerator'] == 'YES' || $userInfo['isOwner'] == 'YES'): ?>
+         <?php if ($modCheck['isModerator'] == 'YES' || $modCheck['isOwner'] == 'YES'): ?>
             <div class="row">
                <div class="col-md-12">
                   <label for="isModerator">Is Moderator:</label>

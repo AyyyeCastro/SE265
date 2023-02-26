@@ -28,8 +28,7 @@ $deleteList = [];
 
 #----------------#
 if (isPostRequest()) {
-   # If the delete button is clicked, call for deleteUserListing method.
-   # User is prompted for confirmation before function is called.
+
    if (isset($_POST['btnDelete'])) {
       header('Location: viewProfile.php');
       $listID = filter_input(INPUT_POST, 'listID');
@@ -57,6 +56,7 @@ if (isPostRequest()) {
    .container {
       padding: 15px;
       min-width: 75%;
+      height: 100%;
    }
 
    .profileContainer {
@@ -67,10 +67,16 @@ if (isPostRequest()) {
       background-clip: padding-box;
       -webkit-background-clip: padding-box;
       border-radius: 15px;
+      border: 1px solid #E5E5E5;
+      box-shadow: 5px 10px 10px #E5E5E5;
    }
 
    .productContainer {
       margin-top: 15px;
+      border-radius: 15px;
+      border: 1px solid #E5E5E5;
+      box-shadow: 5px 10px 10px #E5E5E5;
+      padding: 15px;
    }
 
    /* Important, sets it so that was "edit" listing buttons only show on a table hover */
@@ -176,10 +182,12 @@ if (isPostRequest()) {
       display: none;
    }
 
-   .productContainer {
-      border: 3px solid #F1F1F1;
-      border-radius: 15px;
-      padding: 15px;
+
+   .content {
+      max-width: 250px;
+      min-height: 400px;
+      border: 1px #F5F5F5 solid;
+      margin: 5px;
    }
 
    .content:hover .showEdit {
@@ -187,7 +195,7 @@ if (isPostRequest()) {
    }
 </style>
 
-<div class="container">
+<div class="container viewProfileContainer">
    <div class="profileContainer">
       <div class="row">
          <div class="col-md-4">
@@ -201,8 +209,6 @@ if (isPostRequest()) {
                   echo "<img src='" . $userInfo['userPic'] . "' class='ProfilePics rounded-circle' alt='profile picture'>";
                }
                ?>
-
-
 
                <div class="changePPBox">
                   <form action="editUserPic.php" method="POST" enctype="multipart/form-data">
@@ -257,8 +263,13 @@ if (isPostRequest()) {
    </div>
 
    <div class="productContainer">
+   <div class="active">
+      <a href="viewPurchaseHistory.php"><button class="btn"><i class="fa-sharp fa-solid fa-file-invoice-dollar fa-xl"></i></button>Purchases</a>
+      <a href="viewSaleHistory.php"><button class="btn"><i class="fa-solid fa-clock-rotate-left fa-lg"></i></button>Sales</a>
+   </div>
       <div class="row">
          <?php foreach ($userListLog as $row): ?>
+            <?php if ($row['isListSold'] !='YES'): ?>
             <div class="col-sm-3 content">
                <div class="row">
                   <!-- edit button -->
@@ -295,13 +306,13 @@ if (isPostRequest()) {
                   <?= $row['listID']; ?>
                </div>
             </div>
+            <?php endif; ?>
          <?php endforeach; ?>
       </div>
    </div>
 </div>
-</div>
-</div>
 </body>
+
 </html>
 <?php include_once '../include/footer.php'; ?>
 

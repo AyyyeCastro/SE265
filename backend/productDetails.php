@@ -129,26 +129,66 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
          <div class="listProdCat"> Listed in:
             <?= $listDetails['listProdCat']; ?>
          </div>
-         <div class="col-sm-12 listBuyBox">
-            <div class="listProdPrice">$
-               <?= $listDetails['listProdPrice']; ?>
-            </div>
-            <div class="listCond">
-               <?= $listDetails['listCond']; ?>
-            </div>
-            <div class="btnRequest">
-               <a href="requestProduct.php?listID=<?= $listDetails['listID']; ?>""><button class=" btn btn-md
-                  btn-primary btnBuyNow">Request</button></a>
-            </div>
-            <div class="underBtnText">
-               <div class="listSeller">Seller:
-                  <?= $sellerInfo['userInnie']; ?>
+
+         <?php if ($listDetails['isListSold'] != 'YES'): ?>
+            <div class="col-sm-12 listBuyBox">
+               <div class="listProdPrice">$
+                  <?= $listDetails['listProdPrice']; ?>
                </div>
-               <div class="listState">State:
-                  <?= $listDetails['listState']; ?>
+               <div class="listCond">
+                  <?= $listDetails['listCond']; ?>
+               </div>
+               <div class="btnRequest">
+                  <a href="requestProduct.php?listID=<?= $listDetails['listID']; ?>""><button class=" btn btn-md
+                     btn-primary btnBuyNow">Request</button></a>
+               </div>
+               <div class="underBtnText">
+                  <div class="listSeller">Seller:
+                     <?= $sellerInfo['userInnie']; ?>
+                  </div>
+                  <div class="listState">State:
+                     <?= $listDetails['listState']; ?>
+                  </div>
                </div>
             </div>
-         </div>
+         <?php else: ?>
+            <div class="col-sm-12 listBuyBox">
+               <div class="listProdPrice">$
+                  <?= $listDetails['listProdPrice']; ?>
+               </div>
+               <div class="listCond">
+                  <?= $listDetails['listCond']; ?>
+               </div>
+               <div class="timeListsold">SOLD ON:
+                  <?= $listDetails['timeListsold']; ?>
+               </div>
+               <div class="customerInnie">TO:
+                  <?= $listDetails['customerInnie']; ?>
+               </div>
+               <form action="productDetails.php" method="post">
+               <div class="form-group">
+                  <label for="rating">Rate Seller Based Off of Purchase Experience:</label>
+                  <select class="form-control" id="rating" name="rating">
+                     <option value="1">1 star</option>
+                     <option value="2">2 stars</option>
+                     <option value="3">3 stars</option>
+                     <option value="4">4 stars</option>
+                     <option value="5">5 stars</option>
+                  </select>
+               </div>
+               <input type="hidden" name="userID" value="<?php echo $sellerInfo['userID']; ?>">
+               <button type="submit" class="btn btn-outline-primary" name="btnRate">Rate Seller</button>
+            </form>
+               <div class="underBtnText">
+                  <div class="listSeller">Seller:
+                     <?= $sellerInfo['userInnie']; ?>
+                  </div>
+                  <div class="listState">State:
+                     <?= $listDetails['listState']; ?>
+                  </div>
+               </div>
+            </div>
+         <?php endif ?>
 
       </div>
       <div class="col-sm-12">

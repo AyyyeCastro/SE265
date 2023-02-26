@@ -187,7 +187,6 @@ if (isPostRequest()) {
       </form>
    </div> <!-- main div -->
 </div>
-</body>
-
-</html>
 <?php include_once '../include/footer.php'; ?>
+</body>
+</html>

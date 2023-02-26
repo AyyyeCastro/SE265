@@ -79,10 +79,10 @@ class Users
         $stmt->execute();
         $number_of_rows = $stmt->fetchColumn(); 
         if($number_of_rows > 0){
-            return true;}
+            return false;}
         else
         {
-            return false;
+            return true;
         }
     }
 
@@ -98,10 +98,10 @@ class Users
         $stmt->execute();
         $number_of_rows = $stmt->fetchColumn(); 
         if($number_of_rows > 0){
-            return true;}
+            return false;}
         else
         {
-            return false;
+            return true;
         }
     }
 
@@ -155,6 +155,19 @@ class Users
         }
         return false;
     }
+
+    public function isUserMod($sessionID) 
+    {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_users WHERE userID = :sessionID");
+        $bindParameters = array(":sessionID" => $sessionID);
+        
+        if($stmt->execute($bindParameters) && $stmt->rowCount() > 0){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+
     public function getCustomerDetails($customerID) 
     {
         $userTable = $this->userData;
@@ -188,15 +201,15 @@ class Users
         return $stmt->fetch();
     }
 
-    public function updateProfile($userName, $PW, $userInnie, $userBio, $userID, $fileDestination, $userState)
+    public function updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination, $userState, $isModerator)
     {
         $userTable = $this->userData; 
         
-        if($PW)
+        if($userPW)
         {
             $salt = random_bytes(32);
-            $hashedPW = sha1($salt . $PW);
-            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination, userState=:userState WHERE userID = :userID");
+            $hashedPW = sha1($salt . $userPW);
+            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination, userState=:userState, isModerator=:isModerator WHERE userID = :userID");
             $bindParameters = array(
                 ":uName" => $userName,
                 ":uPW" => $hashedPW,
@@ -205,7 +218,8 @@ class Users
                 ":uBio" => $userBio ,
                 ":userID" => $userID,
                 ":fileDestination" => $fileDestination,
-                ":userState"=>$userState
+                ":userState"=>$userState,
+                ":isModerator"=>$isModerator
             );
         }else{
             $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination, userState=:userState WHERE userID = :userID");
@@ -600,6 +614,104 @@ class Users
  
          return $results;
     }   
+
+    ###############################################
+    ########### CONFIRMING SALE ##################
+
+    public function confirmSale($listID,$customerID,$sellerID, $orderID, $customerInnie)
+   {
+       $isListSold = false;        
+       $userTable = $this->userData; 
+
+       $stmt = $userTable->prepare("UPDATE plugin_listings SET isListSold='YES', customerID=:customerID, sellerID=:sellerID,timeListsold=NOW(), orderID = :orderID, customerInnie=:customerInnie WHERE listID =:listID");
+
+       $bindParameters = array(
+           ":listID"=>$listID,
+           ":customerID"=>$customerID,
+           ":sellerID"=>$sellerID,
+           ":orderID"=>$orderID,
+           ":customerInnie"=>$customerInnie,
+       );       
+
+       $isListSold = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+       return ($isListSold);
+   }
+
+    public function defaultSaleMsg($parentID, $customerID, $sellerID, $listID, 
+    $messageTitle, $messageDesc, $customerInnie, $sellerInnie)
+    {
+        $isMsgSent = false;        
+        $userTable = $this->userData; 
+
+        $salt = random_bytes(32); 
+
+        $stmt = $userTable->prepare("INSERT INTO plugin_messages SET parentID=:parentID, customerID = :customerID, sellerID = :sellerID, 
+        listID = :listID, messageTitle = :messageTitle, messageDesc = :messageDesc,messageSentOn = NOW(), 
+        customerInnie=:customerInnie, sellerInnie=:sellerInnie");
+
+        $bindParameters = array(
+            ":parentID"=>$parentID,
+            ":customerID" => $customerID,
+            ":sellerID" => $sellerID,
+            ":listID" => $listID,
+            ":messageTitle" => $messageTitle,
+            ":messageDesc" => $messageDesc,
+            ":customerInnie"=> $customerInnie,
+            ":sellerInnie"=>$sellerInnie,
+            
+        );       
+
+        $isMsgSent = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isMsgSent);
+    }
+
+    public function getSaleHistory($userID){
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_listings WHERE userID = :userID AND isListSold = 'Yes' ORDER BY timeListsold DESC");
+        $bindParameters = array(
+            ":userID" => $userID
+        );
+        $stmt->execute($bindParameters);
+        return $stmt->fetchAll();
+    }
+    public function getPurchaseHistory($userID){
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT * FROM plugin_listings WHERE sellerID = :userID AND isListSold = 'Yes' ORDER BY timeListsold DESC");
+        $bindParameters = array(
+            ":userID" => $userID
+        );
+        $stmt->execute($bindParameters);
+        return $stmt->fetchAll();
+    }
+
+    ###########################################
+    ########### USER RATINGS ##################
+
+    public function giveUserRating($userID,$userRating){
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("INSERT INTO plugin_user_ratings SET userID=:userID, userRating=:userRating");
+        $bindParameters = array(
+            ":userID" => $userID,
+            "userRating"=>$userRating
+        );
+        $stmt->execute($bindParameters);
+        return $stmt->fetchAll();
+    }
+
+    public function getAvgRating($userID) {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("SELECT AVG(userRating) AS userRating FROM plugin_user_ratings WHERE user_id = :userID");
+        $bindParameters = array(
+            ":userID" => $userID
+        );
+        $stmt->execute($bindParameters);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($result) {
+            return round($result['userRating'], 1);
+        } else {
+            return 0;
+        }
+    }
 }
 
 ?>

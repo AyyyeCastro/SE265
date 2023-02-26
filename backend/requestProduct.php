@@ -6,11 +6,6 @@ include_once "../model/userController.php";
 include_once "../include/functions.php";
 include_once "../include/header.php";
 
-// //if not logged in, kick them
-// if (!isUserLoggedIn())
-// {
-//    header("location: ../login.php"); 
-// }
 
 $configFile = '../model/dbconfig.ini';
 try {
@@ -32,6 +27,15 @@ $customerID = $_SESSION['userID'];
 $customerInfo = $userDatabase->getCustomerDetails($customerID);
 /* Set empty arrays */
 $fileDestination = "";
+
+
+
+
+if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
+   $visitCrumb = ('backend/productDetails.php?listID='.$listID);
+   header("location: ../login.php?visitCrumb=$visitCrumb");
+   exit;
+}
 
 
 if (isPostRequest()) {
@@ -94,47 +98,81 @@ if (isPostRequest()) {
       padding: 15px;
    }
 
+   .pageTitle{
+      font-size: 20px;
+      font-weight: bold;
+   }
    .listProdTitle {
       font-weight: bold;
       font-size: 25px;
-      max-width: 250px;
+
       /* limit title width to the same width of the of the image */
    }
 
    .listProdCat {
-      color: #506d90;
-      max-width: 250px;
+      font-weight: bold;
+      color: #506D90;
+      font-size: 13px;
+
    }
 
    .listProdPrice {
+      font-weight: bold;
       padding-top: 3px;
       font-size: 18px;
-      max-width: 250px;
+      color: #001829;
    }
 
    .listCond {
+      font-weight: bold;
       color: #506d90;
       font-size: 13px;
-      max-width: 250px;
+
    }
 
    .listState {
+      font-weight: bold;
+      color: #506D90;
       font-size: 13px;
-      max-width: 250px;
+
+   }
+   .listPostedOn{
+      font-weight: bold;
+      color: #506D90;
+      font-size: 13px;
    }
 
    .listSeller {
       font-size: 13px;
       color: #506d90;
    }
+   .listDesc{
+      border: 1px solid #E5E5E5;
+      box-shadow: 0px 10px 10px #e9ecef;
+      padding: 15px;
+      border-radius: 15px;
+      margin-top: 25px;
+   }
 
    .listImgBox {}
 
-   .listInfoBox {}
+   .listInfoBox {
+
+   }
 
    .requestInfo {
-      border: 3px solid #E5E5E5;
+      background-color: #F8F9FA;
+      border: 1px solid #E5E5E5;
+      box-shadow: 5px 10px 10px #E5E5E5;
       padding: 15px;
+      border-radius: 15px;
+   }
+   .requestForm{
+      margin-top: 15px;
+      background-color: #F8F9FA;
+      border: 1px solid #E5E5E5;
+      box-shadow: 5px 10px 10px #E5E5E5;
+      padding: 25px;
       border-radius: 15px;
    }
 
@@ -156,12 +194,12 @@ if (isPostRequest()) {
 
 
 <div class="container">
-   <div class="col-sm-12 pageTitle">
-      <h2> Requesting... </h2>
-   </div>
 
    <div class="row requestInfo">
-      <div class="col-sm listImgBox">
+      <div class="col-sm-12 pageTitle">
+         About... 
+      </div>
+      <div class="col-sm-5 listImgBox">
          <!-- posted from this user -->
          <input type="hidden" name="sellerID" value="<?= $listDetails['userID']; ?>" />
          <!-- product listID -->
@@ -169,17 +207,14 @@ if (isPostRequest()) {
          <div class="listProdPic"><img src="<?= $listDetails['listProdPic']; ?>"
                style="object-fit: contain; object-position: center; width: 250px; height: 250px; background-color: #F6F6F6;">
          </div>
-         <div class="listProdCat"> Listed in:
-            <?= $listDetails['listProdCat']; ?>
-         </div>
       </div>
 
-      <div class="col-sm listInfoBox">
+      <div class="col-sm-7 listInfoBox">
          <div class="listProdTitle">
             <?= $listDetails['listProdTitle']; ?>
          </div>
-         <div class="listSeller">Seller:
-            <?= $sellerInfo['userInnie']; ?>
+         <div class="listProdCat"> Listed in:
+            <?= $listDetails['listProdCat']; ?>
          </div>
          <div class="listPostedOn">Posted on:
             <?php echo date("Y-m-d", strtotime($listDetails['listPostedOn'])); ?>
@@ -187,81 +222,85 @@ if (isPostRequest()) {
          <div class="listState">State:
             <?= $listDetails['listState']; ?>
          </div>
-
-         <br>
-         <b>Description</b>
-         <div class="listDesc">
-            <?= $listDetails['listDesc']; ?>
-         </div>
          <div class="listProdPrice">$
             <?= $listDetails['listProdPrice']; ?>
          </div>
          <div class="listCond">
             <?= $listDetails['listCond']; ?>
          </div>
+
       </div>
+
+         <div class="col-sm-12 listDesc">
+            <b>Description</b>
+               <?= $listDetails['listDesc']; ?>
+         </div>  
 
    </div> <!-- close requestInfo row-->
 
-   <!-- message info -->
-   <form action="requestProduct.php" method="post" enctype="multipart/form-data">
-      <br>
-      <!-- hidden listID -->
-      <div>
-         <input type="hidden" class="form-control" id="listID" name="listID" value="<?= $listDetails['listID']; ?>">
-      </div>
-      <!-- hidden userID SEND TO -->
-      <div>
-         <input type="hidden" class="form-control" id="customerID" name="customerID" value="<?php echo $customerID; ?>">
-      </div>
-      <div>
-         <input type="hidden" class="form-control" id="customerInnie" name="customerInnie"
-            value="<?= $customerInfo['userInnie']; ?>">
-      </div>
-      <div>
-         <input type="hidden" class="form-control" id="sellerID" name="sellerID" value="<?= $listDetails['userID']; ?>">
-      </div>
-      <!-- hidden condition -->
-      <div>
-         <input type="hidden" class="form-control" id="isMessageReplied" name="isMessageReplied" value="No">
-      </div>
-      <div>
-         <label for="sellerInnie">To:</label>
-         <input type="text" class="form-control" id="sellerInnie" name="sellerInnie"
-            value="<?= $sellerInfo['userInnie']; ?>" readonly>
-      </div>
-      <!-- hidden title -->
-      <div>
-         <input type="hidden" class="form-control" id="messageTitle" name="messageTitle"
-            value="Requested: <?= $listDetails['listProdTitle']; ?>">
-      </div>
-      <div>
-         <br>
-         <label for="messageDesc">Message</label>
-         <textarea class="form-control" id="messageDesc" name="messageDesc" rows="3" maxlength="275"
-            required></textarea>
-      </div>
-      <br>
-      <div class="container insertPics">
-               <div class="row">
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic" name="sendPic" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic2" name="sendPic2" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic3" name="sendPic3" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic4" name="sendPic4" class="form-control" accept="image/*">
-                  </div>
-               </div>
+   <div class="row">
+      <div class="col-sm-12 requestForm">
+         <!-- message info -->
+         <form action="requestProduct.php" method="post" enctype="multipart/form-data">
+            <br>
+            <!-- hidden listID -->
+            <div>
+               <input type="hidden" class="form-control" id="listID" name="listID" value="<?= $listDetails['listID']; ?>">
             </div>
-      <div class="btnSend">
-         <button class="btn btn-md btn-primary">Send</button>
+            <!-- hidden userID SEND TO -->
+            <div>
+               <input type="hidden" class="form-control" id="customerID" name="customerID" value="<?php echo $customerID; ?>">
+            </div>
+            <div>
+               <input type="hidden" class="form-control" id="customerInnie" name="customerInnie"
+                  value="<?= $customerInfo['userInnie']; ?>">
+            </div>
+            <div>
+               <input type="hidden" class="form-control" id="sellerID" name="sellerID" value="<?= $listDetails['userID']; ?>">
+            </div>
+            <!-- hidden condition -->
+            <div>
+               <input type="hidden" class="form-control" id="isMessageReplied" name="isMessageReplied" value="No">
+            </div>
+            <div>
+               <label for="sellerInnie">To:</label>
+               <input type="text" class="form-control" id="sellerInnie" name="sellerInnie"
+                  value="<?= $sellerInfo['userInnie']; ?>" readonly>
+            </div>
+            <!-- hidden title -->
+            <div>
+               <input type="hidden" class="form-control" id="messageTitle" name="messageTitle"
+                  value="Requested: <?= $listDetails['listProdTitle']; ?>">
+            </div>
+            <div>
+               <br>
+               <label for="messageDesc">Message</label>
+               <textarea class="form-control" id="messageDesc" name="messageDesc" rows="3" maxlength="275"
+                  required></textarea>
+            </div>
+            <br>
+            <div class="container insertPics">
+                     <div class="row">
+                        <div class="col-xs-1">
+                           <input type="file" id="sendPic" name="sendPic" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-xs-1">
+                           <input type="file" id="sendPic2" name="sendPic2" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-xs-1">
+                           <input type="file" id="sendPic3" name="sendPic3" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-xs-1">
+                           <input type="file" id="sendPic4" name="sendPic4" class="form-control" accept="image/*">
+                        </div>
+                     </div>
+                  </div>
+            <div class="btnSend">
+               <button class="btn btn-md btn-primary">Send</button>
+            </div>
+         </form>
       </div>
-   </form>
+   </div>
 </div> <!-- close container -->
 
 </body>
