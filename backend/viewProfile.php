@@ -25,6 +25,8 @@ $userID = $_SESSION['userID'];
 $userInfo = $userDatabase->getUserDetails($userID);
 $userListLog = $userDatabase->getUserListing($userID);
 $deleteList = [];
+$userRating = $userDatabase->getAvgRating($userID);
+$userRatingCount = $userDatabase->getRatingCount($userID);
 
 #----------------#
 if (isPostRequest()) {
@@ -182,7 +184,6 @@ if (isPostRequest()) {
       display: none;
    }
 
-
    .content {
       max-width: 250px;
       min-height: 400px;
@@ -193,8 +194,25 @@ if (isPostRequest()) {
    .content:hover .showEdit {
       display: inline-block;
    }
-</style>
 
+   .userRating {
+      margin-top: 5px;
+      color: gold;
+   }
+
+   .userRatingCount{
+      display: none;
+      color: orange;
+      font-size: 13px;
+   }
+   .userRating:hover .hideCount{
+      display: inline-block;
+   }
+
+   .userBio {
+      margin-top: 15px;
+   }
+</style>
 <div class="container viewProfileContainer">
    <div class="profileContainer">
       <div class="row">
@@ -243,14 +261,123 @@ if (isPostRequest()) {
                   <?php echo $userInfo['userState']; ?>
                </b>
             </small>
-            <br>
-            <small id="bioTitle" class="form-text text-muted">Biography</small>
+            <div class="row userRating showCount">
+               <div class="col-lg-3">
+               <!-- 0 star -->
+               <?php if ($userRating == 0): ?>
+                  <?php for ($i = 0; $i < 5; $i++): ?>
+                     <i class="fa-regular fa-star fa-lg"></i>
+                  <?php endfor; ?>
+               <?php endif ?>
+
+               <!-- 1 stars -->
+               <?php if ($userRating == 1): ?>
+                  <!-- solid -->
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <!-- outline -->
+                  <?php for ($i = 0; $i < 4; $i++): ?>
+                     <i class="fa-regular fa-star fa-lg"></i>
+                  <?php endfor; ?>
+               <?php endif ?>
+
+               <!-- 1.5 stars -->
+               <?php if ($userRating == 1.5): ?>
+                  <!-- solid -->
+                     <i class="fa-solid fa-star fa-lg"></i>
+                     <i class="fa-solid fa-star-half-stroke fa-lg"></i>
+                  <!-- outline -->
+                  <?php for ($i = 0; $i < 3; $i++): ?>
+                     <i class="fa-regular fa-star fa-lg"></i>
+                  <?php endfor; ?>
+               <?php endif ?>
+
+               <!-- 2 stars -->
+               <?php if ($userRating == 2): ?>
+                  <!-- solid -->
+                  <?php for ($i = 0; $i < 2; $i++): ?>
+                     <i class="fa-solid fa-star fa-lg"></i>
+                  <?php endfor; ?>
+                  <!-- outline -->
+                  <?php for ($i = 0; $i < 3; $i++): ?>
+                     <i class="fa-regular fa-star fa-lg"></i>
+                  <?php endfor; ?>
+               <?php endif ?>
+
+               <!-- 2.5 stars -->
+               <?php if ($userRating == 2.5): ?>
+                  <!-- solid -->
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star-half-stroke fa-lg"></i>
+                  <!-- outline -->
+                  <i class="fa-regular fa-star fa-lg"></i>
+                  <i class="fa-regular fa-star fa-lg"></i>
+               <?php endif ?>
+
+               <!-- 3 stars -->
+               <?php if ($userRating == 3): ?>
+                  <!-- solid -->
+                  <?php for ($i = 0; $i < 3; $i++): ?>
+                     <i class="fa-solid fa-star fa-lg"></i>
+                  <?php endfor; ?>
+                  <!-- outline -->
+                  <?php for ($i = 0; $i < 2; $i++): ?>
+                     <i class="fa-regular fa-star fa-lg"></i>
+                  <?php endfor; ?>
+               <?php endif ?>
+
+               <!-- 3.5 stars -->
+               <?php if ($userRating == 3.5): ?>
+                  <!-- solid -->
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star-half-stroke fa-lg"></i>
+                  <!-- outline -->
+                  <i class="fa-regular fa-star fa-lg"></i>
+               <?php endif ?>
+
+               <!-- 4 stars -->
+               <?php if ($userRating == 4): ?>
+                  <!-- solid -->
+                  <?php for ($i = 0; $i < 4; $i++): ?>
+                     <i class="fa-solid fa-star fa-lg"></i>
+                  <?php endfor; ?>
+                  <!-- outline -->
+                  <?php for ($i = 0; $i < 1; $i++): ?>
+                     <i class="fa-regular fa-star fa-lg"></i>
+                  <?php endfor; ?>
+               <?php endif ?>
+
+               <!-- 4.5 stars -->
+               <?php if ($userRating == 4.5): ?>
+                  <!-- solid -->
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <i class="fa-solid fa-star fa-lg"></i>
+                  <!-- outline -->
+                  <i class="fa-solid fa-star-half-stroke fa-lg"></i>
+               <?php endif ?>
+
+               <!-- 5 stars -->
+               <?php if ($userRating == 5): ?>
+                  <!-- solid -->
+                  <?php for ($i = 0; $i < 5; $i++): ?>
+                     <i class="fa-solid fa-star fa-lg"></i>>
+                  <?php endfor; ?>
+               <?php endif ?>
+            </div>
+               <div class="col-lg userRatingCount hideCount">
+                  <?php echo $userRatingCount ?> Product Reviewers
+               </div>
+
+            </div>
+            <small class="form-text text-muted userBio">Biography</small>
             <p>
                <?php echo $userInfo['userBio']; ?>
             </p>
          </div>
-
-         <!-- The following code would be inside the 'profileHeader' div in your viewProfile.php file, most likely in the same area where you have the "Edit" button currently -->
          <div class="col-md-1">
             <!-- Check if the currently logged in user's ID matches the ID of the profile being viewed -->
             <?php if ($_SESSION['userID'] === $userInfo['userID']) { ?>
@@ -263,49 +390,51 @@ if (isPostRequest()) {
    </div>
 
    <div class="productContainer">
-   <div class="active">
-      <a href="viewPurchaseHistory.php"><button class="btn"><i class="fa-sharp fa-solid fa-file-invoice-dollar fa-xl"></i></button>Purchases</a>
-      <a href="viewSaleHistory.php"><button class="btn"><i class="fa-solid fa-clock-rotate-left fa-lg"></i></button>Sales</a>
-   </div>
+      <div class="active">
+         <a href="viewPurchaseHistory.php"><button class="btn"><i
+                  class="fa-sharp fa-solid fa-file-invoice-dollar fa-xl"></i></button>Purchases</a>
+         <a href="viewSaleHistory.php"><button class="btn"><i
+                  class="fa-solid fa-clock-rotate-left fa-lg"></i></button>Sales</a>
+      </div>
       <div class="row">
          <?php foreach ($userListLog as $row): ?>
-            <?php if ($row['isListSold'] !='YES'): ?>
-            <div class="col-sm-3 content">
-               <div class="row">
-                  <!-- edit button -->
-                  <a href="editListing.php?listID=<?= $row['listID']; ?>"><button class="btn btn-primary showEdit"
-                        name="cancelbtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
-                  <form action="viewProfile.php" method="post">
-                     <!-- delete button -->
-                     <button type="submit" class="btn btn-warning showEdit" name="btnDelete"
-                        onclick="return confirm('Are you sure you want to delete this listing? It is a permenant decision.')"><i
-                           class="fa-solid fa-trash"></i></button>
+            <?php if ($row['isListSold'] != 'YES'): ?>
+               <div class="col-sm-3 content">
+                  <div class="row">
+                     <!-- edit button -->
+                     <a href="editListing.php?listID=<?= $row['listID']; ?>"><button class="btn btn-primary showEdit"
+                           name="cancelbtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                     <form action="viewProfile.php" method="post">
+                        <!-- delete button -->
+                        <button type="submit" class="btn btn-warning showEdit" name="btnDelete"
+                           onclick="return confirm('Are you sure you want to delete this listing? It is a permenant decision.')"><i
+                              class="fa-solid fa-trash"></i></button>
 
-                     <input type="hidden" id="listID" name="listID" value="<?= $row['listID']; ?>" />
-                  </form>
-               </div>
-               <a href="productDetails.php?listID=<?= $row['listID']; ?>">
-                  <div class="listProdPic"><img src="<?= $row['listProdPic']; ?>"
-                        style="object-fit: contain; object-position: center; width: 230px; height: 230px; background-color: #F6F6F6;">
+                        <input type="hidden" id="listID" name="listID" value="<?= $row['listID']; ?>" />
+                     </form>
                   </div>
-                  <div class="listProdTitle">
-                     <?= $row['listProdTitle']; ?>
+                  <a href="productDetails.php?listID=<?= $row['listID']; ?>">
+                     <div class="listProdPic"><img src="<?= $row['listProdPic']; ?>"
+                           style="object-fit: contain; object-position: center; width: 230px; height: 230px; background-color: #F6F6F6;">
+                     </div>
+                     <div class="listProdTitle">
+                        <?= $row['listProdTitle']; ?>
+                     </div>
+                  </a>
+                  <div class="listProdCat">
+                     <?= $row['listProdCat']; ?>
                   </div>
-               </a>
-               <div class="listProdCat">
-                  <?= $row['listProdCat']; ?>
+                  <div class="listProdPrice">$
+                     <?= $row['listProdPrice']; ?>
+                  </div>
+                  <div class="listCond">
+                     <?= $row['listCond']; ?>
+                  </div>
+                  <div class="listID">
+                     Product:
+                     <?= $row['listID']; ?>
+                  </div>
                </div>
-               <div class="listProdPrice">$
-                  <?= $row['listProdPrice']; ?>
-               </div>
-               <div class="listCond">
-                  <?= $row['listCond']; ?>
-               </div>
-               <div class="listID">
-                  Product:
-                  <?= $row['listID']; ?>
-               </div>
-            </div>
             <?php endif; ?>
          <?php endforeach; ?>
       </div>

@@ -687,24 +687,41 @@ class Users
     ###########################################
     ########### USER RATINGS ##################
 
-    public function giveUserRating($userID,$userRating){
+    public function giveUserRating($userID,$userRating, $orderID){
         $userTable = $this->userData;
-        $stmt = $userTable->prepare("INSERT INTO plugin_user_ratings SET userID=:userID, userRating=:userRating");
+        $stmt = $userTable->prepare("INSERT INTO plugin_user_ratings SET userID=:userID, userRating=:userRating, orderID=:orderID");
         $bindParameters = array(
             ":userID" => $userID,
-            "userRating"=>$userRating
+            "userRating"=>$userRating,
+            "orderID"=>$orderID
         );
         $stmt->execute($bindParameters);
         return $stmt->fetchAll();
     }
 
+    function isAlreadyRated($orderID){
+        $userTable = $this->userData; 
+        $stmt = $userTable->prepare("SELECT count(*) FROM plugin_user_ratings WHERE orderID=:orderID");
+
+
+        $stmt->bindParam(
+            ':orderID', $orderID
+        );
+
+        $stmt->execute();
+        $number_of_rows = $stmt->fetchColumn(); 
+        if($number_of_rows > 0){
+            return true;}
+        else
+        {
+            return false;
+        }
+    }
+
     public function getAvgRating($userID) {
         $userTable = $this->userData;
-        $stmt = $userTable->prepare("SELECT AVG(userRating) AS userRating FROM plugin_user_ratings WHERE user_id = :userID");
-        $bindParameters = array(
-            ":userID" => $userID
-        );
-        $stmt->execute($bindParameters);
+        $stmt = $userTable->prepare("SELECT AVG(userRating) AS userRating FROM plugin_user_ratings WHERE userID = :userID");
+        $stmt->execute(array(':userID' => $userID));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
             return round($result['userRating'], 1);
@@ -712,6 +729,22 @@ class Users
             return 0;
         }
     }
+
+    function getRatingCount($userID){
+        $userTable = $this->userData; 
+        $stmt = $userTable->prepare("SELECT count(userID) FROM plugin_user_ratings WHERE userID=:userID");
+
+
+        $stmt->bindParam(
+            ':userID', $userID
+        );
+
+        $stmt->execute();
+        $number_of_rows = $stmt->fetchColumn(); 
+        if($number_of_rows > 0){
+            return $number_of_rows;}       
+    }
+    
 }
 
 ?>

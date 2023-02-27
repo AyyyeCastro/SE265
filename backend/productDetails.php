@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+ob_start();
 //call other files
 include_once "../model/userController.php";
 include_once "../include/functions.php";
@@ -19,11 +20,31 @@ try {
 }
 
 /* get the list ID from the URL, send it to the method */
+$loginID = $_SESSION['userID'];
 $listID = $_GET['listID'];
 $listDetails = $userDatabase->getListForm($listID);
 /* get the $userID thensent it to the method */
 $userID = $listDetails['userID'];
 $sellerInfo = $userDatabase->getUserDetails($userID);
+
+if (isset($_GET['orderID'])) {
+   $orderID = $_GET['orderID'];
+   $isAlreadyRated = $userDatabase->isAlreadyRated($orderID);
+}
+
+if (isPostRequest()) {
+
+   if (isset($_POST['btnRate'])) {
+      $userID = filter_input(INPUT_POST, 'userID');
+      $userRating = filter_input(INPUT_POST, 'userRating');
+      $orderID = filter_input(INPUT_POST, 'orderID');
+
+      if ($userDatabase->giveUserRating($userID, $userRating, $orderID)) {
+         header("location: ../backend/viewProfile.php");
+      }
+   }
+}
+
 ?>
 <style>
    .container {
@@ -162,23 +183,29 @@ $sellerInfo = $userDatabase->getUserDetails($userID);
                <div class="timeListsold">SOLD ON:
                   <?= $listDetails['timeListsold']; ?>
                </div>
-               <div class="customerInnie">TO:
+               <div class="customerInnie">
+                  Buyer: 
+               <a href="viewUsers.php?userID=<?= $sellerInfo['userID']; ?>">
                   <?= $listDetails['customerInnie']; ?>
+               </a>
                </div>
+               <?php if ($sellerInfo['userID'] != $loginID && $isAlreadyRated == false): ?>
                <form action="productDetails.php" method="post">
-               <div class="form-group">
-                  <label for="rating">Rate Seller Based Off of Purchase Experience:</label>
-                  <select class="form-control" id="rating" name="rating">
-                     <option value="1">1 star</option>
-                     <option value="2">2 stars</option>
-                     <option value="3">3 stars</option>
-                     <option value="4">4 stars</option>
-                     <option value="5">5 stars</option>
-                  </select>
-               </div>
-               <input type="hidden" name="userID" value="<?php echo $sellerInfo['userID']; ?>">
-               <button type="submit" class="btn btn-outline-primary" name="btnRate">Rate Seller</button>
-            </form>
+                  <div class="form-group">
+                     <label for="userRating">Transaction Rating:</label>
+                     <select class="form-control" id="userRating" name="userRating">
+                        <option value="1">1 star</option>
+                        <option value="2">2 stars</option>
+                        <option value="3">3 stars</option>
+                        <option value="4">4 stars</option>
+                        <option value="5">5 stars</option>
+                     </select>
+                  </div>
+                  <input type="hidden" name="userID" value="<?php echo $sellerInfo['userID']; ?>">
+                  <input type="hidden" name="orderID" value="<?php echo $orderID ?>">
+                  <button type="submit" class="btn btn-outline-primary" name="btnRate">Rate Seller</button>
+               </form>
+               <?php endif ?>
                <div class="underBtnText">
                   <div class="listSeller">Seller:
                      <?= $sellerInfo['userInnie']; ?>

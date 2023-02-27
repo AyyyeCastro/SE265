@@ -72,8 +72,7 @@ $listDetails = $userDatabase->getPurchaseHistory($userID);
       <table class="table table-hover" id="userListLog">
          <thead>
             <tr>
-               <th>Date Sold</th>
-               <th>Seller</th>
+               <th>Bought On</th>
                <th>Product</th> <!-- requested title -->
                <th>Order ID</th> <!-- time sent -->
             </tr>
@@ -88,23 +87,16 @@ $listDetails = $userDatabase->getPurchaseHistory($userID);
                      </p>
                   </td>
                   <td>
-                  <a href="viewUsers.php?userID=<?= $row['customerID']; ?>">
                      <p class="sentFrom">
-                        <?php echo $row['sellerInnie']; ?>
+                        <?php echo $row['listProdTitle']; ?>
                      </p>
-                  </a>
                   </td>
                   <td>
-                     <a href="productDetails.php?listID=<?= $row['listID']; ?>">
+                     <a href="productDetails.php?listID=<?= $row['listID']; ?>&orderID=<?php echo $row['orderID']; ?>">
                         <p class="sentFrom">
-                           <?php echo $row['listProdTitle']; ?>
+                           <?php echo $row['orderID']; ?>
                         </p>
                      </a>
-                  </td>
-                  <td>
-                     <p class="sentFrom">
-                        <?php echo $row['orderID']; ?>
-                     </p>
                   </td>
                </tr>
             <?php endforeach; ?>
