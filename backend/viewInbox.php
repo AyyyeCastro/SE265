@@ -27,62 +27,9 @@ $messageLog = $userDatabase->getAllMessages($userID);
 $deleteMessage = [];
 /* maybe bread crumbs.. */
 ?>
-
-<style>
-   .container-fluid {
-      height: 100vh;
-   }
-
-   .inboxContainer {
-      margin-top: 15px;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-   }
-
-   .container {
-      padding: 15px;
-      min-width: 75%;
-   }
-
-   /* Important, sets it so that was "edit" listing buttons only show on a table hover */
-   table {
-      border-collapse: collapse;
-   }
-
-   table a {
-      color: black;
-   }
-
-   td:after {
-      content: '';
-      display: block;
-      margin-top: 15%;
-   }
-
-   .unreplied {
-      font-weight: bold;
-      background-color: #F0F0FA;
-   }
-
-   .replied {
-      font-weight: normal;
-      color: black;
-   }
-
-   .subText {
-      color: #506d90;
-      font-size: 12px;
-      margin-top: 2px;
-   }
-   .completedSale{
-      font-weight: bold;
-      background-color: #ECE5F9;
-   }
-</style>
-
-<div class="container-fluid">
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/viewInbox.css">
+<div class="fullVH">
    <div class="container inboxContainer">
       <!-- BEGIN TABLE -->
       <table class="table table-hover" id="userListLog">
@@ -153,8 +100,7 @@ $deleteMessage = [];
                         </p>
                      </td>
                      <td class="">
-                        <a
-                           href="viewMessage.php?messageID=<?php echo $row['messageID']; ?>&parentID=<?php echo $row['parentID']; ?>&receiverID=<?= $row['customerID']; ?>&receiverInnie=<?= $row['customerInnie']; ?>">
+                        <a href="viewMessage.php?messageID=<?php echo $row['messageID']; ?>&parentID=<?php echo $row['parentID']; ?>&receiverID=<?= $row['customerID']; ?>&receiverInnie=<?= $row['customerInnie']; ?>" class="customLink">
                            <?php echo $row['messageTitle']; ?>
                         </a>
                      </td>
@@ -175,4 +121,3 @@ $deleteMessage = [];
 </body>
 
 </html>
-<?php include_once '../include/footer.php'; ?>

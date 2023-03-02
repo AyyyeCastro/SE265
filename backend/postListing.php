@@ -89,18 +89,10 @@ if (isPostRequest()) {
    }
 }
 ?>
-
-<style>
-   input[type="file"] {
-      width: 82px;
-      height: 25px;
-      padding: 0px;
-      border: 0;
-   }
-</style>
-<br>
-<div class="container">
-   <div id="mainDiv">
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/postListing.css">
+<div class="fullVH">
+   <div class="container postListingContainer">
       <form action="postListing.php" method="post" enctype="multipart/form-data">
 
          <div>
@@ -142,7 +134,7 @@ if (isPostRequest()) {
          <br>
          <div>
             <label for="inputProdTitle">Product Name/Title:</label>
-            <input type="text" class="form-control" id="inputProdTitle" name="inputProdTitle" maxlength="55" required>
+            <input type="text" class="form-control" id="inputProdTitle" name="inputProdTitle" maxlength="120" required>
          </div>
          <br>
          <div>
@@ -165,28 +157,68 @@ if (isPostRequest()) {
          </div>
 
          <br>
-         <div>
-            <label for="inputProdPic">First Picture (REQUIRED)</label>
-            <input type="file" id="inputProdPic" name="inputProdPic" class="form-control" accept="image/*" required>
+         <div class="row rowCustomFiles">
+            <div class="col-sm-12">
+               <label for="inputProdPic" class="customFiles"><i class="fa-solid fa-image fa-lg"></i> Insert Photo
+                  <input type="file" id="inputProdPic" name="inputProdPic" accept="image/*">
+               </label>
+               <label for="inputProdPic2" class="customFiles"> +
+                  <input type="file" id="inputProdPic2" name="inputProdPic2" accept="image/*">
+               </label>
+               <label for="inputProdPic3" class="customFiles"> +
+                  <input type="file" id="inputProdPic3" name="inputProdPic3" accept="image/*">
+               </label>
+               <label for="inputProdPic4" class="customFiles"> +
+                  <input type="file" id="inputProdPic4" name="inputProdPic4" accept="image/*">
+               </label>
+            </div>
          </div>
-         <div>
-            <input type="file" id="inputProdPic2" name="inputProdPic2" class="form-control" accept="image/*">
+         <div class="row">
+            <div class="col-lg-2">
+               <img id="prevImg" />
+            </div>
+            <div class="col-lg-2">
+               <img id="prevImg2" />
+            </div>
+            <div class="col-lg-2">
+               <img id="prevImg3" />
+            </div>
+            <div class="col-lg-2">
+               <img id="prevImg4" />
+            </div>
          </div>
-         <div>
-            <input type="file" id="inputProdPic3" name="inputProdPic3" class="form-control" accept="image/*">
-         </div>
-         <div>
-            <input type="file" id="inputProdPic4" name="inputProdPic4" class="form-control" accept="image/*">
-         </div>
-
-         <br>
-         <div>
-            <input type="submit" class="btn btn-primary" value="Post Listing">
-            <a href="plugInHome.php" style="padding: 15px;">Cancel</a>
+         <div class="row rowBtnPost">
+            <div class="col-sm-12">
+               <a href="plugInHome.php" style="padding: 15px;">Cancel</a>
+               <input type="submit" class="customBtn" value="Post Listing">
+            </div>
          </div>
       </form>
    </div> <!-- main div -->
 </div>
 <?php include_once '../include/footer.php'; ?>
 </body>
+
 </html>
+<script>
+   document.getElementById('inputProdPic').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg').src = src
+      document.getElementById('prevImg').style = "height: 150px; width: 150px;"
+   }
+   document.getElementById('inputProdPic2').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg2').src = src
+      document.getElementById('prevImg2').style = "height: 150px; width: 150px;"
+   }
+   document.getElementById('inputProdPic3').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg3').src = src
+      document.getElementById('prevImg3').style = "height: 150px; width: 150px;"
+   }
+   document.getElementById('inputProdPic4').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg4').src = src
+      document.getElementById('prevImg4').style = "height: 150px; width: 150px;"
+   }
+</script>

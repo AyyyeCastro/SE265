@@ -25,48 +25,9 @@ $userInfo = $userDatabase->getUserDetails($userID);
 $listDetails = $userDatabase->getSaleHistory($userID);
 /* maybe bread crumbs.. */
 ?>
-
-<style>
-   .container-fluid {
-      height: 100vh;
-   }
-
-   .inboxContainer {
-      margin-top: 15px;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-   }
-
-   .container {
-      padding: 15px;
-      min-width: 75%;
-   }
-
-   /* Important, sets it so that was "edit" listing buttons only show on a table hover */
-   table {
-      border-collapse: collapse;
-   }
-
-   table a {
-      color: black;
-   }
-
-   td:after {
-      content: '';
-      display: block;
-      margin-top: 15%;
-   }
-
-   .subText {
-      color: #506d90;
-      font-size: 12px;
-      margin-top: 2px;
-   }
-</style>
-
-<div class="container-fluid">
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/viewSaleHistory.css">
+<div class="container-fluid fullVH">
    <div class="container inboxContainer">
       <!-- BEGIN TABLE -->
       <table class="table table-hover" id="userListLog">
@@ -81,32 +42,32 @@ $listDetails = $userDatabase->getSaleHistory($userID);
          <tbody>
             <!-- For every value stored in the array we decl2ared in the PHP section -->
             <?php foreach ($listDetails as $row): ?>
-                  <tr>
-                     <td>
-                        <p class="sentFrom">
-                           <?php echo $row['timeListsold']; ?>
-                        </p>
-                     </td>
-                     <td>
+               <tr>
+                  <td>
+                     <p class="sentFrom">
+                        <?php echo $row['timeListsold']; ?>
+                     </p>
+                  </td>
+                  <td>
                      <a href="viewUsers.php?userID=<?= $row['sellerID']; ?>">
                         <p class="sentFrom">
                            <?php echo $row['customerInnie']; ?>
                         </p>
                      </a>
-                     </td>
-                     <td>
-                        <a href="productDetails.php?listID=<?= $row['listID']; ?>">
-                           <p class="sentFrom">
-                              <?php echo $row['listProdTitle']; ?>
-                           </p>
-                        </a>
-                     </td>
-                     <td>
-                        <p class="sentFrom">
+                  </td>
+                  <td>
+                     <p class="sentFrom">
+                        <?php echo $row['listProdTitle']; ?>
+                     </p>
+                  </td>
+                  <td>
+                     <a href="productDetails.php?listID=<?= $row['listID']; ?>">
+                        <p class="customLink">
                            <?php echo $row['orderID']; ?>
                         </p>
-                     </td>
-                  </tr>
+                     </a>
+                  </td>
+               </tr>
             <?php endforeach; ?>
             <!-- END for-loop -->
          </tbody>
@@ -117,4 +78,3 @@ $listDetails = $userDatabase->getSaleHistory($userID);
 </body>
 
 </html>
-<?php include_once '../include/footer.php'; ?>

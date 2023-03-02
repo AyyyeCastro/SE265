@@ -70,84 +70,9 @@ if (isPostRequest()) {
 
 
 ?>
-<style>
-   .container-fluid {
-      height: 100vh;
-   }
 
-   .editProfContainer {
-      width: 75%;
-      margin-top: 15px;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-   }
-
-   .ProfilePics {
-      object-fit: cover;
-      /* Do not scale the image */
-      object-position: center;
-      /* Center the image within the element */
-      width: 200px;
-      height: 200px;
-      border: solid 2px blue;
-   }
-
-   .newUserPP {
-      object-fit: cover;
-      /* Do not scale the image */
-      object-position: center;
-      margin-top: 1px;
-      border: solid 2px blue;
-      /* Center the image within the element */
-      width: 97%;
-      height: 97%;
-   }
-
-
-   .img-overlay {
-      position: absolute;
-      margin-left: 15px;
-      top: 0;
-      left: 0;
-      width: 200px;
-      height: 200px;
-      pointer-events: all;
-   }
-
-   .img-overlay:hover {
-      opacity: 20%;
-      background-color: #F8F8F8;
-   }
-
-
-   .btnUpdatePP {
-      Display: inline-block;
-      position: absolute;
-      top: 140px;
-      left: 170px;
-      pointer-events: all;
-      background-color: purple;
-   }
-
-   input[type="file"] {
-      display: none;
-   }
-
-
-   .custom-file-upload {
-      height: 100%;
-      width: 100%;
-      display: inline-block;
-      cursor: pointer;
-   }
-
-   .row {
-      margin-top: 15px;
-   }
-</style>
-
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/editProfiles.css">
 <div class="container-fluid">
    <div class="container editProfContainer">
       <h1>Account Information</h1>

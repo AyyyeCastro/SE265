@@ -1,0 +1,13 @@
+.editListingContainer{
+   max-width: 75%;
+   border-radius: 15px;
+   border: 1px solid #E5E5E5;
+   box-shadow: 5px 10px 10px #E5E5E5;
+   padding: 25px;
+}
+.displayContent {
+   margin-top: 15px;
+ }
+.postBtns{
+   margin-top: 15px;
+}

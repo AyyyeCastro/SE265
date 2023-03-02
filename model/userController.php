@@ -528,36 +528,22 @@ class Users
  
         $sql = "SELECT * FROM plugin_listings";
  
-         if (isset($listProdTitle)) 
-         {
-             if ($isFirstClause)
-             {
-                 $sql .= " WHERE ";
-                 $isFirstClause = false;
-             }
-             else
-             {
-                 $sql .= " AND ";
-             }
-             $sql .= " listProdTitle LIKE :listProdTitle";
-             $binds['listProdTitle'] = '%'.$listProdTitle.'%';
-         }
-
-         if (isset($listDesc)) 
-         {
-             if ($isFirstClause)
-             {
-                 $sql .= " WHERE ";
-                 $isFirstClause = false;
-             }
-             else
-             {
-                 $sql .= " AND ";
-             }
-             $sql .= " listDesc LIKE :listDesc";
-             $binds['listDesc'] = '%'.$listDesc.'%';
-         }
-       
+        if (isset($listProdTitle) || isset($listDesc)) 
+        {
+            if ($isFirstClause)
+            {
+                $sql .= " WHERE ";
+                $isFirstClause = false;
+            }
+            else
+            {
+                $sql .= " AND ";
+            }
+            $sql .= " (listProdTitle LIKE :listProdTitle OR listDesc LIKE :listDesc)";
+            $binds['listProdTitle'] = '%'.$listProdTitle.'%';
+            $binds['listDesc'] = '%'.$listDesc.'%';
+        }
+        
          if (isset($listProdCat)) 
          {
              if ($isFirstClause)

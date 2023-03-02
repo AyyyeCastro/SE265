@@ -1,0 +1,42 @@
+.inboxContainer {
+  margin-top: 15px;
+  border-radius: 15px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 5px 10px 10px #e5e5e5;
+  padding: 15px;
+}
+
+/* Important, sets it so that was "edit" listing buttons only show on a table hover */
+table {
+  border-collapse: collapse;
+}
+
+table a {
+  color: black;
+}
+
+td:after {
+  content: "";
+  display: block;
+  margin-top: 15%;
+}
+
+.unreplied {
+  font-weight: bold;
+  background-color: #f0f0fa;
+}
+
+.replied {
+  font-weight: normal;
+  color: black;
+}
+
+.subText {
+  color: #506d90;
+  font-size: 12px;
+  margin-top: 2px;
+}
+.completedSale {
+  font-weight: bold;
+  background-color: #ece5f9;
+}

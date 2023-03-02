@@ -10,7 +10,6 @@ if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
    exit;
 }
 
-
 $message = "";
 $configFile = '../model/dbconfig.ini';
 try {
@@ -59,91 +58,12 @@ if (isPostRequest()) {
          $message = "Error in updating profile, please try again.";
       }
    }
-   if (isset($_POST['cancelBtn'])) {
-      header('Location: viewProfile.php');
-   }
 }
 
 
 ?>
-<style>
-   .container-fluid {
-      height: 100vh;
-   }
-
-   .editProfContainer {
-      width: 75%;
-      margin-top: 15px;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-   }
-
-   .ProfilePics {
-      object-fit: cover;
-      /* Do not scale the image */
-      object-position: center;
-      /* Center the image within the element */
-      width: 200px;
-      height: 200px;
-      border: solid 2px blue;
-   }
-
-   .newUserPP {
-      object-fit: cover;
-      /* Do not scale the image */
-      object-position: center;
-      margin-top: 1px;
-      border: solid 2px blue;
-      /* Center the image within the element */
-      width: 97%;
-      height: 97%;
-   }
-
-
-   .img-overlay {
-      position: absolute;
-      margin-left: 15px;
-      top: 0;
-      left: 0;
-      width: 200px;
-      height: 200px;
-      pointer-events: all;
-   }
-
-   .img-overlay:hover {
-      opacity: 20%;
-      background-color: #F8F8F8;
-   }
-
-
-   .btnUpdatePP {
-      Display: inline-block;
-      position: absolute;
-      top: 140px;
-      left: 170px;
-      pointer-events: all;
-      background-color: purple;
-   }
-
-   input[type="file"] {
-      display: none;
-   }
-
-
-   .custom-file-upload {
-      height: 100%;
-      width: 100%;
-      display: inline-block;
-      cursor: pointer;
-   }
-
-   .row {
-      margin-top: 15px;
-   }
-</style>
-
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/editProfiles.css">
 <div class="container-fluid">
    <div class="container editProfContainer">
       <h1>Account Information</h1>
@@ -178,7 +98,7 @@ if (isPostRequest()) {
          </div>
 
 
-         <div class="row">
+         <div class="row displayContent">
             <div class="col-md-12">
                <label for="username">Username</label>
                <input type="text" id="userName" name="userName" class="form-control"
@@ -188,7 +108,7 @@ if (isPostRequest()) {
             </div>
          </div>
 
-         <div class="row">
+         <div class="row displayContent">
             <div class="col-md-12">
                <label for="userPW">Password</label>
                <input type="password" id="userPW" name="userPW" class="form-control"
@@ -198,7 +118,7 @@ if (isPostRequest()) {
             </div>
          </div>
 
-         <div class="row">
+         <div class="row displayContent">
             <div class="col-md-12">
                <select class="form-control" id="userState" name="userState">
                   <?php
@@ -214,7 +134,7 @@ if (isPostRequest()) {
 
          </div>
 
-         <div class="row">
+         <div class="row displayContent">
             <div class="col-md-12">
                <label for="userInnie">Your Innie Handle (@)</label>
                <input type="text" id="userInnie" name="userInnie" class="form-control"
@@ -224,7 +144,7 @@ if (isPostRequest()) {
             </div>
          </div>
 
-         <div class="row">
+         <div class="row displayContent">
             <div class="col-md-12">
                <label for="userBio">Bio</label>
                <textarea id="userBio" name="userBio" class="form-control"
@@ -236,7 +156,7 @@ if (isPostRequest()) {
 
          <!--  Ensure this can only be viewed by ADMIN and/or MODS -->
          <?php if ($userInfo['isModerator'] == 'YES' || $userInfo['isOwner'] == 'YES'): ?>
-            <div class="row">
+            <div class="row displayContent">
                <div class="col-md-12">
                   <label for="isModerator">Is Moderator:</label>
                   <select name="isModerator" id="isModerator">
@@ -253,11 +173,11 @@ if (isPostRequest()) {
          <!------------>
 
 
-         <div class="row">
-            <div class="col-md-12">
-               <input type="submit" class="btn btn-primary" name="updateBtn" value="update" />
-               <input type="submit" class="btn btn-secondary" name="cancelBtn" value="cancel"
-                  onclick="return confirm('This will remove all progress. Leave page?')">
+         <div class="row rowBtnPost">
+            <div class="col-sm-12">
+               <a href="viewProfile.php" class=""
+                  onclick="return confirm('This will remove all progress. Leave page?')">Cancel</a>
+               <input type="submit" class="customBtn" name="updateBtn" value="update" />
             </div>
          </div>
       </form>
@@ -269,7 +189,7 @@ if (isPostRequest()) {
 
 </html>
 
-<?php include_once '../include/footer.php'; ?>
+
 <script>
    document.getElementById('userProfilePicture').onchange = function () {
       var src = URL.createObjectURL(this.files[0])
@@ -282,3 +202,5 @@ if (isPostRequest()) {
    }
 
 </script>
+
+<!-- currently listening to: https://youtu.be/IMgkGBKy6r0?t=166 - Andrew @ 8:48 PM 2023.03.01 -->

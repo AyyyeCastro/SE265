@@ -86,170 +86,112 @@ $stateList = $userDatabase->getAllStates();
    }
 }
 ?>
-<style>
-   .container {
-      padding: 15px;
-   }
-
-   .ProfilePics {
-      object-fit: cover;
-      /* Do not scale the image */
-      object-position: center;
-      /* Center the image within the element */
-      width: 200px;
-      height: 200px;
-      margin-bottom: 1rem;
-   }
-
-   div .content {
-      max-width: 250px;
-      min-height: 400px;
-      border: 1px #F5F5F5 solid;
-      margin: 5px;
-   }
-
-   .listProdTitle {
-      font-size: 18px;
-      max-width: 250px;
-      /* limit title width to the same width of the of the image */
-   }
-
-   .listProdCat {
-      max-width: 250px;
-   }
-
-   .listProdPrice {
-      padding-top: 3px;
-      font-weight: bold;
-      font-size: 18px;
-      max-width: 250px;
-   }
-
-   .listCond {
-      color: #506d90;
-      font-size: 13px;
-      max-width: 250px;
-   }
-
-   .listState {
-      font-size: 13px;
-      max-width: 250px;
-   }
-   .content:HOVER{background-color: #F8F8F8;}
-</style>
-
-
-<!-- WORK IN PROGRESS... Display all user listings at once w/ no criteria added. 
-   Work on search bar and drill down next -->
-<!-- Perhaps include sellers name? -->
-
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/displayResults.css">
 <div class="container">
    <?php if ($search_option == 'Products' || $search_option == $selected || $search_option == $selected): ?>
       <form method="get" action="displayResults.php">
          <div class="row">
-            <br>
-            <!-- Input fields and labels -->
-            <div class="row">
-                  <input type="hidden" name="inputName" value="<?php echo $listProdTitle; ?>">
+            <input type="hidden" name="inputName" value="<?php echo $listProdTitle; ?>">
 
-               <div class="col-xs-3">
-                  <select class="form-control" id="listProdCat" name="listProdCat">
-                     <?php
-                     $selectedCat = (isset($_GET["listProdCat"])) ? $_GET["listProdCat"] : '';
-                     echo '<option value="" disabled ' . (($selectedCat == '') ? 'selected' : '') . '>Choose Category</option>';
-                     foreach ($catList as $category) {
-                        $selected = ($category['catGenre'] == $selectedCat) ? 'selected' : '';
-                        echo '<option value="' . $category['catGenre'] . '" ' . $selected . '>' . $category['catGenre'] . '</option>';
-                     }
-                     ?>
-                  </select>
-               </div>
+            <div class="col-sm-3">
+               <select class="form-control" id="listProdCat" name="listProdCat">
+                  <?php
+                  $selectedCat = (isset($_GET["listProdCat"])) ? $_GET["listProdCat"] : '';
+                  echo '<option value="" disabled ' . (($selectedCat == '') ? 'selected' : '') . '>Choose Category</option>';
+                  foreach ($catList as $category) {
+                     $selected = ($category['catGenre'] == $selectedCat) ? 'selected' : '';
+                     echo '<option value="' . $category['catGenre'] . '" ' . $selected . '>' . $category['catGenre'] . '</option>';
+                  }
+                  ?>
+               </select>
+            </div>
 
-               <div class="col-sm-3">
-                  <select class="form-control" id="listCond" name="listCond">
-                     <?php
-                     $selectedCond = (isset($_GET["listCond"])) ? $_GET["listCond"] : '';
-                     echo '<option value="" disabled ' . (($selectedCond == '') ? 'selected' : '') . '>Choose Condition</option>';
-                     foreach ($condList as $condition) {
-                        $selected = ($condition['condType'] == $selectedCond) ? 'selected' : '';
-                        echo '<option value="' . $condition['condType'] . '" ' . $selected . '>' . $condition['condType'] . '</option>';
-                     }
-                     ?>
-                  </select>
-               </div>
+            <div class="col-sm-3">
+               <select class="form-control" id="listCond" name="listCond">
+                  <?php
+                  $selectedCond = (isset($_GET["listCond"])) ? $_GET["listCond"] : '';
+                  echo '<option value="" disabled ' . (($selectedCond == '') ? 'selected' : '') . '>Choose Condition</option>';
+                  foreach ($condList as $condition) {
+                     $selected = ($condition['condType'] == $selectedCond) ? 'selected' : '';
+                     echo '<option value="' . $condition['condType'] . '" ' . $selected . '>' . $condition['condType'] . '</option>';
+                  }
+                  ?>
+               </select>
+            </div>
 
 
 
-               <div class="col-sm-3">
-                  <select class="form-control" id="listState" name="listState">
-                     <?php
-                     $selectedState = (isset($_GET["listState"])) ? $_GET["listState"] : $userInfo['userState'];
-                     echo '<option value="" ' . (($selectedState == '') ? 'selected' : '') . '>All States</option>';
-                     foreach ($stateList as $states) {
-                        $selected = ($states['stateName'] == $selectedState) ? 'selected' : '';
-                        echo '<option value="' . $states['stateName'] . '" ' . $selected . '>' . $states['stateName'] . '</option>';
-                     }
-                     ?>
-                  </select>
-               </div>
+            <div class="col-sm-3">
+               <select class="form-control" id="listState" name="listState">
+                  <?php
+                  $selectedState = (isset($_GET["listState"])) ? $_GET["listState"] : $userInfo['userState'];
+                  echo '<option value="" ' . (($selectedState == '') ? 'selected' : '') . '>All States</option>';
+                  foreach ($stateList as $states) {
+                     $selected = ($states['stateName'] == $selectedState) ? 'selected' : '';
+                     echo '<option value="' . $states['stateName'] . '" ' . $selected . '>' . $states['stateName'] . '</option>';
+                  }
+                  ?>
+               </select>
+            </div>
+         </div>
 
-
+         <div class="row">
             <!-- Buttons -->
-            <div class="col-sm">
+            <div class="col-sm-4 filterBtns">
                <!-- Search with criteria entered -->
-               <button class="btn btn-outline-info my-2 my-sm-0" type="submit" name="search" value="Search">Apply</button>
-               <a href="displayResults.php"><button type="button" class="btn btn-outline-secondary my-2 my-sm-0"
-                     onclick="resetFilters()">Reset Filter</button></a>
+               <button class="customBtn" type="submit" name="search" value="Search">Apply</button>
+               <a href="displayResults.php"><button type="button" class="customerOtherBtn" onclick="resetFilters()">Reset
+                     Filter</button></a>
             </div>
          </div>
       </form>
 
 
-         <div class="col-sm-12">
-            <p>
-               <?php if (isGetRequest()) {
-                  if (isset($_GET["search"])) {
-                     echo 'Results for: ' . $listProdCat . ' ' . $listCond . ' ' . '<b>' . $listProdTitle . '</b>';
-                  }
-               } ?>
+      <div class="row resultFor">
+         <div class="col-md-12">
+            <?php if (isGetRequest()) {
+               if (isset($_GET["search"])) {
+                  echo 'Results for: ' . $listProdCat . ' ' . $listCond . ' ' . '<b>' . $listProdTitle . '</b>' . $listState;
+               }
+            } ?>
             </p>
          </div>
 
-         
+
          <div class="row">
             <?php foreach ($listArray as $row): ?>
-               <?php if ($row['isListSold'] !='YES'): ?>
-               <div class="col-sm content">
-                  <input type="hidden" name="p_id" value="<?= $row['listID']; ?>" />
-                  <div class="listState">
-                     <?= $row['listState']; ?>
-                  </div>
-                  <a href="productDetails.php?listID=<?= $row['listID']; ?>">
-                     <div class="listProdPic"><img src="<?= $row['listProdPic']; ?>"
-                           style="object-fit: contain; object-position: center; width: 230px; height: 230px; background-color: #F6F6F6;">
+               <?php if ($row['isListSold'] != 'YES'): ?>
+                  <div class="col-sm content">
+                     <input type="hidden" name="p_id" value="<?= $row['listID']; ?>" />
+                     <div class="listState">
+                        <?= $row['listState']; ?>
                      </div>
-                     <div class="listProdTitle">
-                        <?= $row['listProdTitle']; ?>
+                     <a href="productDetails.php?listID=<?= $row['listID']; ?>">
+                        <div class="listProdPic"><img src="<?= $row['listProdPic']; ?>"
+                              style="object-fit: contain; object-position: center; width: 230px; height: 230px; background-color: #F6F6F6;">
+                        </div>
+                        <div class="listProdTitle">
+                           <?= $row['listProdTitle']; ?>
+                        </div>
+                     </a>
+                     <div class="listProdCat">
+                        <?= $row['listProdCat']; ?>
                      </div>
-                  </a>
-                  <div class="listProdCat">
-                     <?= $row['listProdCat']; ?>
+                     <div class="listProdPrice">$
+                        <?= $row['listProdPrice']; ?>
+                     </div>
+                     <div class="listCond">
+                        <?= $row['listCond']; ?>
+                     </div>
                   </div>
-                  <div class="listProdPrice">$
-                     <?= $row['listProdPrice']; ?>
-                  </div>
-                  <div class="listCond">
-                     <?= $row['listCond']; ?>
-                  </div>
-               </div>
                <?php endif ?>
             <?php endforeach; ?>
          </div>
       <?php endif; ?>
 
       <?php if ($search_option == 'Sellers'): ?>
-         <br>
-         <div class="row">
+         <div class="row resultFor">
             <p>
                <?php if (isPostRequest()) {
                   if (isset($_POST["search"])) {
@@ -284,9 +226,9 @@ $stateList = $userDatabase->getAllStates();
       </tbody>
       </table>
    </div>
-</body>
+   </body>
 
-</html>
+   </html>
 
-<!-- Why does this .php page have closing tags for body and html? 
+   <!-- Why does this .php page have closing tags for body and html? 
 This is because the metadata and starting divs were created in header.php ("include" folder), and referenced with PHP above. -->

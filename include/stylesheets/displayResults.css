@@ -1,0 +1,53 @@
+.resultFor{
+  margin-top: 15px;
+}
+.filterBtns{
+  padding: 15px;
+}
+.ProfilePics {
+  object-fit: cover;
+  /* Do not scale the image */
+  object-position: center;
+  /* Center the image within the element */
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1rem;
+}
+
+div .content {
+  max-width: 250px;
+  min-height: 400px;
+  border: 1px #f5f5f5 solid;
+  margin: 5px;
+}
+
+.listProdTitle {
+  font-size: 18px;
+  max-width: 250px;
+  /* limit title width to the same width of the of the image */
+}
+
+.listProdCat {
+  max-width: 250px;
+}
+
+.listProdPrice {
+  padding-top: 3px;
+  font-weight: bold;
+  font-size: 18px;
+  max-width: 250px;
+}
+
+.listCond {
+  color: #506d90;
+  font-size: 13px;
+  max-width: 250px;
+}
+
+.listState {
+  font-size: 13px;
+  max-width: 250px;
+}
+.content:hover {
+  background-color: #f8f8f8;
+}

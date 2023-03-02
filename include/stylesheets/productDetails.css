@@ -1,0 +1,76 @@
+.listProdTitle {
+  font-size: 25px;
+  max-width: 100%;
+  /* limit title width to the same width of the of the image */
+}
+
+.listProdCat {
+  color: #506d90;
+  max-width: 250px;
+}
+
+.listProdPrice {
+  font-size: 18px;
+  max-width: 250px;
+  font-weight: bold;
+}
+
+.listCond {
+  color: #506d90;
+  font-size: 13px;
+  max-width: 250px;
+}
+
+.underBtnText {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+.listImgBox {
+}
+
+.listInfoBox {
+}
+
+.listBuyBox {
+  border: 4px solid #f8f8f8;
+  border-radius: 25px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.btnBuyNow {
+  margin-top: 15px;
+  width: 100%;
+  background-color: #4c49d7;
+}
+
+.listImgBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.main-img {
+  width: 450px;
+  height: 450px;
+}
+
+.thumb-imgs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px;
+  margin-top: 15px;
+}
+
+.thumb-imgs img {
+  cursor: pointer;
+}
+
+.listDescBox {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border-radius: 25px;
+}

@@ -25,48 +25,9 @@ $userInfo = $userDatabase->getUserDetails($userID);
 $listDetails = $userDatabase->getPurchaseHistory($userID);
 /* maybe bread crumbs.. */
 ?>
-
-<style>
-   .container-fluid {
-      height: 100vh;
-   }
-
-   .inboxContainer {
-      margin-top: 15px;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-   }
-
-   .container {
-      padding: 15px;
-      min-width: 75%;
-   }
-
-   /* Important, sets it so that was "edit" listing buttons only show on a table hover */
-   table {
-      border-collapse: collapse;
-   }
-
-   table a {
-      color: black;
-   }
-
-   td:after {
-      content: '';
-      display: block;
-      margin-top: 15%;
-   }
-
-   .subText {
-      color: #506d90;
-      font-size: 12px;
-      margin-top: 2px;
-   }
-</style>
-
-<div class="container-fluid">
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/viewPurchaseHistory.css">
+<div class="container-fluid fullVH">
    <div class="container inboxContainer">
       <!-- BEGIN TABLE -->
       <table class="table table-hover" id="userListLog">
@@ -93,7 +54,7 @@ $listDetails = $userDatabase->getPurchaseHistory($userID);
                   </td>
                   <td>
                      <a href="productDetails.php?listID=<?= $row['listID']; ?>&orderID=<?php echo $row['orderID']; ?>">
-                        <p class="sentFrom">
+                        <p class="customLink">
                            <?php echo $row['orderID']; ?>
                         </p>
                      </a>
@@ -107,6 +68,4 @@ $listDetails = $userDatabase->getPurchaseHistory($userID);
    </div>
 </div>
 </body>
-
 </html>
-<?php include_once '../include/footer.php'; ?>

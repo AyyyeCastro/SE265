@@ -1,0 +1,67 @@
+.editProfContainer {
+  width: 75%;
+  border-radius: 15px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 5px 10px 10px #e5e5e5;
+  padding: 35px;
+}
+
+.ProfilePics {
+  object-fit: cover;
+  /* Do not scale the image */
+  object-position: center;
+  /* Center the image within the element */
+  width: 200px;
+  height: 200px;
+  border: solid 2px #4c49d7;
+}
+
+.newUserPP {
+  object-fit: cover;
+  /* Do not scale the image */
+  object-position: center;
+  margin-top: 1px;
+  border: solid 2px #4c49d7;
+  /* Center the image within the element */
+  width: 97%;
+  height: 97%;
+}
+
+.img-overlay {
+  position: absolute;
+  margin-left: 15px;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  pointer-events: all;
+}
+
+.img-overlay:hover {
+  opacity: 20%;
+  background-color: #f8f8f8;
+}
+
+.btnUpdatePP {
+  display: inline-block;
+  position: absolute;
+  top: 140px;
+  left: 170px;
+  pointer-events: all;
+  background-color: purple;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+.custom-file-upload {
+  height: 100%;
+  width: 100%;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.displayContent {
+  margin-top: 15px;
+}

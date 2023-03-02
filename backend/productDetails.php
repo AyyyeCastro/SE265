@@ -46,89 +46,8 @@ if (isPostRequest()) {
 }
 
 ?>
-<style>
-   .container {
-      padding: 15px;
-   }
-
-   .listProdTitle {
-      font-size: 25px;
-      max-width: 100%;
-      /* limit title width to the same width of the of the image */
-   }
-
-   .listProdCat {
-      color: #506d90;
-      max-width: 250px;
-   }
-
-   .listProdPrice {
-      font-size: 18px;
-      max-width: 250px;
-      font-weight: bold;
-   }
-
-   .listCond {
-      color: #506d90;
-      font-size: 13px;
-      max-width: 250px;
-   }
-
-
-   .underBtnText {
-      margin-top: 10px;
-      font-size: 13px;
-   }
-
-   .listImgBox {}
-
-   .listInfoBox {}
-
-   .listBuyBox {
-      border: 4px solid #F8F8F8;
-      border-radius: 25px;
-      padding: 15px;
-      margin-top: 15px;
-   }
-
-   .btnBuyNow {
-      margin-top: 15px;
-      width: 100%;
-      background-color: #4D27B9;
-   }
-
-   .listImgBox {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-   }
-
-   .main-img {
-      width: 450px;
-      height: 450px;
-   }
-
-   .thumb-imgs {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-left: 10px;
-      margin-top: 15px;
-   }
-
-   .thumb-imgs img {
-      cursor: pointer;
-   }
-
-   .listDescBox {
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #f8f8f8;
-      border-radius: 25px;
-   }
-</style>
-
-
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/productDetails.css">
 <div class="container">
    <div class="row">
       <div class="col-sm-7 listImgBox">
@@ -184,27 +103,27 @@ if (isPostRequest()) {
                   <?= $listDetails['timeListsold']; ?>
                </div>
                <div class="customerInnie">
-                  Buyer: 
-               <a href="viewUsers.php?userID=<?= $sellerInfo['userID']; ?>">
-                  <?= $listDetails['customerInnie']; ?>
-               </a>
+                  Buyer:
+                  <a href="viewUsers.php?userID=<?= $sellerInfo['userID']; ?>">
+                     <?= $listDetails['customerInnie']; ?>
+                  </a>
                </div>
                <?php if ($sellerInfo['userID'] != $loginID && $isAlreadyRated == false): ?>
-               <form action="productDetails.php" method="post">
-                  <div class="form-group">
-                     <label for="userRating">Transaction Rating:</label>
-                     <select class="form-control" id="userRating" name="userRating">
-                        <option value="1">1 star</option>
-                        <option value="2">2 stars</option>
-                        <option value="3">3 stars</option>
-                        <option value="4">4 stars</option>
-                        <option value="5">5 stars</option>
-                     </select>
-                  </div>
-                  <input type="hidden" name="userID" value="<?php echo $sellerInfo['userID']; ?>">
-                  <input type="hidden" name="orderID" value="<?php echo $orderID ?>">
-                  <button type="submit" class="btn btn-outline-primary" name="btnRate">Rate Seller</button>
-               </form>
+                  <form action="productDetails.php" method="post">
+                     <div class="form-group">
+                        <label for="userRating">Transaction Rating:</label>
+                        <select class="form-control" id="userRating" name="userRating">
+                           <option value="1">1 star</option>
+                           <option value="2">2 stars</option>
+                           <option value="3">3 stars</option>
+                           <option value="4">4 stars</option>
+                           <option value="5">5 stars</option>
+                        </select>
+                     </div>
+                     <input type="hidden" name="userID" value="<?php echo $sellerInfo['userID']; ?>">
+                     <input type="hidden" name="orderID" value="<?php echo $orderID ?>">
+                     <button type="submit" class="btn btn-outline-primary" name="btnRate">Rate Seller</button>
+                  </form>
                <?php endif ?>
                <div class="underBtnText">
                   <div class="listSeller">Seller:
@@ -245,7 +164,6 @@ if (isPostRequest()) {
 </body>
 
 </html>
-<?php include_once '../include/footer.php'; ?>
 
 
 <script>

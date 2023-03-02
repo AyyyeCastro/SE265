@@ -1,0 +1,168 @@
+.listProdTitle {
+  font-weight: bold;
+  font-size: 25px;
+  max-width: 250px;
+  /* limit title width to the same width of the of the image */
+}
+
+.listProdCat {
+  color: #506d90;
+  max-width: 250px;
+}
+
+.listProdPrice {
+  padding-top: 3px;
+  font-size: 18px;
+  max-width: 250px;
+}
+
+.listCond {
+  color: #506d90;
+  font-size: 13px;
+  max-width: 250px;
+}
+
+.listState {
+  font-size: 13px;
+  max-width: 250px;
+}
+
+.listID {
+  color: #506d90;
+  font-size: 13px;
+  max-width: 250px;
+}
+
+.listSeller {
+  font-size: 13px;
+  color: #506d90;
+}
+
+.listImgBox {
+}
+
+.listInfoBox {
+}
+
+.requestInfo {
+  background-color: #f8f8f8;
+  border-radius: 15px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 5px 10px 10px #e5e5e5;
+  padding: 15px;
+}
+
+.profileObject {
+  background-color: #f8f8f8;
+  border-radius: 15px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 5px 10px 10px #e5e5e5;
+  padding: 15px;
+}
+
+.customerPP {
+  object-fit: cover;
+  /* Do not scale the image */
+  object-position: center;
+  /* Center the image within the element */
+  width: 200px;
+  height: 200px;
+}
+
+.MessageContainer {
+  margin-top: 15px;
+  border-radius: 15px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 5px 10px 10px #e5e5e5;
+  padding: 15px;
+}
+
+.msgHeader {
+  font-weight: bold;
+  font-size: 25px;
+}
+
+#sendPic,
+#sendPic2,
+#sendPic3,
+#sendPic4 {
+  width: 73px;
+  height: 25px;
+  margin-right: 5px;
+  padding: 0px;
+  border: 0px;
+}
+
+.main-img {
+  width: 450px;
+  height: 450px;
+}
+
+.thumb-imgs {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.thumb-imgs img {
+  cursor: pointer;
+}
+
+.msgHistory {
+  height: 350px;
+  background-color: #f1f1f1;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
+  padding: 35px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.newestMessage {
+  color: white;
+  background: #899aab;
+  border-radius: 25px;
+  padding: 20px;
+  width: 40%;
+}
+
+.newestMessageBox {
+  background: #f8f9fa;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+}
+
+.selfMsg,
+.selfBG {
+  color: white;
+  margin-left: 70%;
+  background-color: #4c49d7;
+  border-radius: 25px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.otherMsg,
+.otherBG {
+  margin-right: 20%;
+  color: white;
+  background-color: #899aab;
+  border-radius: 25px;
+  padding: 20px;
+}
+
+.messageSentOn {
+  font-size: 13px;
+}
+
+.messageDesc {
+  font-size: 18px;
+}
+
+.listIsSold {
+  font-weight: bold;
+  color: #4c49d7;
+}

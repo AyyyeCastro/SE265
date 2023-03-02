@@ -162,7 +162,13 @@ if (isPostRequest()) {
             $customerInnie,
             $sellerInnie
          )
-         && $userDatabase->confirmSale($listID,$customerID,$sellerID, $orderID, $customerInnie)
+         && $userDatabase->confirmSale(
+            $listID,
+            $customerID,
+            $sellerID,
+            $orderID,
+            $customerInnie
+         )
          && $userDatabase->updateIsMessageReplied($priorMessageID, $updateStatus)
       ) {
          header('Location: viewInbox.php');
@@ -175,182 +181,8 @@ if (isPostRequest()) {
 
 }
 ?>
-
-<style>
-   .container {
-      padding: 25px;
-   }
-
-   .listProdTitle {
-      font-weight: bold;
-      font-size: 25px;
-      max-width: 250px;
-      /* limit title width to the same width of the of the image */
-   }
-
-   .listProdCat {
-      color: #506d90;
-      max-width: 250px;
-   }
-
-   .listProdPrice {
-      padding-top: 3px;
-      font-size: 18px;
-      max-width: 250px;
-   }
-
-   .listCond {
-      color: #506d90;
-      font-size: 13px;
-      max-width: 250px;
-   }
-
-   .listState {
-      font-size: 13px;
-      max-width: 250px;
-   }
-
-   .listID {
-      color: #506d90;
-      font-size: 13px;
-      max-width: 250px;
-   }
-
-   .listSeller {
-      font-size: 13px;
-      color: #506d90;
-   }
-
-   .listImgBox {}
-
-   .listInfoBox {}
-
-   .requestInfo {
-      background-color: #F8F8F8;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-
-   }
-
-   .profileObject {
-      background-color: #F8F8F8;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-   }
-
-   .customerPP {
-      object-fit: cover;
-      /* Do not scale the image */
-      object-position: center;
-      /* Center the image within the element */
-      width: 200px;
-      height: 200px;
-
-   }
-
-   .MessageContainer {
-      margin-top: 15px;
-      border-radius: 15px;
-      border: 1px solid #E5E5E5;
-      box-shadow: 5px 10px 10px #E5E5E5;
-      padding: 15px;
-   }
-
-   .msgHeader {
-      font-weight: bold;
-      font-size: 25px;
-   }
-
-   #sendPic,
-   #sendPic2,
-   #sendPic3,
-   #sendPic4 {
-      width: 73px;
-      height: 25px;
-      margin-right: 5px;
-      padding: 0px;
-      border: 0px;
-   }
-
-   .main-img {
-      width: 450px;
-      height: 450px;
-   }
-
-   .thumb-imgs {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-top: 15px;
-      margin-bottom: 15px;
-   }
-
-   .thumb-imgs img {
-      cursor: pointer;
-   }
-
-   .msgHistory {
-      height: 350px;
-      background-color: #F1F1F1;
-      border-top-left-radius: 25px;
-      border-top-right-radius: 25px;
-      padding: 35px;
-      overflow: auto;
-      display: flex;
-      flex-direction: column-reverse;
-   }
-
-   .newestMessage {
-      color: white;
-      background: #899aab;
-      border-radius: 25px;
-      padding: 20px;
-      width: 40%;
-   }
-
-   .newestMessageBox {
-      background: #F8F9FA;
-      border-bottom-left-radius: 25px;
-      border-bottom-right-radius: 25px;
-   }
-
-   .selfMsg,
-   .selfBG {
-      color: white;
-      margin-left: 70%;
-      background-color: #4D27B9;
-      border-radius: 25px;
-      padding: 20px;
-      margin-top: 20px;
-   }
-
-   .otherMsg,
-   .otherBG {
-      margin-right: 20%;
-      color: white;
-      background-color: #899aab;
-      border-radius: 25px;
-      padding: 20px;
-   }
-
-   .messageSentOn {
-      font-size: 13px;
-   }
-
-   .messageDesc {
-      font-size: 18px;
-   }
-
-   .listIsSold {
-      font-weight: bold;
-      color: red;
-   }
-</style>
-
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/viewMessage.css">
 <div class="container">
    <h2>Messaging</h2>
    <div class="row profileObject">
@@ -478,8 +310,8 @@ if (isPostRequest()) {
             </div>
             <?php if (!empty($messageDetails['messagePics']) || !empty($messageDetails['messagePic2']) || !empty($messageDetails['messagePic3']) || !empty($messageDetails['messagePic4'])): ?>
                <div class="main-img" id="TestsDiv" style="display:none"">
-                                 <img src=""style=" object-fit: contain; object-position: center; background-color:
-                  #F6F6F6; height: 450px; width: 450px;">
+                                                <img src=""style=" object-fit: contain; object-position: center;
+                  background-color: #F6F6F6; height: 450px; width: 450px;">
                </div>
             <?php endif ?>
          </div>
@@ -551,25 +383,41 @@ if (isPostRequest()) {
             <!-- User Send Pics -->
             <br>
 
-            <div class="container insertPics">
-               <div class="row">
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic" name="sendPic" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic2" name="sendPic2" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic3" name="sendPic3" class="form-control" accept="image/*">
-                  </div>
-                  <div class="col-xs-1">
-                     <input type="file" id="sendPic4" name="sendPic4" class="form-control" accept="image/*">
-                  </div>
+
+            <div class="row rowCustomFiles">
+               <div class="col-sm-12">
+                  <label for="sendPic" class="customFiles"><i class="fa-solid fa-image fa-lg"></i> Insert Photo
+                     <input type="file" id="sendPic" name="sendPic" accept="image/*">
+                  </label>
+                  <label for="sendPic2" class="customFiles"> +
+                     <input type="file" id="sendPic2" name="sendPic2" accept="image/*">
+                  </label>
+                  <label for="sendPic3" class="customFiles"> +
+                     <input type="file" id="sendPic3" name="sendPic3" accept="image/*">
+                  </label>
+                  <label for="sendPic4" class="customFiles"> +
+                     <input type="file" id="sendPic4" name="sendPic4" accept="image/*">
+                  </label>
                </div>
             </div>
-            <!-- send -->
-            <div class="btnSend">
-               <button class="btn btn-outline-primary" name="btnSend">Reply Back</button>
+            <div class="row">
+               <div class="col-lg-2">
+                  <img id="prevImg" />
+               </div>
+               <div class="col-lg-2">
+                  <img id="prevImg2" />
+               </div>
+               <div class="col-lg-2">
+                  <img id="prevImg3" />
+               </div>
+               <div class="col-lg-2">
+                  <img id="prevImg4" />
+               </div>
+            </div>
+            <div class="row rowBtnPost">
+               <div class="col-sm-12">
+                  <button class="customBtn" name="btnSend">Reply Back</button>
+               </div>
             </div>
          </form>
       </div>
@@ -580,13 +428,11 @@ if (isPostRequest()) {
 <div class="container requestInfoContainer">
    <!-- request info -->
    <div class="row requestInfo">
+
       <div class="col-sm-12">
-         <?php if ($listDetails['isListSold'] == 'YES'): ?>
-            <p class="listIsSold">SOLD ON <?php echo $listDetails['timeListsold']?></p>
-            <p class="listIsSold">ORDER ID: <?php echo $listDetails['orderID'] ?>
-         <?php endif ?>
          <p class="msgHeader">About</p>
       </div>
+
       <div class="col-sm listImgBox">
          <!-- posted from this user -->
          <input type="hidden" name="sellerID" value="<?= $listDetails['userID']; ?>" />
@@ -598,9 +444,18 @@ if (isPostRequest()) {
          <div class="listProdCat"> Listed in:
             <?= $listDetails['listProdCat']; ?>
          </div>
+         <div class="listState">
+            <?php if ($listDetails['isListSold'] == 'YES'): ?>
+               <p class="listIsSold">
+                  ORDER ID:
+                  <?php echo $listDetails['orderID'] ?>
+               </p>
+            <?php endif ?>
+         </div>
       </div>
 
       <div class="col-sm listInfoBox">
+
          <div class="listProdTitle">
             <?= $listDetails['listProdTitle']; ?>
          </div>
@@ -613,7 +468,6 @@ if (isPostRequest()) {
          <div class="listState">State:
             <?= $listDetails['listState']; ?>
          </div>
-
          <br>
          <b>Description</b>
          <div class="listDesc">
@@ -663,7 +517,6 @@ if (isPostRequest()) {
                   <input type="hidden" class="form-control" id="customerInnie" name="customerInnie"
                      value="<?php echo $sellerInnie ?>">
                </div>
-               
 
                <!-- hidden title, autogenerate RE | to mark as a reply.-->
                <div>
@@ -677,20 +530,16 @@ if (isPostRequest()) {
 
                <!-- send -->
                <div class="btnConfirmSale">
-                  <button class="btn btn-outline-primary" name="btnConfirmSale">Confirm Sale</button>
+                  <button class="customBtn" name="btnConfirmSale">Confirm Sale</button>
                </div>
             </form>
          </div>
       <?php endif ?>
    </div> <!-- close requestInfo row-->
-
-
-   <!-- For every value stored in the array we declared in the PHP section -->
 </div>
 </body>
 
 </html>
-<?php include_once '../include/footer.php'; ?>
 
 
 <script>
@@ -701,4 +550,24 @@ if (isPostRequest()) {
       });
    });
 
+   document.getElementById('sendPic').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg').src = src
+      document.getElementById('prevImg').style = "height: 150px; width: 150px;"
+   }
+   document.getElementById('sendPic2').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg2').src = src
+      document.getElementById('prevImg2').style = "height: 150px; width: 150px;"
+   }
+   document.getElementById('sendPic3').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg3').src = src
+      document.getElementById('prevImg3').style = "height: 150px; width: 150px;"
+   }
+   document.getElementById('sendPic4').onchange = function () {
+      var src = URL.createObjectURL(this.files[0])
+      document.getElementById('prevImg4').src = src
+      document.getElementById('prevImg4').style = "height: 150px; width: 150px;"
+   }
 </script>
