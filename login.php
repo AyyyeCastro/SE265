@@ -23,7 +23,7 @@ if (isPostRequest()) {
          session_start();
          $_SESSION['isLoggedIn'] = true;
          $_SESSION['userID'] = $userDatabase->getUserId($userName);
-         $visitCrumb = $_GET['visitCrumb'] ?? 'backend/plugInHome.php';
+         $visitCrumb = $_SESSION['visitCrumb'] ?? 'backend/plugInHome.php';
          header("location: $visitCrumb");
       } else {
          $message = "Incorrect login credentials. Please try again.";

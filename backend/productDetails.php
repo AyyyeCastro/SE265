@@ -20,7 +20,10 @@ try {
 }
 
 /* get the list ID from the URL, send it to the method */
-$loginID = $_SESSION['userID'];
+if (isUserLoggedIn()) {
+   $loginID = $_SESSION['userID'];
+}
+
 $listID = $_GET['listID'];
 $listDetails = $userDatabase->getListForm($listID);
 /* get the $userID thensent it to the method */

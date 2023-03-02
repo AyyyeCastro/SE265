@@ -30,10 +30,9 @@ $fileDestination = "";
 
 
 
-
 if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
-   $visitCrumb = ('backend/productDetails.php?listID=' . $listID);
-   header("location: ../login.php?visitCrumb=$visitCrumb");
+   $_SESSION['visitCrumb'] = 'backend/productDetails.php?listID=' . $listID;
+   header("location: ../login.php");
    exit;
 }
 
@@ -199,36 +198,51 @@ if (isPostRequest()) {
             <br>
             <div class="row rowCustomFiles">
                <div class="col-sm-12">
-                  <label for="sendPic" class="customFiles"><i class="fa-solid fa-image fa-lg"></i> Insert Photo
+                  <label for="sendPic" class="customFiles" id="customFile1"><i class="fa-solid fa-image fa-lg"></i>
+                     Insert Photo
                      <input type="file" id="sendPic" name="sendPic" accept="image/*">
                   </label>
-                  <label for="sendPic2" class="customFiles"> +
+                  <label for="sendPic2" class="customFiles" id="customFile2"> +
                      <input type="file" id="sendPic2" name="sendPic2" accept="image/*">
                   </label>
-                  <label for="sendPic3" class="customFiles"> +
+                  <label for="sendPic3" class="customFiles" id="customFile3"> +
                      <input type="file" id="sendPic3" name="sendPic3" accept="image/*">
                   </label>
-                  <label for="sendPic4" class="customFiles"> +
+                  <label for="sendPic4" class="customFiles" id="customFile4"> +
                      <input type="file" id="sendPic4" name="sendPic4" accept="image/*">
                   </label>
                </div>
             </div>
             <div class="row">
                <div class="col-lg-2">
-                  <img id="prevImg" />
+                  <div class="preview-container">
+                     <img id="prevImg" />
+                     <span class="remove-btn" id="removeBtn1"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
                <div class="col-lg-2">
-                  <img id="prevImg2" />
+                  <div class="preview-container">
+                     <img id="prevImg2" />
+                     <span class="remove-btn" id="removeBtn2"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
                <div class="col-lg-2">
-                  <img id="prevImg3" />
+                  <div class="preview-container">
+                     <img id="prevImg3" />
+                     <span class="remove-btn" id="removeBtn3"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
                <div class="col-lg-2">
-                  <img id="prevImg4" />
+                  <div class="preview-container">
+                     <img id="prevImg4" />
+                     <span class="remove-btn" id="removeBtn4"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
             </div>
-            <div class="rowBtnPost">
-               <button class="customBtn">Send</button>
+            <div class="row rowBtnPost">
+               <div class="col-sm-12">
+                  <button class="customBtn" name="btnSend">Reply Back</button>
+               </div>
             </div>
          </form>
       </div>
@@ -238,25 +252,4 @@ if (isPostRequest()) {
 </body>
 
 </html>
-<script>
-   document.getElementById('sendPic').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg').src = src
-      document.getElementById('prevImg').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('sendPic2').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg2').src = src
-      document.getElementById('prevImg2').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('sendPic3').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg3').src = src
-      document.getElementById('prevImg3').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('sendPic4').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg4').src = src
-      document.getElementById('prevImg4').style = "height: 150px; width: 150px;"
-   }
-</script>
+<script src="../include/logic/JS/js_photoManagement.js"></script>

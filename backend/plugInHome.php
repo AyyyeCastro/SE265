@@ -17,7 +17,7 @@ include_once "../include/header.php";
             </ol>
             <div class="carousel-inner">
                <div class="carousel-item active">
-               <a
+                  <a
                      href="http://localhost/SE266/REPO-Folder/SE265/backend/displayResults.php?search_option=Products&inputName=Moodswings+In+to+Order&search=Search">
                      <img src="../include/slideshow/shopMusic.png" alt="First slide">
                   </a>
@@ -29,8 +29,7 @@ include_once "../include/header.php";
                   </a>
                </div>
                <div class="carousel-item">
-                  <a
-                     href="#">
+                  <a href="#">
                      <img src="../include/slideshow/shopAcc.png" alt="Third slide">
                   </a>
                </div>
@@ -118,8 +117,28 @@ include_once "../include/header.php";
          </div>
       </div>
    </div>
-   <?php include_once '../include/footer.php'; ?>
 </div>
+<!-- Footer -->
+<footer class="text-center text-lg-start bg-light text-muted">
+   <section class="">
+      <div class="container text-center text-sm-start">
+         <div class="row mt-3">
+            <div class="col-xs-3 col-xs-4 col-xs-3 mx-auto mb-md-0 mb-4">
+               <a href="https://github.com/AyyyeJae" class="me-4 text-reset">
+                  <i class="fab fa-github fa-xl"></i> Github
+               </a>
+               <a href="https://plugin-outline.netlify.app/frontend/home.html" class="me-4 text-reset">
+                  <i class="fa-solid fa-book fa-xl" style="margin-left: 5px;"></i> Documentation
+               </a>
+            </div>
+         </div>
+      </div>
+   </section>
+   <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2023 PlugIn
+   </div>
+</footer>
+<!-- Footer -->
 </body>
 
 </html>

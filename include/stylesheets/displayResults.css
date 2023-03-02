@@ -1,3 +1,29 @@
+.customBtn{
+  margin-left: 5px;
+}
+.customBtn:hover, .customerOtherBtn:hover{
+  color: white;
+  background-color: #4c49d7;
+  border: 2px solid gray;
+}
+.pageCountCountainer{
+  border: 2px solid #F1F1F1;
+  background-color: #F8F8F8;
+  padding: 15px;
+  border-radius: 15px;
+}
+.filterContainer{
+  border: 2px solid #F1F1F1;
+  background-color: #F8F8F8;
+  padding: 15px;
+  border-radius: 15px;
+  
+}
+.fullVH{
+  border: 1px solid #e5e5e5;
+  box-shadow: 5px 10px 10px #e5e5e5;
+  padding: 35px;
+}
 .resultFor{
   margin-top: 15px;
 }
@@ -13,12 +39,12 @@
   height: 200px;
   margin-bottom: 1rem;
 }
-
-div .content {
-  max-width: 250px;
+.content  {
+  max-width: 350px;
   min-height: 400px;
   border: 1px #f5f5f5 solid;
-  margin: 5px;
+  margin-top: 15px;
+  margin-left: 15px;
 }
 
 .listProdTitle {

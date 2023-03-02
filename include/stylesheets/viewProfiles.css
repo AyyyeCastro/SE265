@@ -62,7 +62,12 @@
   top: 140px;
   left: 170px;
   pointer-events: all;
-  background-color: purple;
+  border: 1px solid #5d5d5d;
+  border-radius: 15px;
+  padding: 6px 12px;
+  color: white;
+  background-color: #4c49d7;
+  
 }
 
 input[type="file"] {

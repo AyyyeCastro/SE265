@@ -1,185 +1,11 @@
 <!DOCTYPE html>
 <?php
 ob_start();
-include_once '../include/functions.php';
-include_once '../include/header.php';
-include_once '../model/userController.php';
+require '../include/functions.php';
+require '../include/header.php';
+require '../model/userController.php';
+require '../include/Logic/PHP/php_viewMessage.php';
 
-if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
-   header("location: ../login.php");
-   exit;
-}
-
-
-$message = "";
-$configFile = '../model/dbconfig.ini';
-try {
-   $userDatabase = new Users($configFile);
-} catch (Exception $error) {
-   echo "<h2>" . $error->getMessage() . "</h2>";
-}
-
-# -- Important -- #
-# Set the session outside of the post request, so that the forms can get pre-filled. 
-
-/* sender's info */
-$userID = $_SESSION['userID'];
-$senderInfo = $userDatabase->getUserDetails($userID);
-
-/* receiver's info */
-$sellerID = $userID;
-$sellerInnie = $_GET['receiverInnie'];
-
-$receiverID = $_GET['receiverID'];
-
-
-
-/* message info */
-$parentID = $_GET['parentID'];
-$messageID = $_GET['messageID'];
-$messageDetails = $userDatabase->getMessageDetails($messageID);
-$messageSentOn = $messageDetails['messageSentOn'];
-
-/* Get receiver's mini-profile  */
-$profileName = $messageDetails['customerInnie'];
-$profileInfo = $userDatabase->getProfileByName($profileName);
-
-/* Get requested product info */
-$listID = $messageDetails['listID'];
-$listDetails = $userDatabase->getListForm($listID);
-
-/* bread crumbs */
-$convoDetails = $userDatabase->getMessageCrumbs($listID, $parentID, $messageSentOn);
-
-$deleteMessage = [];
-/* Get seller's info (logged in user)
-Redeclare $userID as the logged in user's ID -> $sellerID
-*/
-
-#----------------#
-if (isPostRequest()) {
-
-   if (isset($_POST['btnSend'])) {
-      $listID = filter_input(INPUT_POST, 'listID');
-      $parentID = $_POST['parentID'];
-      /* get the $userID thensent it to the method */
-      $sellerID = filter_input(INPUT_POST, 'sellerID');
-      $sellerInnie = filter_input(INPUT_POST, 'sellerInnie');
-      $customerID = filter_input(INPUT_POST, 'customerID');
-      $customerInnie = filter_input(INPUT_POST, 'customerInnie');
-      $messageTitle = filter_input(INPUT_POST, 'messageTitle');
-      $messageDesc = filter_input(INPUT_POST, 'messageDesc');
-      $fileDestination = filter_input(INPUT_POST, 'fileDestination');
-      $fileDestination2 = filter_input(INPUT_POST, 'fileDestination2');
-      $fileDestination3 = filter_input(INPUT_POST, 'fileDestination3');
-      $fileDestination4 = filter_input(INPUT_POST, 'fileDestination4');
-      $isMessageReplied = filter_input(INPUT_POST, 'isMessageReplied');
-
-      /* for updateIsRepliedMessage function */
-      $priorMessageID = filter_input(INPUT_POST, 'priorMessageID');
-      $updateStatus = filter_input(INPUT_POST, 'updateStatus');
-
-      #--- Profile Picture Traveling -- #
-      $file = $_FILES['sendPic'];
-      if ($file['error'] != UPLOAD_ERR_NO_FILE) {
-         $fileDestination = '../backend/messageUpload/' . $file['name'];
-         move_uploaded_file($file['tmp_name'], $fileDestination);
-      }
-      $file2 = $_FILES['sendPic2'];
-      if ($file2['error'] != UPLOAD_ERR_NO_FILE) {
-         $fileDestination2 = '../backend/messageUpload/' . $file2['name'];
-         move_uploaded_file($file2['tmp_name'], $fileDestination2);
-      }
-      $file3 = $_FILES['sendPic3'];
-      if ($file2['error'] != UPLOAD_ERR_NO_FILE) {
-         $fileDestination3 = '../backend/messageUpload/' . $file3['name'];
-         move_uploaded_file($file3['tmp_name'], $fileDestination3);
-      }
-      $file4 = $_FILES['sendPic4'];
-      if ($file4['error'] != UPLOAD_ERR_NO_FILE) {
-         $fileDestination4 = '../backend/messageUpload/' . $file4['name'];
-         move_uploaded_file($file4['tmp_name'], $fileDestination4);
-      }
-
-      if (
-         $userDatabase->sendMessage(
-            $parentID,
-            $customerID,
-            $sellerID,
-            $listID,
-            $messageTitle,
-            $messageDesc,
-            $fileDestination,
-            $customerInnie,
-            $sellerInnie,
-            $fileDestination2,
-            $fileDestination3,
-            $fileDestination4,
-            $isMessageReplied
-         )
-         && $userDatabase->updateIsMessageReplied($priorMessageID, $updateStatus)
-      ) {
-         header('Location: viewInbox.php');
-         $message = "Your message Was Sent!";
-
-      } else {
-         $message = "Error sending message, please try again.";
-      }
-   }
-   if (isset($_POST['btnConfirmSale'])) {
-      $listID = filter_input(INPUT_POST, 'listID');
-      $listProdCat = filter_input(INPUT_POST, 'listProdCat');
-      $listProdPrice = filter_input(INPUT_POST, 'listProdPrice');
-      $listProdTitle = filter_input(INPUT_POST, 'listProdTitle');
-      $listCond = filter_input(INPUT_POST, 'listCond');
-      $customerID = filter_input(INPUT_POST, 'customerID');
-      $sellerID = filter_input(INPUT_POST, 'sellerID');
-      $orderID = uniqid();
-      $isListSold = filter_input(INPUT_POST, 'isListSold');
-
-      /* defaul sale msg */
-      $parentID = $_POST['parentID'];
-      /* get the $userID thensent it to the method */
-      $customerInnie = filter_input(INPUT_POST, 'customerInnie');
-      $sellerInnie = filter_input(INPUT_POST, 'sellerInnie');
-      $messageTitle = filter_input(INPUT_POST, 'messageTitle');
-      $messageDesc = filter_input(INPUT_POST, 'messageDesc');
-      $isMessageReplied = filter_input(INPUT_POST, 'isMessageReplied');
-
-
-      /* for updateIsRepliedMessage function */
-      $priorMessageID = filter_input(INPUT_POST, 'priorMessageID');
-      $updateStatus = filter_input(INPUT_POST, 'updateStatus');
-
-      if (
-         $userDatabase->defaultSaleMsg(
-            $parentID,
-            $customerID,
-            $sellerID,
-            $listID,
-            $messageTitle,
-            $messageDesc,
-            $customerInnie,
-            $sellerInnie
-         )
-         && $userDatabase->confirmSale(
-            $listID,
-            $customerID,
-            $sellerID,
-            $orderID,
-            $customerInnie
-         )
-         && $userDatabase->updateIsMessageReplied($priorMessageID, $updateStatus)
-      ) {
-         header('Location: viewInbox.php');
-         $message = "This product has been sold!";
-
-      } else {
-         $message = "Error selling, please try again.";
-      }
-   }
-
-}
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/viewMessage.css">
@@ -238,25 +64,25 @@ if (isPostRequest()) {
                         On
                         <?php echo date("Y-m-d", strtotime($row['messageSentOn'])); ?>
                         </p>
-                        </p>
-                        <?php if (!empty($row['messagePics'])): ?>
-                           <img src="<?= $row['messagePics']; ?>"
-                              style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
-                        <?php endif ?>
+                        <p>
+                           <?php if (!empty($row['messagePics'])): ?>
+                              <img src="<?= $row['messagePics']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
+                           <?php endif ?>
 
-                        <?php if (!empty($row['messagePic2'])): ?>
-                           <img src="<?= $row['messagePic2']; ?>"
-                              style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
-                        <?php endif ?>
+                           <?php if (!empty($row['messagePic2'])): ?>
+                              <img src="<?= $row['messagePic2']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
+                           <?php endif ?>
 
-                        <?php if (!empty($row['messagePic3'])): ?>
-                           <img src="<?= $row['messagePic3']; ?>"
-                              style="object-fit: contain; object-position:c enter; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
-                        <?php endif ?>
-                        <?php if (!empty($row['messagePic4'])): ?>
-                           <img src="<?= $row['messagePic4']; ?>"
-                              style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
-                        <?php endif ?>
+                           <?php if (!empty($row['messagePic3'])): ?>
+                              <img src="<?= $row['messagePic3']; ?>"
+                                 style="object-fit: contain; object-position:c enter; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
+                           <?php endif ?>
+                           <?php if (!empty($row['messagePic4'])): ?>
+                              <img src="<?= $row['messagePic4']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
+                           <?php endif ?>
                         </p>
                      </span>
                   <?php else: ?>
@@ -269,6 +95,26 @@ if (isPostRequest()) {
                         <?php echo date("h-i A", strtotime($row['messageSentOn'])); ?>
                         On
                         <?php echo date("Y-m-d", strtotime($row['messageSentOn'])); ?>
+                        </p>
+                        <p>
+                           <?php if (!empty($row['messagePics'])): ?>
+                              <img src="<?= $row['messagePics']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
+                           <?php endif ?>
+
+                           <?php if (!empty($row['messagePic2'])): ?>
+                              <img src="<?= $row['messagePic2']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
+                           <?php endif ?>
+
+                           <?php if (!empty($row['messagePic3'])): ?>
+                              <img src="<?= $row['messagePic3']; ?>"
+                                 style="object-fit: contain; object-position:c enter; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
+                           <?php endif ?>
+                           <?php if (!empty($row['messagePic4'])): ?>
+                              <img src="<?= $row['messagePic4']; ?>"
+                                 style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-top: 2px;">
+                           <?php endif ?>
                         </p>
                      </span>
                   <?php endif ?>
@@ -310,8 +156,8 @@ if (isPostRequest()) {
             </div>
             <?php if (!empty($messageDetails['messagePics']) || !empty($messageDetails['messagePic2']) || !empty($messageDetails['messagePic3']) || !empty($messageDetails['messagePic4'])): ?>
                <div class="main-img" id="TestsDiv" style="display:none"">
-                                                <img src=""style=" object-fit: contain; object-position: center;
-                  background-color: #F6F6F6; height: 450px; width: 450px;">
+                                                                  <img src=""style=" object-fit: contain; object-position:
+                  center; background-color: #F6F6F6; height: 450px; width: 450px;">
                </div>
             <?php endif ?>
          </div>
@@ -386,32 +232,45 @@ if (isPostRequest()) {
 
             <div class="row rowCustomFiles">
                <div class="col-sm-12">
-                  <label for="sendPic" class="customFiles"><i class="fa-solid fa-image fa-lg"></i> Insert Photo
+                  <label for="sendPic" class="customFiles" id="customFile1"><i class="fa-solid fa-image fa-lg"></i>
+                     Insert Photo
                      <input type="file" id="sendPic" name="sendPic" accept="image/*">
                   </label>
-                  <label for="sendPic2" class="customFiles"> +
+                  <label for="sendPic2" class="customFiles" id="customFile2"> +
                      <input type="file" id="sendPic2" name="sendPic2" accept="image/*">
                   </label>
-                  <label for="sendPic3" class="customFiles"> +
+                  <label for="sendPic3" class="customFiles" id="customFile3"> +
                      <input type="file" id="sendPic3" name="sendPic3" accept="image/*">
                   </label>
-                  <label for="sendPic4" class="customFiles"> +
+                  <label for="sendPic4" class="customFiles" id="customFile4"> +
                      <input type="file" id="sendPic4" name="sendPic4" accept="image/*">
                   </label>
                </div>
             </div>
             <div class="row">
                <div class="col-lg-2">
-                  <img id="prevImg" />
+                  <div class="preview-container">
+                     <img id="prevImg" />
+                     <span class="remove-btn" id="removeBtn1"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
                <div class="col-lg-2">
-                  <img id="prevImg2" />
+                  <div class="preview-container">
+                     <img id="prevImg2" />
+                     <span class="remove-btn" id="removeBtn2"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
                <div class="col-lg-2">
-                  <img id="prevImg3" />
+                  <div class="preview-container">
+                     <img id="prevImg3" />
+                     <span class="remove-btn" id="removeBtn3"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
                <div class="col-lg-2">
-                  <img id="prevImg4" />
+                  <div class="preview-container">
+                     <img id="prevImg4" />
+                     <span class="remove-btn" id="removeBtn4"><i class="fa-regular fa-square-minus"></i></span>
+                  </div>
                </div>
             </div>
             <div class="row rowBtnPost">
@@ -510,7 +369,7 @@ if (isPostRequest()) {
                </div>
                <div>
                   <input type="hidden" class="form-control" id="customerID" name="customerID"
-                     value="<?php echo $senderInfo['userID'] ?>">f
+                     value="<?php echo $senderInfo['userID'] ?>">
                </div>
                <!-- hidden condition: INSERT FOR THIS MESSAGE -->
                <div>
@@ -540,34 +399,4 @@ if (isPostRequest()) {
 </body>
 
 </html>
-
-
-<script>
-   // JQuery script not by me. Easy enough now that I see it, but this was Google 101.
-   $(document).ready(function () {
-      $('.thumb-imgs img').click(function () {
-         $('.main-img img').attr('src', $(this).attr('src'));
-      });
-   });
-
-   document.getElementById('sendPic').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg').src = src
-      document.getElementById('prevImg').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('sendPic2').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg2').src = src
-      document.getElementById('prevImg2').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('sendPic3').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg3').src = src
-      document.getElementById('prevImg3').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('sendPic4').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg4').src = src
-      document.getElementById('prevImg4').style = "height: 150px; width: 150px;"
-   }
-</script>
+<script src="../include/logic/JS/js_viewMessages.js"></script>
