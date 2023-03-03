@@ -1,29 +1,7 @@
 <!DOCTYPE html>
 <?php
-include_once '../include/functions.php';
-include_once '../include/header.php';
-include_once '../model/userController.php';
-
-if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
-   header("location: ../login.php");
-   exit;
-}
-
-
-$message = "";
-$configFile = '../model/dbconfig.ini';
-try {
-   $userDatabase = new Users($configFile);
-} catch (Exception $error) {
-   echo "<h2>" . $error->getMessage() . "</h2>";
-}
-
-# -- Important -- #
-# Set the session outside of the post request, so that the forms can get pre-filled. 
-$userID = $_SESSION['userID'];
-$userInfo = $userDatabase->getUserDetails($userID);
-$listDetails = $userDatabase->getSaleHistory($userID);
-/* maybe bread crumbs.. */
+require '../include/header.php';
+require '../include/logic/php/php_viewSaleHistory.php';
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/viewSaleHistory.css">

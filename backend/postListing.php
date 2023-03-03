@@ -1,93 +1,8 @@
 <!DOCTYPE html>
 <?php
 ob_start();
-include_once '../include/header.php';
-include_once '../include/functions.php';
-include_once '../model/userController.php';
-
-if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
-   header("location: ../login.php");
-   exit;
-}
-
-
-$message = "";
-$configFile = '../model/dbconfig.ini';
-try {
-   $userDatabase = new Users($configFile);
-} catch (Exception $error) {
-   echo "<h2>" . $error->getMessage() . "</h2>";
-}
-
-# -- Important -- #
-# Set the session outside of the post request, so that the forms can get pre-filled. 
-$userID = $_SESSION['userID'];
-$userInfo = $userDatabase->getUserDetails($userID);
-$catList = $userDatabase->getAllCategories();
-$condList = $userDatabase->getAllConditions();
-
-# ----------------#
-
-
-if (isPostRequest()) {
-   $listProdCat = filter_input(INPUT_POST, 'inputProdCat');
-   $catList = $userDatabase->getAllCategories();
-   $listProdPrice = filter_input(INPUT_POST, 'inputProdPrice');
-   $listProdTitle = filter_input(INPUT_POST, 'inputProdTitle');
-   $listDesc = filter_input(INPUT_POST, 'inputProdDesc');
-   $listCond = filter_input(INPUT_POST, 'inputProdCond');
-   $listState = filter_input(INPUT_POST, 'inputProdState');
-   $condList = $userDatabase->getAllConditions();
-
-
-   # -- Profile Pictures -- #
-   # -- IMPORTANT!!! -- #
-   $userInfo = $userDatabase->getUserDetails($userID);
-
-   #--- Profile Picture Traveling -- #
-   $file = $_FILES['inputProdPic'];
-   if ($file['error'] != UPLOAD_ERR_NO_FILE) {
-      $fileDestination = '../backend/listingUpload/' . $file['name'];
-      move_uploaded_file($file['tmp_name'], $fileDestination);
-   }
-   $file2 = $_FILES['inputProdPic2'];
-   if ($file2['error'] != UPLOAD_ERR_NO_FILE) {
-      $fileDestination2 = '../backend/listingUpload/' . $file2['name'];
-      move_uploaded_file($file2['tmp_name'], $fileDestination2);
-   }
-   $file3 = $_FILES['inputProdPic3'];
-   if ($file3['error'] != UPLOAD_ERR_NO_FILE) {
-      $fileDestination3 = '../backend/listingUpload/' . $file3['name'];
-      move_uploaded_file($file3['tmp_name'], $fileDestination3);
-   }
-   $file4 = $_FILES['inputProdPic4'];
-   if ($file4['error'] != UPLOAD_ERR_NO_FILE) {
-      $fileDestination4 = '../backend/listingUpload/' . $file4['name'];
-      move_uploaded_file($file4['tmp_name'], $fileDestination4);
-   }
-   # ---------------------------------#
-
-   if (
-      $userDatabase->postUserListing(
-         $userID,
-         $listProdCat,
-         $listProdPrice,
-         $listProdTitle,
-         $listDesc,
-         $listCond,
-         $fileDestination,
-         $listState,
-         $listPostedOn,
-         $fileDestination2,
-         $fileDestination3,
-         $fileDestination4
-      )
-   ) {
-      header("location: ../backend/viewProfile.php");
-   } else {
-      $message = "Error posting new listing, please try again.";
-   }
-}
+require '../include/header.php';
+require '../include/logic/php/php_postListing.php';
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/postListing.css">
@@ -148,7 +63,7 @@ if (isPostRequest()) {
                   plugins: [
                      'advlist autolink lists link image charmap print preview anchor',
                      'searchreplace visualblocks code fullscreen',
-                     'insertdatetime media table paste code help wordcount'
+                     'insertdatetime media table paste code help wordcount', 'autoresize',
                   ],
                   toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
                   content_css: '//www.tiny.cloud/css/codepen.min.css'
@@ -159,32 +74,45 @@ if (isPostRequest()) {
          <br>
          <div class="row rowCustomFiles">
             <div class="col-sm-12">
-               <label for="inputProdPic" class="customFiles"><i class="fa-solid fa-image fa-lg"></i> Insert Photo
-                  <input type="file" id="inputProdPic" name="inputProdPic" accept="image/*">
+               <label for="sendPic" class="customFiles" id="customFile1"><i class="fa-solid fa-image fa-lg"></i>
+                  Insert Photo
+                  <input type="file" id="sendPic" name="sendPic" accept="image/*" required>
                </label>
-               <label for="inputProdPic2" class="customFiles"> +
-                  <input type="file" id="inputProdPic2" name="inputProdPic2" accept="image/*">
+               <label for="sendPic2" class="customFiles" id="customFile2"> +
+                  <input type="file" id="sendPic2" name="sendPic2" accept="image/*">
                </label>
-               <label for="inputProdPic3" class="customFiles"> +
-                  <input type="file" id="inputProdPic3" name="inputProdPic3" accept="image/*">
+               <label for="sendPic3" class="customFiles" id="customFile3"> +
+                  <input type="file" id="sendPic3" name="sendPic3" accept="image/*">
                </label>
-               <label for="inputProdPic4" class="customFiles"> +
-                  <input type="file" id="inputProdPic4" name="inputProdPic4" accept="image/*">
+               <label for="sendPic4" class="customFiles" id="customFile4"> +
+                  <input type="file" id="sendPic4" name="sendPic4" accept="image/*">
                </label>
             </div>
          </div>
          <div class="row">
-            <div class="col-lg-2">
-               <img id="prevImg" />
+            <div class="col-sm-3 col-md-4 col-lg-3">
+               <div class="preview-container">
+                  <img id="prevImg" />
+                  <span class="remove-btn" id="removeBtn1"><i class="fa-regular fa-square-minus"></i></span>
+               </div>
             </div>
-            <div class="col-lg-2">
-               <img id="prevImg2" />
+            <div class="col-sm-6 col-md-4 col-lg-3">
+               <div class="preview-container">
+                  <img id="prevImg2" />
+                  <span class="remove-btn" id="removeBtn2"><i class="fa-regular fa-square-minus"></i></span>
+               </div>
             </div>
-            <div class="col-lg-2">
-               <img id="prevImg3" />
+            <div class="col-sm-6 col-md-4 col-lg-3">
+               <div class="preview-container">
+                  <img id="prevImg3" />
+                  <span class="remove-btn" id="removeBtn3"><i class="fa-regular fa-square-minus"></i></span>
+               </div>
             </div>
-            <div class="col-lg-2">
-               <img id="prevImg4" />
+            <div class="col-sm-6 col-md-4 col-lg-3">
+               <div class="preview-container">
+                  <img id="prevImg4" />
+                  <span class="remove-btn" id="removeBtn4"><i class="fa-regular fa-square-minus"></i></span>
+               </div>
             </div>
          </div>
          <div class="row rowBtnPost">
@@ -200,25 +128,4 @@ if (isPostRequest()) {
 </body>
 
 </html>
-<script>
-   document.getElementById('inputProdPic').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg').src = src
-      document.getElementById('prevImg').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('inputProdPic2').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg2').src = src
-      document.getElementById('prevImg2').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('inputProdPic3').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg3').src = src
-      document.getElementById('prevImg3').style = "height: 150px; width: 150px;"
-   }
-   document.getElementById('inputProdPic4').onchange = function () {
-      var src = URL.createObjectURL(this.files[0])
-      document.getElementById('prevImg4').src = src
-      document.getElementById('prevImg4').style = "height: 150px; width: 150px;"
-   }
-</script>
+<script src="../include/logic/JS/js_photoManagement.js"></script>

@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <?php
 ob_start();
-require '../include/functions.php';
 require '../include/header.php';
-require '../model/userController.php';
-require '../include/Logic/PHP/php_viewMessage.php';
-
+require '../include/logic/php/php_viewMessage.php';
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/viewMessage.css">
@@ -156,8 +153,8 @@ require '../include/Logic/PHP/php_viewMessage.php';
             </div>
             <?php if (!empty($messageDetails['messagePics']) || !empty($messageDetails['messagePic2']) || !empty($messageDetails['messagePic3']) || !empty($messageDetails['messagePic4'])): ?>
                <div class="main-img" id="TestsDiv" style="display:none"">
-                                                                  <img src=""style=" object-fit: contain; object-position:
-                  center; background-color: #F6F6F6; height: 450px; width: 450px;">
+                                                                     <img src=""style=" object-fit: contain;
+                  object-position: center; background-color: #F6F6F6; height: 450px; width: 450px;">
                </div>
             <?php endif ?>
          </div>
@@ -248,25 +245,25 @@ require '../include/Logic/PHP/php_viewMessage.php';
                </div>
             </div>
             <div class="row">
-               <div class="col-lg-2">
+               <div class="col-sm-3 col-md-4 col-lg-3">
                   <div class="preview-container">
                      <img id="prevImg" />
                      <span class="remove-btn" id="removeBtn1"><i class="fa-regular fa-square-minus"></i></span>
                   </div>
                </div>
-               <div class="col-lg-2">
+               <div class="col-sm-6 col-md-4 col-lg-3">
                   <div class="preview-container">
                      <img id="prevImg2" />
                      <span class="remove-btn" id="removeBtn2"><i class="fa-regular fa-square-minus"></i></span>
                   </div>
                </div>
-               <div class="col-lg-2">
+               <div class="col-sm-6 col-md-4 col-lg-3">
                   <div class="preview-container">
                      <img id="prevImg3" />
                      <span class="remove-btn" id="removeBtn3"><i class="fa-regular fa-square-minus"></i></span>
                   </div>
                </div>
-               <div class="col-lg-2">
+               <div class="col-sm-6 col-md-4 col-lg-3">
                   <div class="preview-container">
                      <img id="prevImg4" />
                      <span class="remove-btn" id="removeBtn4"><i class="fa-regular fa-square-minus"></i></span>

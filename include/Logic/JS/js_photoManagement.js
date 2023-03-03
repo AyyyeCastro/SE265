@@ -8,7 +8,7 @@ $(document).ready(function () {
  document.getElementById("sendPic").onchange = function () {
    var src = URL.createObjectURL(this.files[0]);
    document.getElementById("prevImg").src = src;
-   document.getElementById("prevImg").style = "height: 150px; width: 150px;";
+   document.getElementById("prevImg").style = "object-fit: contain; object-position: center; max-width: 230px; max-height: 230px; background-color: #F6F6F6;";
    document.getElementById("customFile1").style.display = "none";
    document.getElementById("removeBtn1").style.display = "inline-block";
    document.getElementById("removeBtn1").addEventListener("click", function () {
@@ -23,7 +23,7 @@ $(document).ready(function () {
  document.getElementById("sendPic2").onchange = function () {
    var src = URL.createObjectURL(this.files[0]);
    document.getElementById("prevImg2").src = src;
-   document.getElementById("prevImg2").style = "height: 150px; width: 150px;";
+   document.getElementById("prevImg2").style = "object-fit: contain; object-position: center; max-width: 230px; max-height: 230px;  background-color: #F6F6F6;"
    document.getElementById("customFile2").style.display = "none";
    document.getElementById("removeBtn2").style.display = "inline-block";
    document.getElementById("removeBtn2").addEventListener("click", function () {
@@ -38,7 +38,7 @@ $(document).ready(function () {
  document.getElementById("sendPic3").onchange = function () {
    var src = URL.createObjectURL(this.files[0]);
    document.getElementById("prevImg3").src = src;
-   document.getElementById("prevImg3").style = "height: 150px; width: 150px;";
+   document.getElementById("prevImg3").style = "object-fit: contain; object-position: center; max-width: 230px; max-height: 230px;  background-color: #F6F6F6;"
    document.getElementById("customFile3").style.display = "none";
    document.getElementById("removeBtn3").style.display = "inline-block";
    document.getElementById("removeBtn3").addEventListener("click", function () {
@@ -52,7 +52,7 @@ $(document).ready(function () {
  document.getElementById("sendPic4").onchange = function () {
    var src = URL.createObjectURL(this.files[0]);
    document.getElementById("prevImg4").src = src;
-   document.getElementById("prevImg4").style = "height: 150px; width: 150px;";
+   document.getElementById("prevImg4").style = "object-fit: contain; object-position: center; max-width: 230px; max-height: 230px;  background-color: #F6F6F6;"
    document.getElementById("customFile4").style.display = "none";
    document.getElementById("removeBtn4").style.display = "inline-block";
    document.getElementById("removeBtn4").addEventListener("click", function () {

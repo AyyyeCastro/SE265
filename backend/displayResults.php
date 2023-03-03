@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <?php
-//call other files
-include_once "../model/userController.php";
-include_once "../include/functions.php";
-include_once "../include/header.php";
+require "../include/header.php";
 require '../include/logic/php/php_displayResults.php';
-
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/displayResults.css">
@@ -80,6 +76,12 @@ require '../include/logic/php/php_displayResults.php';
             </div>
 
             <div class="row">
+               <?php if (empty($listArray)): ?>
+
+                  <div class="col-lg-12 displayMsg">
+                     No products listed for sale or that match your criteria.
+                  </div>
+               <?php endif; ?>
                <?php foreach ($listArray as $row): ?>
                   <?php if ($row['isListSold'] != 'YES'): ?>
                      <div class="col-lg-6 content">

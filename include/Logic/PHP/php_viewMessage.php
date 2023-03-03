@@ -4,14 +4,6 @@ if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
    exit;
 }
 
-$message = "";
-$configFile = '../model/dbconfig.ini';
-try {
-   $userDatabase = new Users($configFile);
-} catch (Exception $error) {
-   echo "<h2>" . $error->getMessage() . "</h2>";
-}
-
 # -- Important -- #
 # Set the session outside of the post request, so that the forms can get pre-filled. 
 
@@ -24,8 +16,6 @@ $sellerID = $userID;
 $sellerInnie = $_GET['receiverInnie'];
 
 $receiverID = $_GET['receiverID'];
-
-
 
 /* message info */
 $parentID = $_GET['parentID'];
@@ -48,7 +38,6 @@ $deleteMessage = [];
 /* Get seller's info (logged in user)
 Redeclare $userID as the logged in user's ID -> $sellerID
 */
-
 #----------------#
 if (isPostRequest()) {
 

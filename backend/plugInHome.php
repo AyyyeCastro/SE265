@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <?php
-include_once "../model/userController.php";
-include_once "../include/functions.php";
-include_once "../include/header.php";
+require "../include/header.php";
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/plugInHome.css">

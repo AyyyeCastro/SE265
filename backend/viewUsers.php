@@ -1,32 +1,8 @@
 <!DOCTYPE html>
 <?php
 ob_start();
-include_once '../include/functions.php';
-include_once '../include/header.php';
-include_once '../model/userController.php';
-$message = "";
-$configFile = '../model/dbconfig.ini';
-try {
-   $userDatabase = new Users($configFile);
-} catch (Exception $error) {
-   echo "<h2>" . $error->getMessage() . "</h2>";
-}
-
-$userID = filter_input(INPUT_GET, 'userID');
-if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
-   $_SESSION['visitCrumb'] = 'backend/viewUsers.php?userID=' . $userID;
-   header("location: ../login.php");
-   exit;
-}
-$userInfo = $userDatabase->getUserDetails($userID);
-$userListLog = $userDatabase->getUserListing($userID);
-$userRating = $userDatabase->getAvgRating($userID);
-$userRatingCount = $userDatabase->getRatingCount($userID);
-
-$sessionID = $_SESSION['userID'];
-$modCheck = $userDatabase->isUserMod($sessionID);
-
-# ----------------#
+require '../include/header.php';
+require '../include/logic/php/php_viewUsers.php';
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/viewProfiles.css">
@@ -45,7 +21,6 @@ $modCheck = $userDatabase->isUserMod($sessionID);
                      echo "<img src='" . $userInfo['userPic'] . "' class='ProfilePics rounded-circle' alt='profile picture'>";
                   }
                   ?>
-
 
                   <div class="changePPBox">
                      <form action="editUserPic.php" method="POST" enctype="multipart/form-data">
@@ -205,7 +180,7 @@ $modCheck = $userDatabase->isUserMod($sessionID);
                <!-- Check if the currently logged in user's ID matches the ID of the profile being viewed -->
                <?php if ($modCheck['isModerator'] == 'YES' || $modCheck['isOwner'] == 'YES'): ?>
                   <p style="text-align: right;"><a href="editUserProfile.php?userID=<?= $userInfo['userID']; ?>"><button
-                           class="btn btn-secondary"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                           class="customBtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
                   <p>
                   <?php endif ?>
             </div>
@@ -214,6 +189,11 @@ $modCheck = $userDatabase->isUserMod($sessionID);
 
       <div class="productContainer">
          <div class="row">
+            <?php if (empty($userListLog)): ?>
+               <div class="col-md-12">
+                  No products listed for sale.
+               </div>
+            <?php endif; ?>
             <?php foreach ($userListLog as $row): ?>
                <?php if ($row['isListSold'] != 'YES'): ?>
                   <div class="col-sm-3 content">

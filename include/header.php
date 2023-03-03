@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <?php
-require_once '../include/functions.php';
+require '../include/functions.php';
+require '../model/userController.php';
+$configFile = '../model/dbconfig.ini';
+try {
+  $userDatabase = new Users($configFile);
+} catch (Exception $error) {
+  echo "<h2>" . $error->getMessage() . "</h2>";
+}
 ?>
 <html lang="en">
 
@@ -92,8 +99,8 @@ require_once '../include/functions.php';
         <!-- Everyone -->
 
         <!-- Signed in only -->
-        <?php if (isUserLoggedIn()) { ?>
-          <li class="nav-item">
+        <?php if (isUserLoggedIn()): ?>
+          <li class="nav-item"><samp></samp>
             <a class="nav-link make-centered" href="postListing.php">
               <button class="btn"><i class="fa-solid fa-cash-register fa-xl"></i></button> Sell Item
             </a>
@@ -104,6 +111,14 @@ require_once '../include/functions.php';
               <button class="btn"><i class="fa-solid fa-comments-dollar fa-xl"></i></button> Messages
             </a>
           </li>
+          <?php $sessionID = $_SESSION['userID'];
+            if ($userDatabase->headerModCheck($sessionID)): ?>
+            <li class="nav-item">
+              <a class="nav-link make-centered" href="modTools.php">
+                <button class="btn"><i class="fa-solid fa-gear fa-xl"></i></button> Mod Tools
+              </a>
+            </li>
+          <?php endif ?>
 
           <!-- add this li item after the Inbox button -->
           <li class="nav-item dropdown">
@@ -126,9 +141,9 @@ require_once '../include/functions.php';
               </a>
             </div>
           </li>
+        <?php endif ?>
 
-          <?php
-        } ?>
+
 
         <!-- only if not signed in -->
         <?php if (!isUserLoggedIn()) { ?>

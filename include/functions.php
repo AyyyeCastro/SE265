@@ -27,7 +27,6 @@ function isUserLoggedIn()
         # Needs to be set at login.php, to also set the userID variable.
         # Otherwise, it isUserLoggedIn() will always return false, and u can't login.
 }
-
 ?>
 
 <!-- Jabascript functions -->

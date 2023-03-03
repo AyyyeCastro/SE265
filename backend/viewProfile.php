@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <?php
 ob_start();
-require '../include/functions.php';
 require '../include/header.php';
-require '../model/userController.php';
 require '../include/Logic/php/php_viewProfile.php';
 ?>
-
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/viewProfiles.css">
 <div class="fullVH">
@@ -189,16 +186,21 @@ require '../include/Logic/php/php_viewProfile.php';
 
       <div class="productContainer">
          <div class="row">
+            <?php if (empty($userListLog)): ?>
+               <div class="col-md-12">
+                  No products listed for sale.
+               </div>
+            <?php endif; ?>
             <?php foreach ($userListLog as $row): ?>
                <?php if ($row['isListSold'] != 'YES'): ?>
-                  <div class="col-sm-3 content">
+                  <div class="col-lg-6 content">
                      <div class="row">
                         <!-- edit button -->
-                        <a href="editListing.php?listID=<?= $row['listID']; ?>"><button class="customBtn showEdit"
+                        <a href="editListing.php?listID=<?= $row['listID']; ?>"><button class="customBtn showEditListing"
                               name="cancelbtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
                         <form action="viewProfile.php" method="post">
                            <!-- delete button -->
-                           <button type="submit" class="customerOtherBtn showEdit" name="btnDelete"
+                           <button type="submit" class="customerOtherBtn showDeleteListing" name="btnDelete"
                               onclick="return confirm('Are you sure you want to delete this listing? It is a permenant decision.')"><i
                                  class="fa-solid fa-trash"></i></button>
 
@@ -208,7 +210,7 @@ require '../include/Logic/php/php_viewProfile.php';
 
                      <a href="productDetails.php?listID=<?= $row['listID']; ?>">
                         <div class="listProdPic"><img src="<?= $row['listProdPic']; ?>"
-                              style="object-fit: contain; object-position: center; width: 230px; height: 230px; background-color: #F6F6F6;">
+                              style="object-fit: contain; object-position: center; max-width: 230px; max-height: 230px; background-color: #F6F6F6;">
                         </div>
                         <div class="listProdTitle">
                            <?= $row['listProdTitle']; ?>

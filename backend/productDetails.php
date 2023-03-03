@@ -1,53 +1,8 @@
 <!DOCTYPE html>
 <?php
 ob_start();
-//call other files
-include_once "../model/userController.php";
-include_once "../include/functions.php";
-include_once "../include/header.php";
-
-// //if not logged in, kick them
-// if (!isUserLoggedIn())
-// {
-//    header("location: ../login.php"); 
-// }
-
-$configFile = '../model/dbconfig.ini';
-try {
-   $userDatabase = new Users($configFile);
-} catch (Exception $error) {
-   echo "<h2>" . $error->getMessage() . "</h2>";
-}
-
-/* get the list ID from the URL, send it to the method */
-if (isUserLoggedIn()) {
-   $loginID = $_SESSION['userID'];
-}
-
-$listID = $_GET['listID'];
-$listDetails = $userDatabase->getListForm($listID);
-/* get the $userID thensent it to the method */
-$userID = $listDetails['userID'];
-$sellerInfo = $userDatabase->getUserDetails($userID);
-
-if (isset($_GET['orderID'])) {
-   $orderID = $_GET['orderID'];
-   $isAlreadyRated = $userDatabase->isAlreadyRated($orderID);
-}
-
-if (isPostRequest()) {
-
-   if (isset($_POST['btnRate'])) {
-      $userID = filter_input(INPUT_POST, 'userID');
-      $userRating = filter_input(INPUT_POST, 'userRating');
-      $orderID = filter_input(INPUT_POST, 'orderID');
-
-      if ($userDatabase->giveUserRating($userID, $userRating, $orderID)) {
-         header("location: ../backend/viewProfile.php");
-      }
-   }
-}
-
+require "../include/header.php";
+require "../include/logic/php/php_productDetails.php";
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/productDetails.css">

@@ -17,9 +17,6 @@
   box-shadow: 5px 10px 10px #e5e5e5;
   padding: 15px;
 }
-
-/* Important, sets it so that was "edit" listing buttons only show on a table hover */
-
 .ProfilePics {
   object-fit: cover;
   /* Do not scale the image */
@@ -67,7 +64,6 @@
   padding: 6px 12px;
   color: white;
   background-color: #4c49d7;
-  
 }
 
 input[type="file"] {
@@ -119,19 +115,37 @@ input[type="file"] {
   max-width: 250px;
 }
 
-.showEdit {
+.showEdit{
+  display: none;
+}
+.showEditListing{
+  display: none;
+}
+.showDeleteListing{
   display: none;
 }
 
 .content {
-  max-width: 250px;
-  max-height: 400px;
+  max-width: 350px;
+  min-height: 400px;
   border: 1px #f5f5f5 solid;
-  margin: 5px;
+  margin-top: 15px;
+  margin-left: 15px;
+}
+.listProdPic {
+  text-align: center;
+  background-color: #f8f8f8;
 }
 
-.content:hover .showEdit {
+.content:hover .showEditListing{
   display: inline-block;
+  position: absolute;
+  margin-left: 15px;
+}
+.content:hover .showDeleteListing{
+  display: inline-block;
+  position: absolute;
+  margin-left: 60px;
 }
 
 .userRating {

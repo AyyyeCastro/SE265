@@ -51,17 +51,6 @@
   background-color: purple;
 }
 
-input[type="file"] {
-  display: none;
-}
-
-.custom-file-upload {
-  height: 100%;
-  width: 100%;
-  display: inline-block;
-  cursor: pointer;
-}
-
 .displayContent {
   margin-top: 15px;
 }
