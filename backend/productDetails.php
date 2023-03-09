@@ -8,7 +8,7 @@ require "../include/logic/php/php_productDetails.php";
 <link rel="stylesheet" href="../include/stylesheets/productDetails.css">
 <div class="container">
    <div class="row">
-      <div class="col-sm-7 listImgBox">
+      <div class="col-md-7 listImgBox">
          <input type="hidden" name="userID" value="<?= $sellerInfo['userID']; ?>" />
          <input type="hidden" name="p_id" value="<?= $listDetails['listID']; ?>" />
          <div class="main-img">
@@ -17,7 +17,7 @@ require "../include/logic/php/php_productDetails.php";
          </div>
       </div>
 
-      <div class="col-sm-5 listInfoBox">
+      <div class="col-lg-5 listInfoBox">
          <div class="listProdTitle">
             <?= $listDetails['listProdTitle']; ?>
          </div>
@@ -29,7 +29,7 @@ require "../include/logic/php/php_productDetails.php";
          </div>
 
          <?php if ($listDetails['isListSold'] != 'YES'): ?>
-            <div class="col-sm-12 listBuyBox">
+            <div class="col-md-12 listBuyBox">
                <div class="listProdPrice">$
                   <?= $listDetails['listProdPrice']; ?>
                </div>
@@ -50,7 +50,7 @@ require "../include/logic/php/php_productDetails.php";
                </div>
             </div>
          <?php else: ?>
-            <div class="col-sm-12 listBuyBox">
+            <div class="col-md-12 listBuyBox">
                <div class="listProdPrice">$
                   <?= $listDetails['listProdPrice']; ?>
                </div>
@@ -61,11 +61,16 @@ require "../include/logic/php/php_productDetails.php";
                   <?= $listDetails['timeListsold']; ?>
                </div>
                <div class="customerInnie">
-                  Buyer:
+                  Seller:
                   <a href="viewUsers.php?userID=<?= $sellerInfo['userID']; ?>">
-                     <?= $listDetails['customerInnie']; ?>
+                     <?= $sellerInfo['userInnie']; ?>
                   </a>
                </div>
+               <div class="listSeller">Buyer:
+                  <a href="viewUsers.php?userID=<?= $listDetails['sellerID']; ?>">
+                     <?= $listDetails['sellerInnie']; ?>
+               </div>
+               </a>
                <?php if ($sellerInfo['userID'] != $loginID && $isAlreadyRated == false): ?>
                   <form action="productDetails.php" method="post">
                      <div class="form-group">
@@ -95,22 +100,26 @@ require "../include/logic/php/php_productDetails.php";
          <?php endif ?>
 
       </div>
-      <div class="col-sm-12">
-         <div class="col-sm-6 thumb-imgs">
+      <div class="col-md-12">
+         <div class="col-md-6 thumb-imgs">
             <img src="<?= $listDetails['listProdPic']; ?>"
                style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black;">
-            <?php if (!empty($listDetails['listProdPic2']) || !empty($listDetails['listProdPic3']) || !empty($listDetails['listProdPic4'])): ?>
+            <?php if (!empty($listDetails['listProdPic2'])): ?>
                <img src="<?= $listDetails['listProdPic2']; ?>"
                   style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
+            <?php endif ?>
+            <?php if (!empty($listDetails['listProdPic3'])): ?>  
                <img src="<?= $listDetails['listProdPic3']; ?>"
                   style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
+            <?php endif ?>
+            <?php if (!empty($listDetails['listProdPic4'])): ?>
                <img src="<?= $listDetails['listProdPic4']; ?>"
                   style="object-fit: contain; object-position: center; width: 100px; height: 100px; background-color: #F6F6F6; border: 1px solid black; margin-left: 5px;">
             <?php endif ?>
          </div>
       </div>
 
-      <div class="col-sm-12 listDescBox">
+      <div class="col-md-12 listDescBox">
          <p class="listDescHeader">Description</p>
          <div class="listDesc">
             <?= $listDetails['listDesc']; ?>
@@ -131,4 +140,4 @@ require "../include/logic/php/php_productDetails.php";
          $('.main-img img').attr('src', $(this).attr('src'));
       });
    });
-</script>
+</script>`

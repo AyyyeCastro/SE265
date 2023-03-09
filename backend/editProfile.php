@@ -12,34 +12,6 @@ require '../include/logic/php/php_editProfile.php';
       <!-- SUPER important. enctype="multipart/form-data" in order to allow inserting profile pics -->
       <form action="editProfile.php" method="POST" enctype="multipart/form-data">
 
-         <div class="row">
-            <div class="col-md-12">
-               <img id="newUserPP" class="newUserPP rounded-circle img-overlay" />
-
-               <div class="img-container">
-                  <?php
-                  $defaultAvie = "../include/default-avie/default-avie.jpg";
-                  if (is_null($userInfo['userPic']) || empty($userInfo['userPic'])) {
-                     echo "<img src= '$defaultAvie' class='ProfilePics rounded-circle' alt='profile picture'>";
-                  } else {
-                     echo "<img src='" . $userInfo['userPic'] . "' class='ProfilePics rounded-circle' alt='profile picture'>";
-                  }
-                  ?>
-
-                  <div class="changePPBox">
-                     <div class="img-overlay">
-                        <label class="custom-file-upload">
-                           <input type="file" id="userProfilePicture" name="userProfilePicture" class="form-control"
-                              accept="image/*">
-                        </label>
-                     </div>
-                  </div>
-
-               </div>
-            </div>
-         </div>
-
-
          <div class="row displayContent">
             <div class="col-md-12">
                <label for="username">Username</label>
@@ -47,16 +19,6 @@ require '../include/logic/php/php_editProfile.php';
                   value="<?php echo $userInfo['userName']; ?>" required>
                <small id="userHelp" class="form-text text-muted">Remember, this is your login username. Keep this
                   private.</small>
-            </div>
-         </div>
-
-         <div class="row displayContent">
-            <div class="col-md-12">
-               <label for="userPW">Password</label>
-               <input type="password" id="userPW" name="userPW" class="form-control"
-                  value="<?php echo $userInfo['userPW']; ?>">
-               <small id="innieHelp" class="form-text text-muted">Do not enter anything, if you want to keep the same
-                  Password.</small>
             </div>
          </div>
 
@@ -111,7 +73,11 @@ require '../include/logic/php/php_editProfile.php';
                   </select>
                </div>
             </div>
+            <?php else: ?>
+               <input type="hidden" id="isModerator" name="isModerator" class="form-control"
+                  value="NO" required>
          <?php endif ?>
+         
          <!------------>
 
 
@@ -123,6 +89,33 @@ require '../include/logic/php/php_editProfile.php';
             </div>
          </div>
       </form>
+
+      <form action="editProfile.php" method="POST" enctype="multipart/form-data">
+         <br><br><br>
+         <div class="row displayContent">
+            <div class="col-md-12">
+               <label for="userPW">Password</label>
+               <input type="text" id="userPW" name="userPW" class="form-control"
+                  placeholder="Enter New Password" required>
+               <small id="innieHelp" class="form-text text-muted"></small>
+               <input type="submit" class="customerOtherBtn" name="updatePwBtn" value="Change Password" onclick="return confirm('Confirm password change?')" />
+            </div>
+         </div>
+      </form>
+
+      
+      <form action="editProfile.php" method="POST" enctype="multipart/form-data">
+         <div class="row displayContent">
+            <div class="col-md-12">
+               <label for="inputInnie">Delete account</label>
+               <input type="hidden" id="userPW" name="userPW" class="form-control"
+                  placeholder="Retype Your Innie Handle to DELETE Your Account" required value="<?php echo $userInfo['userID']?> ">
+               <small id="innieHelp" class="form-text text-muted"></small>
+               <input type="submit" class="customerOtherBtn" name="deleteAccBtn" value="Delete Account" onclick="return confirm('Are you sure you wish to DELETE your account? This is permenant.')"/>
+            </div>
+         </div>
+      </form>
+
       <br>
       <?php echo $message ?>
    </div>

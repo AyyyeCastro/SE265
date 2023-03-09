@@ -114,16 +114,16 @@ if (isPostRequest()) {
       $listProdPrice = filter_input(INPUT_POST, 'listProdPrice');
       $listProdTitle = filter_input(INPUT_POST, 'listProdTitle');
       $listCond = filter_input(INPUT_POST, 'listCond');
-      $customerID = filter_input(INPUT_POST, 'customerID');
-      $sellerID = filter_input(INPUT_POST, 'sellerID');
       $orderID = uniqid();
       $isListSold = filter_input(INPUT_POST, 'isListSold');
 
       /* defaul sale msg */
       $parentID = $_POST['parentID'];
       /* get the $userID thensent it to the method */
-      $customerInnie = filter_input(INPUT_POST, 'customerInnie');
+      $sellerID = filter_input(INPUT_POST, 'sellerID');
       $sellerInnie = filter_input(INPUT_POST, 'sellerInnie');
+      $customerID = filter_input(INPUT_POST, 'customerID');
+      $customerInnie = filter_input(INPUT_POST, 'customerInnie');
       $messageTitle = filter_input(INPUT_POST, 'messageTitle');
       $messageDesc = filter_input(INPUT_POST, 'messageDesc');
       $isMessageReplied = filter_input(INPUT_POST, 'isMessageReplied');
@@ -149,7 +149,8 @@ if (isPostRequest()) {
             $customerID,
             $sellerID,
             $orderID,
-            $customerInnie
+            $customerInnie,
+            $sellerInnie
          )
          && $userDatabase->updateIsMessageReplied($priorMessageID, $updateStatus)
       ) {

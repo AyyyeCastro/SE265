@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+ob_start();
 require '../include/header.php';
 require '../include/logic/php/php_viewPurchaseHistory.php';
 ?>

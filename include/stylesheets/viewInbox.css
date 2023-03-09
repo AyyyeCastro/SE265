@@ -23,7 +23,7 @@ td:after {
 
 .unreplied {
   font-weight: bold;
-  background-color: #f0f0fa;
+  background-color: #e6e6f2;
 }
 
 .replied {
@@ -38,5 +38,5 @@ td:after {
 }
 .completedSale {
   font-weight: bold;
-  background-color: #ece5f9;
+  background-color:#F0F0FA;
 }

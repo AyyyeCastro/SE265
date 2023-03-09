@@ -124,7 +124,6 @@ require '../include/logic/php/php_postListing.php';
       </form>
    </div> <!-- main div -->
 </div>
-<?php include_once '../include/footer.php'; ?>
 </body>
 
 </html>

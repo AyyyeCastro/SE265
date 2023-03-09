@@ -23,7 +23,7 @@ if (isPostRequest()) {
       $orderID = filter_input(INPUT_POST, 'orderID');
 
       if ($userDatabase->giveUserRating($userID, $userRating, $orderID)) {
-         header("location: ../backend/viewProfile.php");
+         echo '<script>setTimeout(function() { window.location.href = "../backend/viewProfile.php"; }, 3500);</script>';
       }
    }
 }

@@ -9,6 +9,7 @@ $message = "";
 # -- Important -- #
 # Set the session outside of the post request, so that the forms can get pre-filled. 
 $userID = $_GET['userID'];
+
 $userInfo = $userDatabase->getUserDetails($userID);
 // Get all of the States from the database. Fills dropdown list.
 $stateList = $userDatabase->getAllStates();
@@ -35,22 +36,29 @@ if (isPostRequest()) {
       # This way if the user doesn't update their pic in the form, the previous image is still saved.
 
       #--- Profile Picture Traveling -- #
-      $file = $_FILES['userProfilePicture'];
-      if ($file['error'] != UPLOAD_ERR_NO_FILE) {
-         $fileDestination = '../uploaded/' . $file['name'];
-         move_uploaded_file($file['tmp_name'], $fileDestination);
+      if ($userDatabase->updateProfile($userName, $userInnie, $userBio, $userID, $userState, $isModerator)) {
+         header('Location: editUserProfile.php?userID='. $userInfo['userID']);
+      } else {
+         $message = "Error in updating profile, please try again.";
       }
-      # ---------------------------------#
+      
+      // I intentionally want mods/admins to have to go to modTools.php to delete an account.
+      // I dont like it being accessible at an editProfile menu for mods. 
+      // Important stuff like this should be more tedious to do, to prevent accidents.
+   }
+   if (isset($_POST['updatePwBtn'])) {
+      $userID = filter_input(INPUT_POST, 'userID');
+      $userPW = filter_input(INPUT_POST, 'userPW');
+      echo $userPW;
+      echo $userID;
 
-      if ($userDatabase->updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination, $userState, $isModerator)) {
-         header('Location: viewUsers.php?userID='. $userInfo['userID']);
+      if ($userDatabase->updatePW($userPW, $userID)) {
+         header('Location: viewUsers.php?userID='. $userID);
       } else {
          $message = "Error in updating profile, please try again.";
       }
    }
-   if (isset($_POST['cancelBtn'])) {
-      header('Location: viewUsers.php?userID='. $userInfo['userID']);
-   }
+
 }
 
 ?>

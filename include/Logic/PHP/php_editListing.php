@@ -1,6 +1,9 @@
 <?php
 $message = "";
-
+if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
+   header("location: ../login.php");
+   exit;
+}
 ## IMPORTANT -- A DELETE BUTTON WILL BE NEEDED. 
 ## NOT IMPLEMENTED YET.
 $deleteList = [];
@@ -55,20 +58,15 @@ if (isPostRequest()) {
             $listDesc,
             $listCond,
             $listState
-         )
+        )
       ) {
-         header("location: ../backend/viewProfile.php");
+         echo '<script>setTimeout(function() { window.location.href = "viewProfile.php"; }, 2);</script>';
       } else {
          $message = "Error posting new listing, please try again.";
       }
    }
    if (isset($_POST['cancelBtn'])) {
-      header('Location: viewProfile.php');
-   }
-   if (isset($_POST['deleteBtn'])) {
-      header('Location: viewProfile.php');
-      $listID = filter_input(INPUT_POST, 'listID');
-      $deleteList = $userDatabase->deleteUserLising($listID);
+      echo '<script>setTimeout(function() { window.location.href = "viewProfile.php"; }, 2);</script>';
    }
 }
 ?>

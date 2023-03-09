@@ -67,7 +67,7 @@ if (isPostRequest()) {
 <style>
   body,
   html {
-    height: 100%;
+    height: 100vh;
     font-size: 16px;
     font-family: 'Sora', sans-serif;
     color: #4C49D7;
@@ -79,18 +79,17 @@ if (isPostRequest()) {
     font-size: 65px;
   }
 
-  .container-fluid {
+  .bodyContainer{
     background-color: #4C49D7;
     padding: 35px;
-    height: 100vh;
+    height: 100%;
   }
 
-  .container {
+  .signUpContainer{
     border-radius: 15px;
-    margin-top: 250px;
     background-color: #231E39;
     max-width: 600px;
-    min-height: 800px;
+    max-height: 800px;
     padding: 100px;
   }
 
@@ -131,10 +130,11 @@ if (isPostRequest()) {
     background-color: #3C3AAC;
   }
 </style>
-
+<link rel="stylesheet" href="../include/stylesheets/global.css">
+<link rel="stylesheet" href="../include/stylesheets/plugInHome.css">
 <body>
-  <div class="container-fluid">
-    <div class="container">
+  <div class="container-fluid bodyContainer">
+    <div class="container signUpContainer">
 
       <div class="row">
         <div class="col-md-12">

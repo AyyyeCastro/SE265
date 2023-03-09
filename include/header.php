@@ -82,7 +82,7 @@ try {
 </style>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-xl navbar-light bg-light">
     <a class="navbar-brand" href="plugInHome.php">
       <img src="../include/materials/PI-Icon4.png" class="siteIcon" width="50" height="50"
         class="d-inline-block align-top" alt="">

@@ -1,4 +1,5 @@
 <?php
+
 if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
    header("location: ../login.php");
    exit;
@@ -19,30 +20,37 @@ if (isPostRequest()) {
       $userName = filter_input(INPUT_POST, 'userName');
       $userInnie = filter_input(INPUT_POST, 'userInnie');
       $userBio = filter_input(INPUT_POST, 'userBio');
-      $userPW = filter_input(INPUT_POST, 'userPW');
       $userState = filter_input(INPUT_POST, 'userState');
       $isModerator = filter_input(INPUT_POST, 'isModerator');
 
       # -- Profile Pictures -- #
       # -- IMPORTANT!!! -- #
       $userInfo = $userDatabase->getUserDetails($userID);
-      $fileDestination = $userInfo['userPic'];
-      # First it get's the userInfo stored in the MySQL database, which I have linked to getUserDetails($userID)
-      # Then set the DEFAULT $fileDestination to always be the previously set profile picture, stored in the DB.
-      # This way if the user doesn't update their pic in the form, the previous image is still saved.
 
-      #--- Profile Picture Traveling -- #
-      $file = $_FILES['userProfilePicture'];
-      if ($file['error'] != UPLOAD_ERR_NO_FILE) {
-         $fileDestination = '../uploaded/' . $file['name'];
-         move_uploaded_file($file['tmp_name'], $fileDestination);
-      }
-      # ---------------------------------#
-
-      if ($userDatabase->updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination, $userState, $isModerator)) {
-         header("location: ../backend/viewProfile.php");
+      if ($userDatabase->updateProfile($userName, $userInnie, $userBio, $userID, $userState, $isModerator)) {
+         echo '<script>setTimeout(function() { window.location.href = "editProfile.php"; }, 2);</script>';
       } else {
          $message = "Error in updating profile, please try again.";
+      }
+   }
+   if (isset($_POST['updatePwBtn'])) {
+      $userPW = filter_input(INPUT_POST, 'userPW');
+
+      if ($userDatabase->updatePW($userPW, $userID)) {
+         echo '<script>setTimeout(function() { window.location.href = "editProfile.php"; }, 2);</script>';
+      } else {
+         $message = "Error in updating profile, please try again.";
+      }
+   }
+   if (isset($_POST['deleteAccBtn'])) {
+      $sessionID = $_SESSION['userID'];
+      echo $sessionID;
+
+
+      if ($userDatabase->deleteAccount($sessionID)) {
+         echo '<script>setTimeout(function() { window.location.href = "editProfile.php"; }, 2);</script>';
+      } else {
+         $message = "Error in deleting profile, please try again.";
       }
    }
 }

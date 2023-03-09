@@ -3,104 +3,62 @@
 ob_start();
 require '../include/header.php';
 require '../include/logic/php/php_editUserProfile.php';
-?>
-<link rel="stylesheet" href="../include/stylesheets/global.css">
-<link rel="stylesheet" href="../include/stylesheets/editProfiles.css">
-<div class="container-fluid">
-   <div class="container editProfContainer">
-      <h1>Account Information</h1>
-      <!-- SUPER important. enctype="multipart/form-data" in order to allow inserting profile pics -->
-      <form action="editUserProfile.php" method="POST" enctype="multipart/form-data">
 
-         <div class="row">
-            <div class="col-md-12">
-               <img id="newUserPP" class="newUserPP rounded-circle img-overlay" />
+if ($modCheck['isModerator'] == 'YES' || $modCheck['isOwner'] == 'YES'):
+   ?>
+   <link rel="stylesheet" href="../include/stylesheets/global.css">
+   <link rel="stylesheet" href="../include/stylesheets/editProfiles.css">
+   <div class="container-fluid">
+      <div class="container editProfContainer">
+         <h1>Account Information</h1>
+         <!-- SUPER important. enctype="multipart/form-data" in order to allow inserting profile pics -->
+         <form action="editUserProfile.php" method="POST" enctype="multipart/form-data">
 
-               <div class="img-container">
-                  <?php
-                  $defaultAvie = "../include/default-avie/default-avie.jpg";
-                  if (is_null($userInfo['userPic']) || empty($userInfo['userPic'])) {
-                     echo "<img src= '$defaultAvie' class='ProfilePics rounded-circle' alt='profile picture'>";
-                  } else {
-                     echo "<img src='" . $userInfo['userPic'] . "' class='ProfilePics rounded-circle' alt='profile picture'>";
-                  }
-                  ?>
+         <input type="hidden" id="userID" name="userID" class="form-control" value="<?php echo $userID ?>"required>
 
-                  <div class="changePPBox">
-                     <div class="img-overlay">
-                        <label class="custom-file-upload">
-                           <input type="file" id="userProfilePicture" name="userProfilePicture" class="form-control"
-                              accept="image/*">
-                        </label>
-                     </div>
-                  </div>
 
+            <div class="row displayContent">
+               <div class="col-md-12">
+                  <label for="username">Username</label>
+                  <input type="text" id="userName" name="userName" class="form-control"
+                     value="<?php echo $userInfo['userName']; ?>" required>
+                  <small id="userHelp" class="form-text text-muted">Remember, this is your login username. Keep this
+                     private.</small>
                </div>
             </div>
-         </div>
 
-         <input type="hidden" id="userID" name="userID" class="form-control" value="<?php echo $userInfo['userID']; ?>"
-            required>
-
-         <div class="row displayContent">
-            <div class="col-md-12">
-               <label for="username">Username</label>
-               <input type="text" id="userName" name="userName" class="form-control"
-                  value="<?php echo $userInfo['userName']; ?>" required>
-               <small id="userHelp" class="form-text text-muted">Remember, this is your login username. Keep this
-                  private.</small>
-            </div>
-         </div>
-
-
-         <div class="row displayContent">
-            <div class="col-md-12">
-               <label for="userPW">Password</label>
-               <input type="password" id="userPW" name="userPW" class="form-control"
-                  value="<?php echo $userInfo['userPW']; ?>">
-               <small id="innieHelp" class="form-text text-muted">Do not enter anything, if you want to keep the same
-                  Password.</small>
-            </div>
-         </div>
-
-
-         <div class="row displayContent">
-            <div class="col-md-12">
-               <select class="form-control" id="userState" name="userState">
-                  <?php
-                  $selectedState = (isset($_GET["listState"])) ? $_GET["listState"] : $userInfo['userState'];
-                  echo '<option value="" ' . (($selectedState == '') ? 'selected' : '') . '>All States</option>';
-                  foreach ($stateList as $states) {
-                     $selected = ($states['stateName'] == $selectedState) ? 'selected' : '';
-                     echo '<option value="' . $states['stateName'] . '" ' . $selected . '>' . $states['stateName'] . '</option>';
-                  }
-                  ?>
-               </select>
+            <div class="row displayContent">
+               <div class="col-md-12">
+                  <label for="userInnie">Your Innie Handle (@)</label>
+                  <input type="text" id="userInnie" name="userInnie" class="form-control"
+                     value="<?php echo $userInfo['userInnie']; ?>" maxlength="15" required>
+                  <small id="innieHelp" class="form-text text-muted">Your public handle, and what people will see you
+                     as.</small>
+               </div>
             </div>
 
-         </div>
-
-
-         <div class="row displayContent">
-            <div class="col-md-12">
-               <label for="userInnie">Your Innie Handle (@)</label>
-               <input type="text" id="userInnie" name="userInnie" class="form-control"
-                  value="<?php echo $userInfo['userInnie']; ?>" maxlength="15" required>
-               <small id="innieHelp" class="form-text text-muted">Your public handle, and what people will see you
-                  as.</small>
+            <div class="row displayContent">
+               <div class="col-md-12">
+                  <select class="form-control" id="userState" name="userState">
+                     <?php
+                     $selectedState = (isset($_GET["listState"])) ? $_GET["listState"] : $userInfo['userState'];
+                     echo '<option value="" ' . (($selectedState == '') ? 'selected' : '') . '>All States</option>';
+                     foreach ($stateList as $states) {
+                        $selected = ($states['stateName'] == $selectedState) ? 'selected' : '';
+                        echo '<option value="' . $states['stateName'] . '" ' . $selected . '>' . $states['stateName'] . '</option>';
+                     }
+                     ?>
+                  </select>
+               </div>
             </div>
-         </div>
 
-         <div class="row displayContent">
-            <div class="col-md-12">
-               <label for="userBio">Bio</label>
-               <textarea id="userBio" name="userBio" class="form-control"
-                  required><?php echo $userInfo['userBio']; ?></textarea>
+            <div class="row displayContent">
+               <div class="col-md-12">
+                  <label for="userBio">Bio</label>
+                  <textarea id="userBio" name="userBio" class="form-control"
+                     required><?php echo $userInfo['userBio']; ?></textarea>
+               </div>
             </div>
-         </div>
-
-         <!--  Ensure this can only be viewed by ADMIN and/or MODS -->
-         <?php if ($modCheck['isModerator'] == 'YES' || $modCheck['isOwner'] == 'YES'): ?>
 
             <div class="row displayContent">
                <div class="col-md-12">
@@ -115,26 +73,38 @@ require '../include/logic/php/php_editUserProfile.php';
                   </select>
                </div>
             </div>
-         <?php endif ?>
-         <!------------>
-
-         <div class="row rowBtnPost">
-            <div class="col-sm-12">
-               <a href="viewProfile.php" class=""
-                  onclick="return confirm('This will remove all progress. Leave page?')">Cancel</a>
-               <input type="submit" class="customBtn" name="updateBtn" value="update" />
+            <div class="row rowBtnPost">
+               <div class="col-sm-12">
+                  <input type="submit" class="customBtn" name="updateBtn" value="update" />
+               </div>
             </div>
-         </div>
-      </form>
-      <br>
-      <?php echo $message ?>
+         </form>
+
+         <form action="editUserProfile.php" method="POST" enctype="multipart/form-data">
+            <br><br>
+            <div class="row displayContent">
+               <div class="col-md-12">
+               <input type="hidden" id="userID" name="userID" class="form-control" value="<?php echo $userID ?>" required>
+                  <label for="userPW">Password</label>
+                  <input type="text" id="userPW" name="userPW" class="form-control" placeholder="Enter New Password"
+                     required>
+                  <small id="innieHelp" class="form-text text-muted"></small>
+                  <input type="submit" class="customerOtherBtn" name="updatePwBtn" value="Change Password"
+                     onclick="return confirm('Confirm password change?')" />
+               </div>
+            </div>
+         </form>
+         <br>
+         <?php echo $message ?>
+      </div>
    </div>
-</div>
-</body>
+   </body>
 
-</html>
+   </html>'
+   <?php else: ?>
+      echo '<script>setTimeout(function() { window.location.href = "viewProfile.php"; }, 2);</script>';
+<?php endif ?>
 
-<?php include_once '../include/footer.php'; ?>
 <script>
    document.getElementById('userProfilePicture').onchange = function () {
       var src = URL.createObjectURL(this.files[0])
@@ -145,5 +115,4 @@ require '../include/logic/php/php_editUserProfile.php';
       document.getElementById("btnUpdatePPBox").innerHTML = "<button type='submit' class='btn btn-primary btnUpdatePP'><i class='fa-solid fa-square-check fa-xl'></i></button>";
 
    }
-
 </script>

@@ -69,7 +69,7 @@ $stateList = $userDatabase->getAllStates();
       $listArray = $userDatabase->getAllListings();
    }
 
-   $maxResults = 20; // number of results to show per page
+   $maxResults = 17; // number of results to show per page
    $totalResults = count($listArray); // total number of results
    $pageCount = ceil($totalResults / $maxResults); // calculate total pages
 

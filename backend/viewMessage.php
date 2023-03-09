@@ -57,7 +57,7 @@ require '../include/logic/php/php_viewMessage.php';
                            <?php echo $row['messageDesc']; ?>
                         <p>
                         </p class="messageSentOn">sent:
-                        <?php echo date("h-i A", strtotime($row['messageSentOn'])); ?>
+                        <?php echo date("h:i A", strtotime($row['messageSentOn'])); ?>
                         On
                         <?php echo date("Y-m-d", strtotime($row['messageSentOn'])); ?>
                         </p>
@@ -89,7 +89,7 @@ require '../include/logic/php/php_viewMessage.php';
                         </p>
                         </p class="messageSentOn">
                         sent:
-                        <?php echo date("h-i A", strtotime($row['messageSentOn'])); ?>
+                        <?php echo date("h:i A", strtotime($row['messageSentOn'])); ?>
                         On
                         <?php echo date("Y-m-d", strtotime($row['messageSentOn'])); ?>
                         </p>
@@ -119,13 +119,13 @@ require '../include/logic/php/php_viewMessage.php';
             <?php endforeach; ?>
          </div>
 
-         <div class="container newestMessageBox">
+         <div class="newestMessageBox">
             <div class="row-sm-12 newestMessage">
                <p>
                   <?php echo $messageDetails['messageDesc']; ?>
                </p>
                <p class="messageSentOn">sent:
-                  <?php echo date("h-i A", strtotime($messageDetails['messageSentOn'])); ?>
+                  <?php echo date("h:i A", strtotime($messageDetails['messageSentOn'])); ?>
                   On
                   <?php echo date("Y-m-d", strtotime($messageDetails['messageSentOn'])); ?>
                </p>
@@ -153,7 +153,7 @@ require '../include/logic/php/php_viewMessage.php';
             </div>
             <?php if (!empty($messageDetails['messagePics']) || !empty($messageDetails['messagePic2']) || !empty($messageDetails['messagePic3']) || !empty($messageDetails['messagePic4'])): ?>
                <div class="main-img" id="TestsDiv" style="display:none"">
-                                                                     <img src=""style=" object-fit: contain;
+                                                                        <img src=""style=" object-fit: contain;
                   object-position: center; background-color: #F6F6F6; height: 450px; width: 450px;">
                </div>
             <?php endif ?>
@@ -365,13 +365,17 @@ require '../include/logic/php/php_viewMessage.php';
                      value="<?php echo $receiverID ?>">
                </div>
                <div>
+                  <input type="hidden" class="form-control" id="sellerInnie" name="sellerInnie"
+                     value="<?php echo $sellerInnie ?>">
+               </div>
+               <div>
                   <input type="hidden" class="form-control" id="customerID" name="customerID"
                      value="<?php echo $senderInfo['userID'] ?>">
                </div>
                <!-- hidden condition: INSERT FOR THIS MESSAGE -->
                <div>
                   <input type="hidden" class="form-control" id="customerInnie" name="customerInnie"
-                     value="<?php echo $sellerInnie ?>">
+                     value="<?php echo $senderInfo['userInnie'] ?>">
                </div>
 
                <!-- hidden title, autogenerate RE | to mark as a reply.-->

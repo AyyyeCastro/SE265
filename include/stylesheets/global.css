@@ -43,6 +43,15 @@ input[type="file"] {
   text-align: center;
   background-color: gray;
 }
+.warningBtn{
+  margin-left: 5px;
+  border: 2px solid black;
+  border-radius: 15px;
+  padding: 6px 12px;
+  color: white;
+  text-align: center;
+  background-color: #cc0033;
+}
 .rowBtnPost {
   margin-top: 15px;
   float: right;

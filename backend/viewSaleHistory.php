@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+ob_start();
 require '../include/header.php';
 require '../include/logic/php/php_viewSaleHistory.php';
 ?>
@@ -29,7 +30,7 @@ require '../include/logic/php/php_viewSaleHistory.php';
                   <td>
                      <a href="viewUsers.php?userID=<?= $row['sellerID']; ?>">
                         <p class="sentFrom">
-                           <?php echo $row['customerInnie']; ?>
+                           <?php echo $row['sellerInnie']; ?>
                         </p>
                      </a>
                   </td>

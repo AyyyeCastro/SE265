@@ -159,7 +159,7 @@ require '../include/Logic/php/php_viewProfile.php';
                      <?php if ($userRating == 5): ?>
                         <!-- solid -->
                         <?php for ($i = 0; $i < 5; $i++): ?>
-                           <i class="fa-solid fa-star fa-lg"></i>>
+                           <i class="fa-solid fa-star fa-lg"></i>
                         <?php endfor; ?>
                      <?php endif ?>
                   </div>
@@ -185,15 +185,15 @@ require '../include/Logic/php/php_viewProfile.php';
       </div>
 
       <div class="productContainer">
-         <div class="row">
+         <div class="row rowContainer">
             <?php if (empty($userListLog)): ?>
-               <div class="col-md-12">
+               <div class="col-md-12 col-sm-12">
                   No products listed for sale.
                </div>
             <?php endif; ?>
             <?php foreach ($userListLog as $row): ?>
                <?php if ($row['isListSold'] != 'YES'): ?>
-                  <div class="col-lg-6 content">
+                  <div class="col-md-4 content">
                      <div class="row">
                         <!-- edit button -->
                         <a href="editListing.php?listID=<?= $row['listID']; ?>"><button class="customBtn showEditListing"

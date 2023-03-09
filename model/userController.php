@@ -173,7 +173,7 @@ class Users
         $userTable = $this->userData;
 
         $stmt = $userTable->prepare("UPDATE plugin_users SET userInnie = :newInnie 
-        WHERE userInnie = :oldInnie");
+        WHERE userInnie = :oldInnie AND isOwner ='NO'");
 
         $bindParameters = array(
             ":newInnie" => $newInnie,
@@ -182,6 +182,63 @@ class Users
 
         $isInnieUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isInnieUpdated);
+    }
+    public function modUpdateCat($newCat, $oldCat)
+    {
+        $isCatUpdated = false;
+        $userTable = $this->userData;
+
+        $stmt = $userTable->prepare("UPDATE plugin_categories SET catGenre = :newCat 
+        WHERE catGenre = :oldCat");
+
+        $bindParameters = array(
+            ":newCat" => $newCat,
+            ":oldCat" => $oldCat
+        );
+
+        $isCatUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isCatUpdated);
+    }
+    public function modUpdateCond($newCond, $oldCond)
+    {
+        $isCondUpdated = false;
+        $userTable = $this->userData;
+
+        $stmt = $userTable->prepare("UPDATE plugin_conditions SET condType = :newCond 
+        WHERE condType = :oldCond");
+
+        $bindParameters = array(
+            ":newCond" => $newCond,
+            ":oldCond" => $oldCond
+        );
+
+        $isCondUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isCondUpdated);
+    }
+    public function modDeleteCond($inputCond)
+    {
+        $isCondDeleted = false;
+        $userTable = $this->userData;
+
+        $stmt = $userTable->prepare("DELETE FROM plugin_conditions WHERE condType = :inputCond");
+
+        $bindParameters = array(
+            ":inputCond" => $inputCond
+        );
+
+        $isCondDeleted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isCondDeleted);
+    }
+    public function modDeleteUser($inputInnie)
+    {
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("DELETE FROM plugin_users WHERE userInnie = :inputInnie AND isOwner = 'NO'");
+        $bindParameters = array(":inputInnie" => $inputInnie);
+
+        if ($stmt->execute($bindParameters) && $stmt->rowCount() > 0) {
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
     }
 
     public function isUserMod($sessionID)
@@ -245,11 +302,31 @@ class Users
         return $stmt->fetch();
     }
 
-    public function modDeleteUser($inputInnie)
+
+    public function updateProfile($userName, $userInnie, $userBio, $userID, $userState, $isModerator)
+    {
+
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userInnie = :uInnie, 
+        userBio = :uBio, userState=:userState, isModerator=:isModerator
+        WHERE userID = :userID");
+
+        $bindParameters = array(
+            ":uName" => $userName,
+            ":uInnie" => $userInnie,
+            ":uBio" => $userBio,
+            ":userID" => $userID,
+            ":userState" => $userState,
+            ":isModerator" => $isModerator
+        );
+
+        return $stmt->execute($bindParameters);
+    }
+    public function deleteAccount($sessionID)
     {
         $userTable = $this->userData;
-        $stmt = $userTable->prepare("DELETE FROM plugin_users WHERE userInnie = :inputInnie");
-        $bindParameters = array(":inputInnie" => $inputInnie);
+        $stmt = $userTable->prepare("DELETE FROM plugin_users WHERE userID = :sessionID");
+        $bindParameters = array(":sessionID" => $sessionID);
 
         if ($stmt->execute($bindParameters) && $stmt->rowCount() > 0) {
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -257,36 +334,19 @@ class Users
         return false;
     }
 
-    public function updateProfile($userName, $userPW, $userInnie, $userBio, $userID, $fileDestination, $userState, $isModerator)
+    public function updatePW($userPW, $userID)
     {
         $userTable = $this->userData;
 
-        if ($userPW) {
-            $salt = random_bytes(32);
-            $hashedPW = sha1($salt . $userPW);
-            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userPW = :uPW, userSalt = :uSalt, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination, userState=:userState, isModerator=:isModerator WHERE userID = :userID");
-            $bindParameters = array(
-                ":uName" => $userName,
-                ":uPW" => $hashedPW,
-                ":uSalt" => $salt,
-                ":uInnie" => $userInnie,
-                ":uBio" => $userBio,
-                ":userID" => $userID,
-                ":fileDestination" => $fileDestination,
-                ":userState" => $userState,
-                ":isModerator" => $isModerator
-            );
-        } else {
-            $stmt = $userTable->prepare("UPDATE plugin_users SET userName = :uName, userInnie = :uInnie, userBio = :uBio, userPic = :fileDestination, userState=:userState WHERE userID = :userID");
-            $bindParameters = array(
-                ":uName" => $userName,
-                ":uInnie" => $userInnie,
-                ":uBio" => $userBio,
-                ":userID" => $userID,
-                ":fileDestination" => $fileDestination,
-                ":userState" => $userState
-            );
-        }
+        $salt = random_bytes(32);
+        $hashedPW = sha1($salt . $userPW);
+        $stmt = $userTable->prepare("UPDATE plugin_users SET userPW = :uPW, userSalt = :uSalt WHERE userID = :userID");
+        $bindParameters = array(
+            ":uPW" => $hashedPW,
+            ":uSalt" => $salt,
+            ":userID" => $userID,
+        );
+
         return $stmt->execute($bindParameters);
     }
 
@@ -376,23 +436,8 @@ class Users
         return $stmt->fetchAll();
     }
 
-    public function updateListCat($newCat, $oldCat)
-    {
-        $isCatUpdated = false;
-        $userTable = $this->userData;
 
-        $stmt = $userTable->prepare("UPDATE plugin_categories SET catGenre = :newCat 
-        WHERE catGenre = :oldCat");
-
-        $bindParameters = array(
-            ":newCat" => $newCat,
-            ":oldCat" => $oldCat
-        );
-
-        $isCatUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
-        return ($isCatUpdated);
-    }
-    public function deleteListCat($inputCat)
+    public function modDeleteCat($inputCat)
     {
         $isCatDeleted = false;
         $userTable = $this->userData;
@@ -406,7 +451,7 @@ class Users
         $isCatDeleted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isCatDeleted);
     }
-    public function insertNewCat($inputCat)
+    public function modNewCat($inputCat)
     {
         $isCatPosted = false;
         $userTable = $this->userData;
@@ -419,6 +464,20 @@ class Users
 
         $isCatPosted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isCatPosted);
+    }
+    public function modNewCond($inputCond)
+    {
+        $iCondPosted = false;
+        $userTable = $this->userData;
+
+        $stmt = $userTable->prepare("INSERT INTO plugin_conditions SET condType = :inputCond");
+
+        $bindParameters = array(
+            ":inputCond" => $inputCond,
+        );
+
+        $iCondPosted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($iCondPosted);
     }
 
 
@@ -599,6 +658,22 @@ class Users
         $isMsgSent = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isMsgSent);
     }
+    public function inboxHideConvo($parentID)
+    {
+
+        $isMsgHidden = false;
+        $userTable = $this->userData;
+
+        $stmt = $userTable->prepare("UPDATE plugin_messages SET isMessageHidden = 'YES' 
+        WHERE parentID = :parentID");
+
+        $bindParameters = array(
+            ":parentID" => $parentID
+        );
+
+        $isMsgHidden = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isMsgHidden);
+    }
 
 
 
@@ -719,12 +794,12 @@ class Users
     ###############################################
     ########### CONFIRMING SALE ##################
 
-    public function confirmSale($listID, $customerID, $sellerID, $orderID, $customerInnie)
+    public function confirmSale($listID, $customerID, $sellerID, $orderID, $customerInnie,$sellerInnie,)
     {
         $isListSold = false;
         $userTable = $this->userData;
 
-        $stmt = $userTable->prepare("UPDATE plugin_listings SET isListSold='YES', customerID=:customerID, sellerID=:sellerID,timeListsold=NOW(), orderID = :orderID, customerInnie=:customerInnie WHERE listID =:listID");
+        $stmt = $userTable->prepare("UPDATE plugin_listings SET isListSold='YES', customerID=:customerID, sellerID=:sellerID,timeListsold=NOW(), orderID = :orderID, customerInnie=:customerInnie, sellerInnie=:sellerInnie WHERE listID =:listID");
 
         $bindParameters = array(
             ":listID" => $listID,
@@ -732,6 +807,7 @@ class Users
             ":sellerID" => $sellerID,
             ":orderID" => $orderID,
             ":customerInnie" => $customerInnie,
+            ":sellerInnie"=>$sellerInnie,
         );
 
         $isListSold = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);

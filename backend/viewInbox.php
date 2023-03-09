@@ -22,14 +22,13 @@ require '../include/logic/php/php_viewInbox.php';
          <tbody>
             <!-- For every value stored in the array we decl2ared in the PHP section -->
             <?php foreach ($messageLog as $row): ?>
-               <?php if ($row['isMessageReplied'] == 'No'): ?>
-                  <tr class="unreplied <?php if (strpos($row['messageTitle'], 'RE | SALE CONFIRMED:') !== false) echo 'completedSale'; ?>">
+               <?php if ($row['isMessageReplied'] == 'No' && $row['isMessageHidden'] != 'YES'): ?>
+                  <tr class="unreplied <?php if (strpos($row['messageTitle'], 'RE | SALE CONFIRMED:') !== false)
+                     echo 'completedSale'; ?>">
                      <td>
-                        <!-- form to manage post requests -->
-                        <form action="" method="post">
-                           <!-- hidden listID field. -->
-                           <input type="hidden" name="customerID" value="<?= $row['customerID']; ?>" />
-                           <input type="hidden" name="messageID" value="<?= $row['messageID']; ?>" />
+                        <form action="viewInbox.php" method="post" enctype="multipart/form-data">
+                           <input type="hidden" name="parentID" id='parentID' value="<?= $row['parentID']; ?>" />
+                           <button type="submit" class="customerOtherBtn" name="btnHideMsg" onclick="return confirm('Delete Entire Conversation?')"><i class="fa-solid fa-trash"></i></button>
                         </form>
                      </td>
                      <td>
@@ -55,14 +54,15 @@ require '../include/logic/php/php_viewInbox.php';
                         </p>
                      </td>
                   </tr>
-               <?php else: ?>
-                  <tr class="replied <?php if (strpos($row['messageTitle'], 'RE | SALE CONFIRMED:') !== false) echo 'completedSale'; ?>"">
+               <?php endif ?>
+               <?php if ($row['isMessageReplied'] != 'No' && $row['isMessageHidden'] != 'YES'): ?>
+                  <tr
+                     class="replied <?php if (strpos($row['messageTitle'], 'RE | SALE CONFIRMED:') !== false)
+                        echo 'completedSale'; ?>">
                      <td>
-                        <!-- form to manage post requests -->
-                        <form action="" method="post">
-                           <!-- hidden listID field. -->
-                           <input type="hidden" name="customerID" value="<?= $row['customerID']; ?>" />
-                           <input type="hidden" name="messageID" value="<?= $row['messageID']; ?>" />
+                        <form action="viewInbox.php" method="post" enctype="multipart/form-data">
+                           <input type="hidden" name="parentID" id='parentID' value="<?= $row['parentID']; ?>" />
+                           <button type="submit" class="customerOtherBtn" name="btnHideMsg" onclick="return confirm('Delete Entire Conversation?')"><i class="fa-solid fa-trash"></i></button>
                         </form>
                      </td>
                      <td>
@@ -76,7 +76,8 @@ require '../include/logic/php/php_viewInbox.php';
                         </p>
                      </td>
                      <td class="">
-                        <a href="viewMessage.php?messageID=<?php echo $row['messageID']; ?>&parentID=<?php echo $row['parentID']; ?>&receiverID=<?= $row['customerID']; ?>&receiverInnie=<?= $row['customerInnie']; ?>" class="customLink">
+                        <a href="viewMessage.php?messageID=<?php echo $row['messageID']; ?>&parentID=<?php echo $row['parentID']; ?>&receiverID=<?= $row['customerID']; ?>&receiverInnie=<?= $row['customerInnie']; ?>"
+                           class="customLink">
                            <?php echo $row['messageTitle']; ?>
                         </a>
                      </td>
