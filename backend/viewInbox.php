@@ -28,12 +28,16 @@ require '../include/logic/php/php_viewInbox.php';
                      <td>
                         <form action="viewInbox.php" method="post" enctype="multipart/form-data">
                            <input type="hidden" name="parentID" id='parentID' value="<?= $row['parentID']; ?>" />
-                           <button type="submit" class="customerOtherBtn" name="btnHideMsg" onclick="return confirm('Delete Entire Conversation?')"><i class="fa-solid fa-trash"></i></button>
+                           <button type="submit" class="customerOtherBtn" name="btnHideMsg" onclick="return confirm('This will delete the entire conversation from everyone in the group. Are you sure?')">
+                              <i class="fa-solid fa-trash fa-xs"></i>
+                           </button>
                         </form>
                      </td>
                      <td>
                         <p class="sentFrom">
-                           <?php echo $row['customerInnie']; ?>
+                           <a href="viewUsers.php?userID=<?php echo $row['customerID'];?>">
+                              <?php echo $row['customerInnie']; ?>
+                           </a>
                         </p>
                      </td>
                      <td>
@@ -50,7 +54,7 @@ require '../include/logic/php/php_viewInbox.php';
                      </td>
                      <td>
                         <p class="messageSentOn">
-                           <?php echo date("Y-m-d h-i A", strtotime($row['messageSentOn'])); ?>
+                           <?php echo date("Y-m-d h:i A", strtotime($row['messageSentOn'])); ?>
                         </p>
                      </td>
                   </tr>
@@ -67,11 +71,13 @@ require '../include/logic/php/php_viewInbox.php';
                      </td>
                      <td>
                         <p class="sentFrom">
-                           <?php echo $row['customerInnie']; ?>
+                           <a href="viewUsers.php?userID=<?php echo $row['customerID'];?>">
+                              <?php echo $row['customerInnie']; ?>
+                           </a>
                         </p>
                      </td>
                      <td>
-                        <p class="listID">
+                        <p class="listID">   
                            <?php echo $row['listID']; ?>
                         </p>
                      </td>
@@ -83,7 +89,7 @@ require '../include/logic/php/php_viewInbox.php';
                      </td>
                      <td>
                         <p class="messageSentOn">
-                           <?php echo date("Y-m-d h-i A", strtotime($row['messageSentOn'])); ?>
+                           <?php echo date("Y-m-d h:i A", strtotime($row['messageSentOn'])); ?>
                         </p>
                      </td>
                   </tr>

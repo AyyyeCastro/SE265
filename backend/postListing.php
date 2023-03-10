@@ -54,21 +54,28 @@ require '../include/logic/php/php_postListing.php';
          <br>
          <div>
             <label for="inputProdDesc">Product Description:</label> <!-- listSummary in the db -->
-            <textarea id="inputProdDesc" class="form-control" name="inputProdDesc" rows="5"></textarea>
+            <textarea id="inputProdDesc" class="form-control" name="inputProdDesc" rows="5" placeholder="Type something about your item. You can also include extra descriptionary images."></textarea>
             <script>
-               tinymce.init({
+                  tinymce.init({
                   selector: '#inputProdDesc',
-                  height: 200,
-                  menubar: false,
-                  plugins: [
-                     'advlist autolink lists link image charmap print preview anchor',
-                     'searchreplace visualblocks code fullscreen',
-                     'insertdatetime media table paste code help wordcount', 'autoresize',
-                  ],
-                  toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
-                  content_css: '//www.tiny.cloud/css/codepen.min.css'
-               });
-            </script>
+                  plugins: 'quickbars table image link lists media autoresize help',
+                  toolbar: 'undo redo | formatselect | bold italic | alignleft aligncentre alignright alignjustify | indent outdent | bullist numlist',
+                  content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+                  });
+                  tinymce.init({
+                     selector: '#inputProdDesc',
+                     height: 200,
+                     menubar: false,
+                     plugins: [
+                        'quickbars, advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount',
+                        'autoresize','emoticons','fullscreen','hr', 'image', 'preview'
+                     ],quickbars_image_toolbar: true,
+                     toolbar: 'formatselect  undo redo | formatselect | bold italic backcolor image | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent hr | removeformat | fullscreen preview | emoticons table',
+                     content_css: '//www.tiny.cloud/css/codepen.min.css'
+                  });
+               </script>
          </div>
 
          <br>

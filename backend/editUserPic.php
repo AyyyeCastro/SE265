@@ -1,9 +1,7 @@
-<!DOCTYPE html>
 <?php
 ob_start();
 require '../include/header.php';
 
-session_start();
 if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
    header("location: ../login.php");
    exit;
@@ -13,7 +11,7 @@ $message = "";
 
 # -- Important -- #
 # Set the session outside of the post request, so that the forms can get pre-filled. 
-$userID = $_SESSION['userID'];
+$userID = $_GET['userID'];
 $userInfo = $userDatabase->getUserDetails($userID);
 # ----------------#
 
@@ -27,7 +25,7 @@ if (isPostRequest()) {
    # ---------------------- #
 
    if ($userDatabase->updatePP($fileDestination, $userID)) {
-      header("location: ../backend/viewProfile.php");
+      header("location: ../backend/viewUsers.php?userID=" . $userID);
    } else {
       $message = "Error in updating profile, please try again.";
    }

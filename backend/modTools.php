@@ -8,6 +8,12 @@ $modCheck = $userDatabase->getUserDetails($userID);
 
 if ($modCheck['isModerator']== 'YES'):
 ?>
+
+
+<!-- PLEASE NOTE:
+THIS WAS EXTRA WORK I DID IN WEEK 8/9. It was not originally a core design -->
+
+
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/modTools.css">
 <div class="container-fluid">

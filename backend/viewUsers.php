@@ -59,7 +59,7 @@ require '../include/logic/php/php_viewUsers.php';
                <div class="row userRating showCount">
                   <div class="col-sm-12">
                      <!-- 0 star -->
-                     <?php if ($userRating == 0): ?>s
+                     <?php if ($userRating == 0): ?>
                         <?php for ($i = 0; $i < 5; $i++): ?>
                            <i class="fa-regular fa-star fa-lg"></i>
                         <?php endfor; ?>

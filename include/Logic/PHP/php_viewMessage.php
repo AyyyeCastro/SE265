@@ -154,9 +154,7 @@ if (isPostRequest()) {
          )
          && $userDatabase->updateIsMessageReplied($priorMessageID, $updateStatus)
       ) {
-         header('Location: viewInbox.php');
-         $message = "This product has been sold!";
-
+         header('Location: viewSaleHistory.php');
       } else {
          $message = "Error selling, please try again.";
       }

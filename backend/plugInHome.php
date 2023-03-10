@@ -22,12 +22,12 @@ require "../include/header.php";
                </div>
                <div class="carousel-item active">
                   <a
-                     href="displayResults.php?search_option=Products&inputName=JUJU&search=Search">
+                     href="displayResults.php?inputName=&listProdCat=Manga&listState=&search=Search">
                      <img src="../include/slideshow/shopManga.png" alt="Second slide">
                   </a>
                </div>
                <div class="carousel-item">
-                  <a href="#">
+                  <a href="displayResults.php?inputName=&listProdCat=Accessories&listState=&search=Search">
                      <img src="../include/slideshow/shopAcc.png" alt="Third slide">
                   </a>
                </div>

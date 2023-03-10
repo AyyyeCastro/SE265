@@ -884,8 +884,9 @@ class Users
             "orderID" => $orderID
         );
         $stmt->execute($bindParameters);
-        return $stmt->fetchAll();
+        return true;
     }
+    
 
     function isAlreadyRated($orderID)
     {
@@ -914,11 +915,13 @@ class Users
         $stmt->execute(array(':userID' => $userID));
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
-            return round($result['userRating'], 1);
+            $rating = round($result['userRating'] * 2) / 2; 
+            return $rating >= 1 ? $rating : 1;
         } else {
             return 0;
         }
     }
+    
 
     function getRatingCount($userID)
     {

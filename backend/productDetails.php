@@ -57,21 +57,8 @@ require "../include/logic/php/php_productDetails.php";
                <div class="listCond">
                   <?= $listDetails['listCond']; ?>
                </div>
-               <div class="timeListsold">SOLD ON:
-                  <?= $listDetails['timeListsold']; ?>
-               </div>
-               <div class="customerInnie">
-                  Seller:
-                  <a href="viewUsers.php?userID=<?= $sellerInfo['userID']; ?>">
-                     <?= $sellerInfo['userInnie']; ?>
-                  </a>
-               </div>
-               <div class="listSeller">Buyer:
-                  <a href="viewUsers.php?userID=<?= $listDetails['sellerID']; ?>">
-                     <?= $listDetails['sellerInnie']; ?>
-               </div>
-               </a>
-               <?php if ($sellerInfo['userID'] != $loginID && $isAlreadyRated == false): ?>
+              
+               <?php if ($sellerInfo['userID'] != $loginID && $isAlreadyRated == false && isset($_SESSION['userID'])): ?>
                   <form action="productDetails.php" method="post">
                      <div class="form-group">
                         <label for="userRating">Transaction Rating:</label>
@@ -89,12 +76,23 @@ require "../include/logic/php/php_productDetails.php";
                   </form>
                <?php endif ?>
                <div class="underBtnText">
-                  <div class="listSeller">Seller:
-                     <?= $sellerInfo['userInnie']; ?>
-                  </div>
                   <div class="listState">State:
                      <?= $listDetails['listState']; ?>
                   </div>
+                  <div class="timeListsold">SOLD ON:
+                  <?= $listDetails['timeListsold']; ?>
+               </div>
+               <div class="customerInnie">
+                  Seller:
+                  <a href="viewUsers.php?userID=<?= $sellerInfo['userID']; ?>">
+                     <?= $sellerInfo['userInnie']; ?>
+                  </a>
+               </div>
+               <div class="listSeller">Buyer:
+                  <a href="viewUsers.php?userID=<?= $listDetails['sellerID']; ?>">
+                     <?= $listDetails['sellerInnie']; ?>
+                  </a>
+               </div>
                </div>
             </div>
          <?php endif ?>
