@@ -3,12 +3,19 @@
 ob_start();
 require '../include/header.php';
 require '../include/logic/php/php_editListing.php';
+$modCheck = $userDatabase->getUserDetails($userID);
+
+
+if ($_SESSION['userID'] == $listDetails['userID'] || $modCheck['isModerator']== 'YES'):
 ?>
+
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/editListing.css">
 <div class="container-fluid">
    <div class="container editListingContainer">
       <form action="editListing.php" method="post" enctype="multipart/form-data">
+         <input type="hidden" name="visitID" value="<?php echo $listDetails['userID']; ?>">
+
          <div>
             <input type="hidden" id="listID" name="listID" value="<?= $listDetails['listID']; ?>" />
          </div>
@@ -88,7 +95,7 @@ require '../include/logic/php/php_editListing.php';
                   <option value="" disabled>Choose category</option>
                   <?php
                   foreach ($condList as $condition) {
-                     $selected = ($condition['condType'] == $listDetails['listCondition']) ? 'selected' : '';
+                     $selected = ($condition['condType'] == $listDetails['listCond']) ? 'selected' : '';
                      echo '<option value="' . $condition['condType'] . '" ' . $selected . '>' . $condition['condType'] . '</option>';
                   }
                   ?>
@@ -108,3 +115,5 @@ require '../include/logic/php/php_editListing.php';
 </body>
 
 </html>
+<?php else: header("location: ../backend/viewProfile.php"); ?>
+<?php endif ?>

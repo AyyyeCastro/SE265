@@ -197,19 +197,21 @@ require '../include/logic/php/php_viewUsers.php';
             <?php foreach ($userListLog as $row): ?>
                <?php if ($row['isListSold'] != 'YES'): ?>
                   <div class="col-sm-3 content">
-                     <div class="row">
-                        <!-- edit button -->
-                        <a href="editListing.php?listID=<?= $row['listID']; ?>"><button class="btn btn-primary showEdit"
-                              name="cancelbtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
-                        <form action="viewProfile.php" method="post">
-                           <!-- delete button -->
-                           <button type="submit" class="btn btn-warning showEdit" name="btnDelete"
-                              onclick="return confirm('Are you sure you want to delete this listing? It is a permenant decision.')"><i
-                                 class="fa-solid fa-trash"></i></button>
+                     <?php if ($modCheck['isModerator'] == 'YES' || $modCheck['isOwner'] == 'YES'): ?>
+                        <div class="row">
+                           <!-- edit button -->
+                           <a href="editListing.php?listID=<?= $row['listID']; ?>"><button class="customBtn showEditListing"
+                                 name="cancelbtn"><i class="fa-solid fa-pen-to-square"></i></button></a>
+                           <form action="viewProfile.php" method="post">
+                              <!-- delete button -->
+                              <button type="submit" class="customerOtherBtn showDeleteListing" name="btnDelete"
+                                 onclick="return confirm('Are you sure you want to delete this listing? It is a permenant decision.')"><i
+                                    class="fa-solid fa-trash"></i></button>
 
-                           <input type="hidden" id="listID" name="listID" value="<?= $row['listID']; ?>" />
-                        </form>
-                     </div>
+                              <input type="hidden" id="listID" name="listID" value="<?= $row['listID']; ?>" />
+                           </form>
+                        </div>
+                     <?php endif; ?>
                      <a href="productDetails.php?listID=<?= $row['listID']; ?>">
                         <div class="listProdPic"><img src="<?= $row['listProdPic']; ?>"
                               style="object-fit: contain; object-position: center; width: 230px; height: 230px; background-color: #F6F6F6;">

@@ -21,14 +21,10 @@ if (isGetRequest()) {
    $listDetails = $userDatabase->getListForm($listID);
    $catList = $userDatabase->getAllCategories();
    $condList = $userDatabase->getAllConditions();
-
-
-   # DEBUG - DUMP THE listDetails array.
-   #echo '<br><br> this is the listDetails container <br><br>';
-   #var_dump($listDetails);
-   #echo '<br><br>';
-
 }
+$visitID = filter_input(INPUT_POST, 'visitID');
+$visitCrumb = 'viewUsers.php?userID=' . $visitID;
+
 
 if (isPostRequest()) {
    if (isset($_POST['updateBtn'])) {
@@ -60,7 +56,7 @@ if (isPostRequest()) {
             $listState
         )
       ) {
-         echo '<script>setTimeout(function() { window.location.href = "viewProfile.php"; }, 2);</script>';
+         header("location: $visitCrumb");
       } else {
          $message = "Error posting new listing, please try again.";
       }

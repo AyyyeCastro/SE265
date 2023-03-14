@@ -916,7 +916,7 @@ class Users
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($result) {
             $rating = round($result['userRating'] * 2) / 2; 
-            return $rating >= 1 ? $rating : 1;
+            return $rating >= 1 ? $rating : 0;
         } else {
             return 0;
         }

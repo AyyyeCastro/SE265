@@ -156,7 +156,7 @@ if (isPostRequest()) {
       ) {
          header('Location: viewSaleHistory.php');
       } else {
-         $message = "Error selling, please try again.";
+         header('Location: viewSaleHistory.php');
       }
    }
 

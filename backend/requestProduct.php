@@ -139,7 +139,7 @@ require "../include/logic/php/php_requestProduct.php";
             </div>
             <div class="row rowBtnPost">
                <div class="col-sm-12">
-                  <button class="customBtn" name="btnSend">Reply Back</button>
+                  <button class="customBtn" name="btnSend">Request</button>
                </div>
             </div>
          </form>

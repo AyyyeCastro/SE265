@@ -23,7 +23,7 @@ require '../include/Logic/php/php_viewProfile.php';
                   ?>
 
                   <div class="changePPBox">
-                     <form action="editUserPic.php" method="POST" enctype="multipart/form-data">
+                     <form action="editPP.php" method="POST" enctype="multipart/form-data">
                         <div>
                            <input type="hidden" id="userID" name="userID" class="form-control"
                               value="<?php echo $userID ?>" required>

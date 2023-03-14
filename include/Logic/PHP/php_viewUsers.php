@@ -7,6 +7,7 @@ if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
    header("location: ../login.php");
    exit;
 }
+
 $userInfo = $userDatabase->getUserDetails($userID);
 $userListLog = $userDatabase->getUserListing($userID);
 $userRating = $userDatabase->getAvgRating($userID);
