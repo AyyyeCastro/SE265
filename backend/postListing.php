@@ -81,6 +81,7 @@ require '../include/logic/php/php_postListing.php';
          <br>
          <div class="row rowCustomFiles">
             <div class="col-sm-12">
+            <small class="form-text text-muted">First photo is required.</small>
                <label for="sendPic" class="customFiles" id="customFile1"><i class="fa-solid fa-image fa-lg"></i>
                   Insert Photo
                   <input type="file" id="sendPic" name="sendPic" accept="image/*" required>

@@ -48,10 +48,16 @@ if (isPostRequest()) {
       echo $sessionID;
 
 
-      if ($userDatabase->deleteAccount($sessionID)) {
-         echo '<script>setTimeout(function() { window.location.href = "editProfile.php"; }, 2);</script>';
+      if ($userDatabase->deleteAccountListings($sessionID) && $userDatabase->deleteAccount($sessionID)) {
+         session_start();
+         session_unset();
+         session_destroy();
+         header("location: plugInHome.php"); 
       } else {
-         $message = "Error in deleting profile, please try again.";
+         session_start();
+         session_unset();
+         session_destroy();
+         header("location: plugInHome.php"); 
       }
    }
 }

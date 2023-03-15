@@ -8,6 +8,7 @@ require '../include/logic/php/php_viewUsers.php';
 <link rel="stylesheet" href="../include/stylesheets/viewProfiles.css">
 <div class="fullVH">
    <div class="container viewProfileContainer">
+   <?php if (!empty($userInfo)):?>
       <div class="profileContainer">
          <div class="row">
             <div class="col-md-4">
@@ -238,6 +239,11 @@ require '../include/logic/php/php_viewUsers.php';
             <?php endforeach; ?>
          </div>
       </div>
+      <?php else: 
+         echo 'User does not exist, or could not be retrieved. Redirecting back to your profile.'; 
+         echo '<script>setTimeout(function() { window.location.href = "viewProfile.php"; }, 3500);</script>';
+         ?>
+      <?php endif ?>
    </div>
    </body>
 

@@ -6,6 +6,9 @@ require "../include/logic/php/php_productDetails.php";
 ?>
 <link rel="stylesheet" href="../include/stylesheets/global.css">
 <link rel="stylesheet" href="../include/stylesheets/productDetails.css">
+<?php if (empty($listDetails)){
+   header('Location: plugInHome.php');
+   }?>
 <div class="container">
    <div class="row">
       <div class="col-md-7 listImgBox">

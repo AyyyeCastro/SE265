@@ -176,6 +176,9 @@ class Users
         return false;
     }
     // modTools.php function, used to update userInnie.
+    // IMPORTANT NOTE: WHERE userInnie = :oldInnie AND isOwner ='NO'
+    // isOwner is plugin's profile. Mods can not update the userInnie of an owner. (they are of higher clearance).
+    // same logic can be used to create elevated roles, such as 'admins'. 
     public function modUpdateUser($newInnie, $oldInnie)
     {
         $isInnieUpdated = false;
@@ -183,6 +186,8 @@ class Users
 
         $stmt = $userTable->prepare("UPDATE plugin_users SET userInnie = :newInnie 
         WHERE userInnie = :oldInnie AND isOwner ='NO'");
+        // where userInnie = oldInnie, means that the selected userInnie from the dropdown is a match to one in the db.
+        // newInnie updates the userInnie of the user selected from the dropdown. 
 
         $bindParameters = array(
             ":newInnie" => $newInnie,
@@ -192,6 +197,8 @@ class Users
         $isInnieUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isInnieUpdated);
     }
+
+    
     // modTools.php function, used to update categories.
     public function modUpdateCat($newCat, $oldCat)
     {
@@ -360,6 +367,17 @@ class Users
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
         return false;
+    }
+    // Whent the user delete's their account, delete all listings tied to their account.
+    public function deleteAccountListings($sessionID)
+    {
+        $isListingDeleted = false;
+        $userTable = $this->userData;
+        $stmt = $userTable->prepare("DELETE FROM plugin_listings WHERE userID = :sessionID");
+        $bindParameters = array(":sessionID" => $sessionID);
+
+        $isListingDeleted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
+        return ($isListingDeleted);
     }
 
     // Allows user to update their password.

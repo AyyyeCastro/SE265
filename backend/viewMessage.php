@@ -8,7 +8,10 @@ require '../include/logic/php/php_viewMessage.php';
 <link rel="stylesheet" href="../include/stylesheets/viewMessage.css">
 <div class="container">
    <h2>Messaging</h2>
+
+   
    <div class="row profileObject">
+   <?php if (!empty($profileInfo)):?>
       <div class="col-md-4">
          <div class="img-container">
             <?php
@@ -40,7 +43,10 @@ require '../include/logic/php/php_viewMessage.php';
             <?php echo $profileInfo['userBio']; ?>
          </p>
       </div>
+      <?php else: echo '<div class="noProduct">User no longer exists, or could be retrieved.</div>'; ?>
+      <?php endif ?>
    </div> <!-- end user's profile -->
+   
 
 
    <!-- Message -->
@@ -160,6 +166,7 @@ require '../include/logic/php/php_viewMessage.php';
          </div>
       </div> <!-- end history and newest message -->
 
+      <?php if (!empty($listDetails)):?>
       <div class="col-lg-12 msgReply">
          <!-- reply -->
          <form action="viewMessage.php" method="post" enctype="multipart/form-data">
@@ -218,6 +225,7 @@ require '../include/logic/php/php_viewMessage.php';
                      value="RE | SALE INQUIRY: <?= $listDetails['listProdTitle']; ?>">
                <?php endif; ?>
             </div>
+            <?php if ($messageDetails['isMessageReplied']!='Yes'):?>
             <!-- User enter message -->
             <div>
                <textarea class="form-control" id="messageDesc" name="messageDesc" rows="2" maxlength="275"
@@ -275,11 +283,14 @@ require '../include/logic/php/php_viewMessage.php';
                   <button class="customBtn" name="btnSend">Reply Back</button>
                </div>
             </div>
+            <?php else: echo '<div class="noProduct">Already replied to this message.</div>'; ?>
+            <?php endif ?>
          </form>
+         <?php else: echo '<div class="noProduct"> Cannot reply, since product could not be retrieved from the database, or was removed.</div>' ?>
       </div>
+      <?php endif ?>
    </div>
 </div>
-
 
 <div class="container requestInfoContainer">
    <!-- request info -->
@@ -288,7 +299,8 @@ require '../include/logic/php/php_viewMessage.php';
       <div class="col-sm-12">
          <p class="msgHeader">About</p>
       </div>
-
+      
+      <?php if (!empty($listDetails)):?>
       <div class="col-sm listImgBox">
          <!-- posted from this user -->
          <input type="hidden" name="sellerID" value="<?= $listDetails['userID']; ?>" />
@@ -336,7 +348,7 @@ require '../include/logic/php/php_viewMessage.php';
             <?= $listDetails['listCond']; ?>
          </div>
       </div>
-
+      
       <!-- If the session ID (logged in User's ID) is equal to the ID of the user who posted the sale -->
       <?php if ($_SESSION['userID'] == $listDetails['userID'] && $listDetails['isListSold'] != 'YES'): ?>
          <div class="col-sm-12">
@@ -396,6 +408,8 @@ require '../include/logic/php/php_viewMessage.php';
          </div>
       <?php endif ?>
    </div> <!-- close requestInfo row-->
+   <?php else: echo '<div class="noProduct">Product could not be retrieved from the database, or was removed.</div>'; ?>
+   <?php endif ?>
 </div>
 </body>
 
