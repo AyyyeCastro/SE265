@@ -7,7 +7,7 @@ class Users
     const saltPW = "saltedPW";
 
 
-    public function __construct($configFile)
+    public function __construct($configFile) // $configFile declared in header.php
     {
         if ($ini = parse_ini_file($configFile)) {
             $userDB = new PDO(
@@ -28,6 +28,7 @@ class Users
         }
     }
 
+    // fetches all states from the plugin_states database.
     public function getAllStates()
     {
         $userTable = $this->userData;
@@ -37,6 +38,7 @@ class Users
         return $stmt->fetchAll();
     }
 
+    // Inserts signup information to the database.
     public function userSignup($userName, $PW, $userInnie, $userBio, $userState)
     {
         $isUserAdded = false;
@@ -67,6 +69,7 @@ class Users
     }
 
 
+    // compare the signed up userInnie to ones store in the db. If the userInniq exists already, an error will show in signup.php.
     function userUniqueInnie($userInnie)
     {
         $userTable = $this->userData;
@@ -87,6 +90,7 @@ class Users
         }
     }
 
+    // compare the signed up userName to ones store in the db. If the userName exists already, an error will show in signup.php.
     function userUniqueUN($userName)
     {
         $userTable = $this->userData;
@@ -114,6 +118,7 @@ class Users
     }
 
 
+    // compare login info to the db. If the information is correct, allow login.
     public function isUserTrue($userName, $PW)
     {
         $isUserTrue = false;
@@ -133,6 +138,7 @@ class Users
         return $isUserTrue;
     }
 
+    // get's user details by their userInnie. (acceptable since innie is a unique identifer)
     public function getProfileByName($profileName)
     {
         $userTable = $this->userData;
@@ -145,6 +151,7 @@ class Users
         return false;
     }
 
+    // gets user details by the userID.
     public function getUserDetails($userID)
     {
         $userTable = $this->userData;
@@ -157,6 +164,7 @@ class Users
         return false;
     }
 
+    // Get all users from the db. 
     public function getAllUsers()
     {
         $userTable = $this->userData;
@@ -167,6 +175,7 @@ class Users
         }
         return false;
     }
+    // modTools.php function, used to update userInnie.
     public function modUpdateUser($newInnie, $oldInnie)
     {
         $isInnieUpdated = false;
@@ -183,6 +192,7 @@ class Users
         $isInnieUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isInnieUpdated);
     }
+    // modTools.php function, used to update categories.
     public function modUpdateCat($newCat, $oldCat)
     {
         $isCatUpdated = false;
@@ -199,6 +209,7 @@ class Users
         $isCatUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isCatUpdated);
     }
+    // modTools.php function, used to update conditions.
     public function modUpdateCond($newCond, $oldCond)
     {
         $isCondUpdated = false;
@@ -215,6 +226,8 @@ class Users
         $isCondUpdated = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isCondUpdated);
     }
+
+    // modTools.php function, used to delete conditions.
     public function modDeleteCond($inputCond)
     {
         $isCondDeleted = false;
@@ -229,6 +242,8 @@ class Users
         $isCondDeleted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isCondDeleted);
     }
+
+    // modTools.php function, used to delete user accounts.
     public function modDeleteUser($inputInnie)
     {
         $userTable = $this->userData;
@@ -241,6 +256,7 @@ class Users
         return false;
     }
 
+    // Get's the userID from the logged in session['userID']. Where this function is called, it checks if isModerator =='YES'. 
     public function isUserMod($sessionID)
     {
         $userTable = $this->userData;
@@ -253,6 +269,7 @@ class Users
         return false;
     }
 
+    // Get's the userID from the logged in session['userID']. Where this function is called, it checks if isModerator =='YES'. 
     public function headerModCheck($sessionID)
     {
         $userTable = $this->userData;
@@ -269,6 +286,7 @@ class Users
     }
 
 
+    // Get's the details of a customer for a transaction. (Customer may be synonymous as 'receiver' in functionality)
     public function getCustomerDetails($customerID)
     {
         $userTable = $this->userData;
@@ -281,6 +299,7 @@ class Users
         return false;
     }
 
+    // gets the userID where the userName is a match. Acceptable since userNames are also unique identifiers. 
     public function getUserId($username)
     {
         $userTable = $this->userData;
@@ -291,6 +310,7 @@ class Users
         return $user['userID'];
     }
 
+    // gets the userID where the userInnie is a match. Acceptable since userInnie are also unique identifiers. 
     public function getUserIdByInnie($userInnie)
     {
         $userTable = $this->userData;
@@ -303,6 +323,12 @@ class Users
     }
 
 
+    // Why those functions over the general getUserDetails? I personally like it when code is more readable/understandable 
+    // to the situation. I dont mind re-doing a method that gatheres the same data, but in a more specific way to whats needed. 
+    // for me readability > minimalism. 
+
+
+    // Updates the user's database information when their userID is a match.
     public function updateProfile($userName, $userInnie, $userBio, $userID, $userState, $isModerator)
     {
 
@@ -322,6 +348,8 @@ class Users
 
         return $stmt->execute($bindParameters);
     }
+
+    // User can delete their accounts. UserID must match the logged in $_Session['userID']
     public function deleteAccount($sessionID)
     {
         $userTable = $this->userData;
@@ -334,6 +362,7 @@ class Users
         return false;
     }
 
+    // Allows user to update their password.
     public function updatePW($userPW, $userID)
     {
         $userTable = $this->userData;
@@ -350,6 +379,7 @@ class Users
         return $stmt->execute($bindParameters);
     }
 
+    // Allows user to update their profile picture.
     public function updatePP($fileDestination, $userID)
     {
         $isUpdated = false;
@@ -367,7 +397,7 @@ class Users
         return ($isUpdated);
     }
 
-
+    // user for the search functionality. Finds a user by their userInnie. (again -> unique identifier)
     public function findUserByInnie($userInnie)
     {
         $results = array();
@@ -405,10 +435,12 @@ class Users
 
     #######################################################################################
     #######################################################################################
-    ################# -- BEGINNING OF USER LISTING CONTROLLER -- ##########################
+    ################# -- BEGINNING OF USER LISTINGS (MAIN)-- ##########################
     #######################################################################################
     #######################################################################################
 
+
+    // functions are self explanitory here :D 
     public function getAllCategories()
     {
         $userTable = $this->userData;
@@ -436,7 +468,7 @@ class Users
         return $stmt->fetchAll();
     }
 
-
+    // for modTools.php
     public function modDeleteCat($inputCat)
     {
         $isCatDeleted = false;
@@ -451,6 +483,8 @@ class Users
         $isCatDeleted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isCatDeleted);
     }
+
+    // for modTools.php
     public function modNewCat($inputCat)
     {
         $isCatPosted = false;
@@ -465,6 +499,8 @@ class Users
         $isCatPosted = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isCatPosted);
     }
+
+    // for modTools.php
     public function modNewCond($inputCond)
     {
         $iCondPosted = false;
@@ -480,6 +516,8 @@ class Users
         return ($iCondPosted);
     }
 
+    // Important. Take note of how the listing pictures are stored to fileDestinationX.
+    // This is the logic for how pictures are stored in most functions. 
 
     public function postUserListing(
         $userID,
@@ -641,6 +679,9 @@ class Users
         return ($isMsgSent);
     }
 
+    // Every message sent from a request sets isMessageReplied == 'NO'.
+    // This allows manipulation of CSS where a message is replied to, or not.
+    // When a user replies to a message, this updates the previous isMessageReplied to 'YES'. 
     public function updateIsMessageReplied($priorMessageID, $updateStatus)
     {
 
@@ -658,6 +699,14 @@ class Users
         $isMsgSent = ($stmt->execute($bindParameters) && $stmt->rowCount() > 0);
         return ($isMsgSent);
     }
+    // note: the cycle is repeated.
+    // 1: first message: isMessageReplied == 'NO'.
+    // 2: reply message: isMessageReplied == 'YES' FOR THE PREVIOUS messageID (1). isMessageReplied == 'NO' for the new messageID (2).
+
+
+    // Hides the conversation from everyone involved in the message. 
+    // Does NOT delete the message from the database. 
+    // In the future, modTools.php for a more elevated admin could retrieve messages if needed (?). 
     public function inboxHideConvo($parentID)
     {
 
@@ -688,6 +737,7 @@ class Users
         return $stmt->fetchAll();
     }
 
+    // Gets the previous messages tied to the conversation (parentID of a message thread)
     public function getMessageCrumbs($listID, $parentID, $messageSentOn)
     {
         $userTable = $this->userData;
@@ -701,7 +751,6 @@ class Users
         $stmt->execute($bindParameters);
         return $stmt->fetchAll();
     }
-
 
 
 

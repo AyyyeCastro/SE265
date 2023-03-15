@@ -23,10 +23,6 @@ if (isPostRequest()) {
    $listCond = filter_input(INPUT_POST, 'inputProdCond');
    $listState = filter_input(INPUT_POST, 'inputProdState');
    $condList = $userDatabase->getAllConditions();
-
-
-   # -- Profile Pictures -- #
-   # -- IMPORTANT!!! -- #
    $userInfo = $userDatabase->getUserDetails($userID);
 
    #--- Profile Picture Traveling -- #

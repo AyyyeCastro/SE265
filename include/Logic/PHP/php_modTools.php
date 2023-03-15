@@ -1,4 +1,21 @@
 <?php
+
+
+
+
+
+
+
+
+// NOTE. modTools was not a core design/agreement to the project. This was done at the last minute for extra work! 
+// There may be some unknown (to me) bugs.
+
+
+
+
+
+
+
 if (!array_key_exists('isLoggedIn', $_SESSION) || !$_SESSION['isLoggedIn']) {
    header("location: ../login.php");
    exit;

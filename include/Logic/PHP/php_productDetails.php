@@ -11,7 +11,7 @@ else{
 
 $listID = $_GET['listID'];
 $listDetails = $userDatabase->getListForm($listID);
-/* get the $userID thensent it to the method */
+/* get the $userID then send it to the method */
 $userID = $listDetails['userID'];
 $sellerInfo = $userDatabase->getUserDetails($userID);
 

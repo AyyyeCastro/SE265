@@ -43,8 +43,9 @@ if (isPostRequest()) {
       }
       
       // I intentionally want mods/admins to have to go to modTools.php to delete an account.
-      // I dont like it being accessible at an editProfile menu for mods. 
-      // Important stuff like this should be more tedious to do, to prevent accidents.
+      // I dont like it being accessible at an editProfile menu * for mods *. 
+      // Important stuff like this should be more tedious to do, to prevent accidents IMO.
+      // PLease note: modTools.php was not a core design/agreement to the project. I added it in the last week!
    }
    if (isset($_POST['updatePwBtn'])) {
       $userID = filter_input(INPUT_POST, 'userID');

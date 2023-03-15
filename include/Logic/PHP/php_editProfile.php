@@ -17,14 +17,15 @@ $stateList = $userDatabase->getAllStates();
 
 if (isPostRequest()) {
    if (isset($_POST['updateBtn'])) {
+
+      // variables utilized in the below functions, set as values sent from the HTML form.
       $userName = filter_input(INPUT_POST, 'userName');
       $userInnie = filter_input(INPUT_POST, 'userInnie');
       $userBio = filter_input(INPUT_POST, 'userBio');
       $userState = filter_input(INPUT_POST, 'userState');
       $isModerator = filter_input(INPUT_POST, 'isModerator');
 
-      # -- Profile Pictures -- #
-      # -- IMPORTANT!!! -- #
+      # Gather db info.
       $userInfo = $userDatabase->getUserDetails($userID);
 
       if ($userDatabase->updateProfile($userName, $userInnie, $userBio, $userID, $userState, $isModerator)) {

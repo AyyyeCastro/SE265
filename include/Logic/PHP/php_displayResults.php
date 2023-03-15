@@ -37,7 +37,6 @@ $stateList = $userDatabase->getAllStates();
 // IMPORTANT
 // Why Get request? 
 // It stores the results of the user's search into the URL. 
-// This allows the user to copy the URL, and share it to other sources, with the same results showing.
 {
    // if they clicked the search button ->
    if (isset($_GET["search"])) {
