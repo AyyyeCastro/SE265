@@ -290,7 +290,7 @@ require '../include/logic/php/php_viewMessage.php';
       </div>
       <?php endif ?>
    </div>
-</div>
+</div> </div>
 
 <div class="container requestInfoContainer">
    <!-- request info -->
